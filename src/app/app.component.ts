@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { BoardComponent } from '../board/board.component';
-
+import { StatusBarComponent } from "../status-bar/status-bar.component";
 
 @Component({
   selector: 'app-root',
-  imports: [BoardComponent],
+  imports: [BoardComponent, StatusBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
+
 export class AppComponent {
   title = 'tikTackToe';
 }
