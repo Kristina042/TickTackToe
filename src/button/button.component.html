@@ -1,1 +1,9 @@
-<button class="button">id: {{ID()}}</button>
+<button class="button" (click)="handleClick()">
+    <!-- id is displayed for debugging rn
+    id: {{ID()}}
+     -->
+    {{ID}}
+    @if(IsButtonClicked === true){
+        {{OnDisplay}}
+    }
+</button>
