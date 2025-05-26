@@ -23,6 +23,8 @@ export class BoardComponent {
 
  turnCount = 0
 
+ isBoardDisabled = false
+
   //control what to display on button
   ButtonDisplay_1: 'X'|'O'|'' = ''
   ButtonDisplay_2: 'X'|'O'|'' = ''
@@ -143,8 +145,10 @@ export class BoardComponent {
         ((this.ButtonDisplay_2 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_8 === 'O')) ||
         ((this.ButtonDisplay_3 === 'O')&&(this.ButtonDisplay_6 === 'O') && (this.ButtonDisplay_9 === 'O')) ||
         ((this.ButtonDisplay_1 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_9 === 'O')) ||
-        ((this.ButtonDisplay_7 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_3 === 'O')))
+        ((this.ButtonDisplay_7 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_3 === 'O'))){
        this.sendMessageToStatusBar('O is the winner')
+       this.isBoardDisabled = true
+      }
     else if (((this.ButtonDisplay_1 === 'X')&&(this.ButtonDisplay_2 === 'X') && (this.ButtonDisplay_3 === 'X'))||
         ((this.ButtonDisplay_4 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_6 === 'X')) ||
         ((this.ButtonDisplay_7 === 'X')&&(this.ButtonDisplay_8 === 'X') && (this.ButtonDisplay_9 === 'X')) ||
@@ -152,10 +156,14 @@ export class BoardComponent {
         ((this.ButtonDisplay_2 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_8 === 'X')) ||
         ((this.ButtonDisplay_3 === 'X')&&(this.ButtonDisplay_6 === 'X') && (this.ButtonDisplay_9 === 'X')) ||
         ((this.ButtonDisplay_1 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_9 === 'X')) ||
-        ((this.ButtonDisplay_7 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_3 === 'X')))
+        ((this.ButtonDisplay_7 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_3 === 'X'))){
          this.sendMessageToStatusBar('X is the winner')
-    else if (this.turnCount === 8)
+         this.isBoardDisabled = true
+      }
+    else if (this.turnCount === 8){
       this.sendMessageToStatusBar('Its a tie!')
+      this.isBoardDisabled = true
+    }
     else if (this.currPlayer.isX === false)
       this.sendMessageToStatusBar("It's X's turn")
     else 

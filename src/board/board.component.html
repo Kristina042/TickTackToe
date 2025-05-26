@@ -1,13 +1,13 @@
 <div class="container">
     <div class="board">
-        <app-button [ID]="1" [OnDisplay]='ButtonDisplay_1' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="2" [OnDisplay]='ButtonDisplay_2' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="3" [OnDisplay]='ButtonDisplay_3' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="4" [OnDisplay]='ButtonDisplay_4' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="5" [OnDisplay]='ButtonDisplay_5' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="6" [OnDisplay]='ButtonDisplay_6' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="7" [OnDisplay]='ButtonDisplay_7' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="8" [OnDisplay]='ButtonDisplay_8' (ButtonEmitter)="getButtonInfo($event)"></app-button>
-        <app-button [ID]="9" [OnDisplay]='ButtonDisplay_9' (ButtonEmitter)="getButtonInfo($event)"></app-button>
+        <app-button [ID]="1" [OnDisplay]='ButtonDisplay_1' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="2" [OnDisplay]='ButtonDisplay_2' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="3" [OnDisplay]='ButtonDisplay_3' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="4" [OnDisplay]='ButtonDisplay_4' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="5" [OnDisplay]='ButtonDisplay_5' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="6" [OnDisplay]='ButtonDisplay_6' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="7" [OnDisplay]='ButtonDisplay_7' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="8" [OnDisplay]='ButtonDisplay_8' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
+        <app-button [ID]="9" [OnDisplay]='ButtonDisplay_9' (ButtonEmitter)="getButtonInfo($event)" [disabled]="isBoardDisabled"></app-button>
     </div>
 </div>

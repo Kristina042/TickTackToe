@@ -17,7 +17,15 @@ export class ButtonComponent {
   OnDisplay = input<'X' | 'O' | ''>('');
   IsButtonClicked = false
 
-  IsDisabled = computed(() => !!this.OnDisplay().length);
+  disabled = input<boolean>()
+
+  IsDisabled = computed<boolean>(() => {
+    if (this.disabled() === true)
+      return true
+    else
+     return(!!this.OnDisplay().length)
+  });
+
 
   // board = [
   //   [1, null, 0],
