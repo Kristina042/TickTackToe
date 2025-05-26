@@ -1,8 +1,3 @@
 <button class="button" (click)="handleClick()">
-    <!-- id is displayed for debugging rn
-    id: {{ID()}}
-     -->
-    @if(IsButtonClicked === true){
-        {{OnDisplay}}
-    }
+    {{ OnDisplay() }}
 </button>

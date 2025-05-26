@@ -1,4 +1,4 @@
 <div class="body">
-    <app-status-bar CurrPlayer="X" [isEndOfGame]="false"/>
-    <app-board/>
+    <app-status-bar [status]="gameStatus"/>
+    <app-board (BoardEmitter)="handleStatusChange($event)"/>
 </div>

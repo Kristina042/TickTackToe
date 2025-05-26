@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, input } from '@angular/core';
 
 type button = {
   id: number | any,
@@ -14,9 +14,10 @@ type button = {
 
 export class ButtonComponent {
   @Input() ID: number = 0
-  @Input() OnDisplay: 'X'|'O'|'' = '';
-
+  OnDisplay = input<'X' | 'O' | ''>('');
   IsButtonClicked = false
+
+  IsDisabled = computed(() => !!this.OnDisplay().length);
 
   // board = [
   //   [1, null, 0],
@@ -36,7 +37,9 @@ export class ButtonComponent {
   }
 
   handleClick(){
+    if (this.IsDisabled()) return
     this.IsButtonClicked = true
     this.sendButtonStateUp()
   }
+
 }
