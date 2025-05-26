@@ -16,14 +16,14 @@ type button = {
 export class BoardComponent {
 
   @Output() BoardEmitter = new EventEmitter<string>()
-  //first turn is 1 - odd
-  //in first implementation X - goes on odd turns
+
+  //first turn is X - odd
+  //X - goes on odd turns
   //O - goes on even turns 
  wasTurnEven = true
-
  turnCount = 0
-
  isBoardDisabled = false
+
 
   //control what to display on button
   ButtonDisplay_1: 'X'|'O'|'' = ''
@@ -36,7 +36,7 @@ export class BoardComponent {
   ButtonDisplay_8: 'X'|'O'|'' = ''
   ButtonDisplay_9: 'X'|'O'|'' = ''
 
-  isButtonDisabled = false
+  
 
   //returns true(disabled) or false(disabled)
   getButtonStatus(ButtonDisplay: string){

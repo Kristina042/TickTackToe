@@ -17,10 +17,10 @@ export class ButtonComponent {
   OnDisplay = input<'X' | 'O' | ''>('');
   IsButtonClicked = false
 
-  disabled = input<boolean>()
+  isGameFinished = input<boolean>()
 
   IsDisabled = computed<boolean>(() => {
-    if (this.disabled() === true)
+    if (this.isGameFinished() === true)
       return true
     else
      return(!!this.OnDisplay().length)
