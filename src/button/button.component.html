@@ -1,3 +1,10 @@
-<button class="button" (click)="handleClick()">
-    {{ OnDisplay() }}
+<button 
+  [class]="{
+    'button': true,
+    'highlighted-button': !!isHighlighted(),
+    'disabled-button': !!isGameFinished()
+  }"
+  (click)="handleClick()"
+>
+  {{ OnDisplay() }}
 </button>

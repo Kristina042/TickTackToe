@@ -23,20 +23,32 @@ export class BoardComponent {
  wasTurnEven = true
  turnCount = 0
  isBoardDisabled = false
+ 
+  board = [
+    [{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false }],
+    [{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false }],
+    [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
+  ]
 
+  damianGetValue(id: number) {
+    const CELL_COUNT_PER_ROW = 3
 
-  //control what to display on button
-  ButtonDisplay_1: 'X'|'O'|'' = ''
-  ButtonDisplay_2: 'X'|'O'|'' = ''
-  ButtonDisplay_3: 'X'|'O'|'' = ''
-  ButtonDisplay_4: 'X'|'O'|'' = ''
-  ButtonDisplay_5: 'X'|'O'|'' = ''
-  ButtonDisplay_6: 'X'|'O'|'' = ''
-  ButtonDisplay_7: 'X'|'O'|'' = ''
-  ButtonDisplay_8: 'X'|'O'|'' = ''
-  ButtonDisplay_9: 'X'|'O'|'' = ''
+    const rowIndex = Math.floor(id / CELL_COUNT_PER_ROW)
+    const columnIndex = Math.floor(id - rowIndex * CELL_COUNT_PER_ROW)
+    const boardElement = this.board[rowIndex][columnIndex]
 
-  
+    return boardElement.display
+  }
+
+  getButtonColor(id: number){
+    const CELL_COUNT_PER_ROW = 3
+
+    const rowIndex = Math.floor(id / CELL_COUNT_PER_ROW)
+    const columnIndex = Math.floor(id - rowIndex * CELL_COUNT_PER_ROW)
+    const boardElement = this.board[rowIndex][columnIndex]
+
+    return boardElement.isHighlighted
+  }
 
   //returns true(disabled) or false(disabled)
   getButtonStatus(ButtonDisplay: string){
@@ -51,10 +63,6 @@ export class BoardComponent {
     CurrId: 0
   }
 
-  //get info from child
-  //called on every button click
-  //so we can also use is to know if round is
-
   updateCurrPlayerInfo(){
      this.wasTurnEven = !this.wasTurnEven
 
@@ -65,111 +73,146 @@ export class BoardComponent {
   }
 
   updateButtonDisplay(){
-      if((this.currPlayer.CurrId === 1)){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_1 = 'X'
-          else
-            this.ButtonDisplay_1 = 'O'
-      }
+    //getButtonValueById()
+    const CELL_COUNT_PER_ROW = 3
 
-      if((this.currPlayer.CurrId === 2)){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_2 = 'X'
-          else
-            this.ButtonDisplay_2 = 'O'
+    const rowIndex = Math.floor(this.currPlayer.CurrId / CELL_COUNT_PER_ROW)
+    const columnIndex = Math.floor(this.currPlayer.CurrId - rowIndex * CELL_COUNT_PER_ROW)
+    const boardElement = this.board[rowIndex][columnIndex]
 
-      }
-
-      if((this.currPlayer.CurrId === 3) ){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_3 = 'X'
-          else
-            this.ButtonDisplay_3 = 'O'
-
-      }
-
-      if((this.currPlayer.CurrId === 4) ){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_4 = 'X'
-          else
-            this.ButtonDisplay_4 = 'O'
-
-      }
-
-      if((this.currPlayer.CurrId === 5) ){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_5 = 'X'
-          else
-            this.ButtonDisplay_5 = 'O'
-
-      }
-
-      if((this.currPlayer.CurrId === 6) ){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_6 = 'X'
-          else
-            this.ButtonDisplay_6 = 'O'
-
-      }
-
-      if((this.currPlayer.CurrId === 7)){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_7 = 'X'
-          else
-            this.ButtonDisplay_7 = 'O'
-
-      }
-
-      if((this.currPlayer.CurrId === 8) ){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_8 = 'X'
-          else
-            this.ButtonDisplay_8 = 'O'
-
-      }
-
-      if((this.currPlayer.CurrId === 9) ){
-         if (this.currPlayer.isX)
-            this.ButtonDisplay_9 = 'X'
-          else
-            this.ButtonDisplay_9 = 'O'
-      }
-      
+   if(this.currPlayer.isX)
+      boardElement.display = 'X'
+    else
+      boardElement.display = 'O'
   }
-  checkWinner(){
 
-    if (((this.ButtonDisplay_1 === 'O')&&(this.ButtonDisplay_2 === 'O') && (this.ButtonDisplay_3 === 'O'))||
-        ((this.ButtonDisplay_4 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_6 === 'O')) ||
-        ((this.ButtonDisplay_7 === 'O')&&(this.ButtonDisplay_8 === 'O') && (this.ButtonDisplay_9 === 'O')) ||
-        ((this.ButtonDisplay_1 === 'O')&&(this.ButtonDisplay_4 === 'O') && (this.ButtonDisplay_7 === 'O')) ||
-        ((this.ButtonDisplay_2 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_8 === 'O')) ||
-        ((this.ButtonDisplay_3 === 'O')&&(this.ButtonDisplay_6 === 'O') && (this.ButtonDisplay_9 === 'O')) ||
-        ((this.ButtonDisplay_1 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_9 === 'O')) ||
-        ((this.ButtonDisplay_7 === 'O')&&(this.ButtonDisplay_5 === 'O') && (this.ButtonDisplay_3 === 'O'))){
-       this.sendMessageToStatusBar('O is the winner')
-       this.isBoardDisabled = true
-      }
-    else if (((this.ButtonDisplay_1 === 'X')&&(this.ButtonDisplay_2 === 'X') && (this.ButtonDisplay_3 === 'X'))||
-        ((this.ButtonDisplay_4 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_6 === 'X')) ||
-        ((this.ButtonDisplay_7 === 'X')&&(this.ButtonDisplay_8 === 'X') && (this.ButtonDisplay_9 === 'X')) ||
-        ((this.ButtonDisplay_1 === 'X')&&(this.ButtonDisplay_4 === 'X') && (this.ButtonDisplay_7 === 'X')) ||
-        ((this.ButtonDisplay_2 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_8 === 'X')) ||
-        ((this.ButtonDisplay_3 === 'X')&&(this.ButtonDisplay_6 === 'X') && (this.ButtonDisplay_9 === 'X')) ||
-        ((this.ButtonDisplay_1 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_9 === 'X')) ||
-        ((this.ButtonDisplay_7 === 'X')&&(this.ButtonDisplay_5 === 'X') && (this.ButtonDisplay_3 === 'X'))){
-         this.sendMessageToStatusBar('X is the winner')
-         this.isBoardDisabled = true
-      }
-    else if (this.turnCount === 8){
-      this.sendMessageToStatusBar('Its a tie!')
+  didRowWin(){
+    const CELL_COUNT_PER_ROW = 3
+    const currRow = Math.floor(this.currPlayer.CurrId/CELL_COUNT_PER_ROW)
+
+    let fullRow_X = this.board[currRow].every((el) => {
+       return (el.display === 'X')
+    })
+
+    let fullRow_O = this.board[currRow].every((el) => {
+       return (el.display === 'O')
+    })
+
+    if (fullRow_X === true)
+    {
+      this.board[currRow].forEach((el) => {el.isHighlighted = true})
+      this.sendMessageToStatusBar('X is the winner!')
       this.isBoardDisabled = true
     }
-    else if (this.currPlayer.isX === false)
-      this.sendMessageToStatusBar("It's X's turn")
-    else 
-      this.sendMessageToStatusBar("It's O's turn")
+
+    if (fullRow_O === true)
+    {
+      this.board[currRow].forEach((el) => {el.isHighlighted = true})
+      this.sendMessageToStatusBar('O is the winner!')
+      this.isBoardDisabled = true
+    }
+  }  
+
+  didColumnWin_X(){
+    const CELL_COUNT_PER_ROW = 3
+
+    const currRow = Math.floor(this.currPlayer.CurrId / CELL_COUNT_PER_ROW)
+    const currColumn = Math.floor(this.currPlayer.CurrId - currRow * CELL_COUNT_PER_ROW)
+
+    const isColumn_X: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    let k = 0 //index for boolean array
+
+    //check if there is any point in checking for x
+    if (this.board[currRow][currColumn].display !== 'X')
+      return
+
+    //check curr position then check (currRow) times up
+    let rowIndex = currRow
+    for (let i  = 0; i <= currRow; i++){
+      if (this.board[rowIndex][currColumn].display === 'X'){
+        isColumn_X[k] = true
+        k++
+      }
+      //make sure next check is a row up
+      --rowIndex     
+    }
+
+    //reset row index
+    rowIndex = currRow
+    //go (CELL_COUNT_PER_ROW - 1 - currRow times down (index + 3))
+    for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
+      rowIndex++
+      if(this.board[rowIndex][currColumn].display === 'X'){
+        isColumn_X[k] = true
+        k++
+      }
+    }
+
+    if (isColumn_X.every((el) =>{ return (el === true) })){
+      this.sendMessageToStatusBar('X is the winner!')
+      this.isBoardDisabled = true  
+
+      //highlight the column
+      for (let i = 0; i < CELL_COUNT_PER_ROW; i++){
+          this.board[i][currColumn].isHighlighted = true
+      }
+    }   
   }
 
+  didColumnWin_O(){
+    const CELL_COUNT_PER_ROW = 3
+
+    const currRow = Math.floor(this.currPlayer.CurrId / CELL_COUNT_PER_ROW)
+    const currColumn = Math.floor(this.currPlayer.CurrId - currRow * CELL_COUNT_PER_ROW)
+
+    const isColumn_O: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    let k = 0 //index for boolean array
+
+    //check if there is any point in checking for x
+    if (this.board[currRow][currColumn].display !== 'O')
+      return
+
+    //check curr position then check (currRow) times up
+    let rowIndex = currRow
+    for (let i  = 0; i <= currRow; i++){
+      if (this.board[rowIndex][currColumn].display === 'O'){
+        isColumn_O[k] = true
+        k++
+      }
+      //make sure next check is a row up
+      --rowIndex     
+    }
+
+    //reset row index
+    rowIndex = currRow
+    //go (CELL_COUNT_PER_ROW - 1 - currRow times down (index + 3))
+    for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
+      rowIndex++
+      if(this.board[rowIndex][currColumn].display === 'O'){
+        isColumn_O[k] = true
+        k++
+      }
+    }
+
+    if (isColumn_O.every((el) =>{ return (el === true) })){
+      this.sendMessageToStatusBar('O is the winner!')
+      this.isBoardDisabled = true  
+      
+      //highlight the column
+      for (let i = 0; i < CELL_COUNT_PER_ROW; i++){
+          this.board[i][currColumn].isHighlighted = true
+      }
+    }   
+  }
+
+  checkWinner(){
+    this.didRowWin()
+    this.didColumnWin_X()
+    this.didColumnWin_O()
+  }
+  //get info from child
+  //called on every button click
+  //so we can also use is to know if round is even
   getButtonInfo (info: button) {
     this.currPlayer.CurrId = info.id
 

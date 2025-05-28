@@ -1,3 +1,7 @@
+$highlight-color: #ffa6f0;
+$highlight-border: #b33a9e;
+
+
 .button{
     width: 100%;
     height: 100%;
@@ -11,9 +15,32 @@
     font-size: 50px;
 
     transition: all .25s ease-in-out;
+
+    &:hover{
+        opacity: 1;
+        background-color: #218380;
+    }
 }
 
-.button:hover{
-    opacity: 1;
-    background-color: #218380;
+.highlighted-button{
+   
+    background-color:$highlight-color;
+    border-color:  $highlight-border;
+
+    &:hover{
+        background-color: $highlight-color !important;
+        border-color: $highlight-border !important;
+        opacity: 1 !important;
+    }
+}
+
+.disabled-button{
+    pointer-events: none; // Prevent clicks
+    cursor: default;  // Show default cursor
+  
+    &:hover {
+        background-color: inherit !important;
+        border-color: inherit !important;
+        opacity: 1 !important;
+    }
 }

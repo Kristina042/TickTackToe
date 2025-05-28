@@ -1,13 +1,13 @@
 <div class="container">
     <div class="board">
-        <app-button [ID]="1" [OnDisplay]='ButtonDisplay_1' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="2" [OnDisplay]='ButtonDisplay_2' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="3" [OnDisplay]='ButtonDisplay_3' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="4" [OnDisplay]='ButtonDisplay_4' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="5" [OnDisplay]='ButtonDisplay_5' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="6" [OnDisplay]='ButtonDisplay_6' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="7" [OnDisplay]='ButtonDisplay_7' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="8" [OnDisplay]='ButtonDisplay_8' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
-        <app-button [ID]="9" [OnDisplay]='ButtonDisplay_9' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled"></app-button>
+        <app-button [Id]="0" [OnDisplay]='damianGetValue(0)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(0)"></app-button>
+        <app-button [Id]="1" [OnDisplay]='damianGetValue(1)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(1)"></app-button>
+        <app-button [Id]="2" [OnDisplay]='damianGetValue(2)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(2)"></app-button>
+        <app-button [Id]="3" [OnDisplay]='damianGetValue(3)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(3)"></app-button>
+        <app-button [Id]="4" [OnDisplay]='damianGetValue(4)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(4)"></app-button>
+        <app-button [Id]="5" [OnDisplay]='damianGetValue(5)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(5)"></app-button>
+        <app-button [Id]="6" [OnDisplay]='damianGetValue(6)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(6)"></app-button>
+        <app-button [Id]="7" [OnDisplay]='damianGetValue(7)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(7)"></app-button>
+        <app-button [Id]="8" [OnDisplay]='damianGetValue(8)' (ButtonEmitter)="getButtonInfo($event)" [isGameFinished]="isBoardDisabled" [isHighlighted]="getButtonColor(8)"></app-button>
     </div>
 </div>
