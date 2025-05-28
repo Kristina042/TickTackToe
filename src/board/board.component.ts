@@ -25,9 +25,11 @@ export class BoardComponent {
  isBoardDisabled = false
  
   board = [
-    [{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false }],
-    [{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false }],
-    [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
+    [{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
+    [{ id: -1, display: '', isHighlighted: false  },{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
+    [{ id: -1, display: '', isHighlighted: false  },{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
+    [{ id: -1, display: '', isHighlighted: false  },{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
+    [{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false}]
   ]
 
   damianGetValue(id: number) {
@@ -86,30 +88,108 @@ export class BoardComponent {
       boardElement.display = 'O'
   }
 
-  didRowWin(){
+  // didRowWin(){
+  //   const CELL_COUNT_PER_ROW = 3
+  //   const currRow = Math.floor(this.currPlayer.CurrId/CELL_COUNT_PER_ROW)
+
+  //   let fullRow_X = this.board[currRow].every((el) => {
+  //      return (el.display === 'X')
+  //   })
+
+  //   let fullRow_O = this.board[currRow].every((el) => {
+  //      return (el.display === 'O')
+  //   })
+
+  //   if (fullRow_X === true)
+  //   {
+  //     this.board[currRow].forEach((el) => {el.isHighlighted = true})
+  //     this.sendMessageToStatusBar('X is the winner!')
+  //     this.isBoardDisabled = true
+  //   }
+
+  //   if (fullRow_O === true)
+  //   {
+  //     this.board[currRow].forEach((el) => {el.isHighlighted = true})
+  //     this.sendMessageToStatusBar('O is the winner!')
+  //     this.isBoardDisabled = true
+  //   }
+  // } 
+  
+  didRowWin_X(){
     const CELL_COUNT_PER_ROW = 3
     const currRow = Math.floor(this.currPlayer.CurrId/CELL_COUNT_PER_ROW)
+    const currColumn = Math.floor(this.currPlayer.CurrId - currRow * CELL_COUNT_PER_ROW)
 
-    let fullRow_X = this.board[currRow].every((el) => {
-       return (el.display === 'X')
-    })
+    const isRow_X: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    let k = 0
 
-    let fullRow_O = this.board[currRow].every((el) => {
-       return (el.display === 'O')
-    })
+    if (this.board[currRow][currColumn].display !== 'X')
+      return
 
-    if (fullRow_X === true)
-    {
-      this.board[currRow].forEach((el) => {el.isHighlighted = true})
-      this.sendMessageToStatusBar('X is the winner!')
-      this.isBoardDisabled = true
+    let columnIndex = currColumn
+
+    //go left
+    for (let i = 0; i <= currColumn; i++){
+      if (this.board[currRow][columnIndex].display === 'X'){
+        isRow_X[k] = true
+        k++
+      }
+      columnIndex = columnIndex - 1
     }
 
-    if (fullRow_O === true)
-    {
-      this.board[currRow].forEach((el) => {el.isHighlighted = true})
+    //go right
+    columnIndex = currColumn
+    for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currColumn); i++){
+      columnIndex = columnIndex + 1
+
+      if (this.board[currRow][columnIndex].display === 'X'){
+        isRow_X[k] = true
+        k++
+      }
+    }
+
+    if (isRow_X.every((el) =>{ return (el === true) })){
+      this.sendMessageToStatusBar('X is the winner!')
+      this.isBoardDisabled = true  
+    }
+  }  
+
+   didRowWin_O(){
+    const CELL_COUNT_PER_ROW = 3
+    const currRow = Math.floor(this.currPlayer.CurrId/CELL_COUNT_PER_ROW)
+    const currColumn = Math.floor(this.currPlayer.CurrId - currRow * CELL_COUNT_PER_ROW)
+
+    const isRow_O: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    let k = 0
+
+    if (this.board[currRow][currColumn].display !== 'O')
+      return
+
+    let columnIndex = currColumn
+
+    //go left
+    for (let i = 0; i <= currColumn; i++){
+      if (this.board[currRow][columnIndex].display === 'O'){
+        isRow_O[k] = true
+        k++
+      }
+      columnIndex = columnIndex - 1
+    }
+
+    //go right
+    columnIndex = currColumn
+    for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currColumn); i++){
+      columnIndex = columnIndex + 1
+
+      if (this.board[currRow][columnIndex].display === 'O'){
+        isRow_O[k] = true
+        k++
+      }
+    }
+
+    if (isRow_O.every((el) =>{ return (el === true) })){
       this.sendMessageToStatusBar('O is the winner!')
-      this.isBoardDisabled = true
+      this.isBoardDisabled = true  
     }
   }  
 
@@ -205,10 +285,101 @@ export class BoardComponent {
     }   
   }
 
+  didDiagonalWin_X_1(){
+    const CELL_COUNT_PER_ROW = 3
+
+    const currRow = Math.floor(this.currPlayer.CurrId / CELL_COUNT_PER_ROW)
+    const currColumn = Math.floor(this.currPlayer.CurrId - currRow * CELL_COUNT_PER_ROW)
+
+    const isDiagonal_X: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    let k = 0 //index for boolean array
+
+    if (this.board[currRow][currColumn].display === 'O')
+      return
+
+    let rowIndex = currRow
+    let columnIndex = currColumn
+
+    //go up
+    for (let i = 0; i <= currRow; i++){
+      if(this.board[rowIndex--][columnIndex--].display === 'X'){
+        isDiagonal_X[k] = true
+        k++
+      }
+    }
+
+    //go down
+    //reset indexes
+    rowIndex = currRow
+    columnIndex = currColumn
+    for(let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
+      if (this.board[++rowIndex][++columnIndex].display === 'X'){
+        isDiagonal_X[k] = true
+        k++
+      }
+    }
+
+    if (isDiagonal_X.every((el) =>{ return (el === true) })){
+      this.sendMessageToStatusBar('X is the winner!')
+      this.isBoardDisabled = true  
+    }   
+  }
+
+  didDiagonalWin_X_2(){
+    const CELL_COUNT_PER_ROW = 3
+
+    const currRow = Math.floor(this.currPlayer.CurrId / CELL_COUNT_PER_ROW)
+    const currColumn = Math.floor(this.currPlayer.CurrId - currRow * CELL_COUNT_PER_ROW)
+
+    const isDiagonal_X: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    let k = 0 //index for boolean array
+
+    if (this.board[currRow][currColumn].display === 'O')
+      return
+
+    let rowIndex = currRow
+    let columnIndex = currColumn
+
+    //go up
+    for (let i = 0; i <= currRow; i++){
+      if(this.board[rowIndex][columnIndex].display === 'X'){
+        isDiagonal_X[k] = true
+        console.log(isDiagonal_X)
+        k++
+      }
+      rowIndex = rowIndex-1
+      columnIndex = columnIndex+1
+    }
+
+    //go down
+    //reset indexes
+    rowIndex = currRow
+    columnIndex = currColumn
+    for(let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
+      rowIndex = rowIndex + 1
+      columnIndex = columnIndex - 1
+      if (this.board[rowIndex][columnIndex].display === 'X'){
+        isDiagonal_X[k] = true
+        console.log(isDiagonal_X)
+        k++
+      }
+    }
+
+    if (isDiagonal_X.every((el) =>{ return (el === true) })){
+      this.sendMessageToStatusBar('X is the winner!')
+      this.isBoardDisabled = true  
+    }   
+  }
+
   checkWinner(){
-    this.didRowWin()
+   // this.didRowWin()
+    this.didRowWin_X()
+    this.didRowWin_O()
     this.didColumnWin_X()
     this.didColumnWin_O()
+    
+    this.didDiagonalWin_X_1()
+    this.didDiagonalWin_X_2()
   }
   //get info from child
   //called on every button click
@@ -227,5 +398,4 @@ export class BoardComponent {
   sendMessageToStatusBar(message: string){
     this.BoardEmitter.emit(message)
   }
-
 }
