@@ -1,6 +1,4 @@
 import { Component, Input, Output, EventEmitter, computed, input } from '@angular/core';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 type button = {
   id: number | any,
