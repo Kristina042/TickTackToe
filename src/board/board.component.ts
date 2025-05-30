@@ -1,12 +1,19 @@
 import { Component, EventEmitter } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, UpperCasePipe } from '@angular/common';
 
 type button = {
   id: number,
   isClicked: boolean
 }
+
+type stats = {
+  numXwins: number,
+  numOwins: number,
+  numTies: number
+}
+
 
 @Component({
   selector: 'app-board',
@@ -16,13 +23,21 @@ type button = {
 })
 export class BoardComponent {
 
-  @Output() BoardEmitter = new EventEmitter<string>()
+  @Output() BoardEmitter = new EventEmitter()
+  @Output() StatsEmitter = new EventEmitter<stats>() 
 
   //first turn is X - odd
   //X - goes on odd turns
   //O - goes on even turns 
  wasTurnEven = true
  turnCount = 0
+
+ gameStats:stats = {
+  numXwins: 0,
+  numOwins: 0,
+  numTies: 0
+ }
+
  isBoardDisabled = false
  
   board = [
@@ -35,6 +50,18 @@ export class BoardComponent {
     isX: true,
     CurrId: 0
   }
+
+  updateGameStats(valToIncrement: 'X'|'O'|'tie'){
+    if (valToIncrement === 'X')
+      this.gameStats.numXwins++
+    else if(valToIncrement === 'O')
+      this.gameStats.numOwins ++
+    else
+      this.gameStats.numTies++
+
+      console.log('from updateGameStats')
+      console.log(this.gameStats)
+  }
   
   getPlayerPosition(id:number){
     const CELL_COUNT_PER_ROW = 3
@@ -45,7 +72,7 @@ export class BoardComponent {
     return{rowIndex, columnIndex}
   }
 
-  damianGetValue(id: number){ 
+  GetValueById(id: number){ 
     const player = this.getPlayerPosition(id)
     const boardElement = this.board[player.rowIndex][player.columnIndex]
     return boardElement.display
@@ -76,7 +103,7 @@ export class BoardComponent {
       boardElement.display = 'O'
   }
   
-  didRowWin(buttonValue: string){
+  didRowWin(buttonValue: 'X'|'O'){
     const CELL_COUNT_PER_ROW = 3
     const player = this.getPlayerPosition(this.currPlayer.CurrId)
 
@@ -87,7 +114,8 @@ export class BoardComponent {
     const WinningIds: number[] = new Array(CELL_COUNT_PER_ROW)
     let k = 0
 
-    if (this.board[currRow][currColumn].display !== buttonValue) return
+    if (this.board[currRow][currColumn].display !== buttonValue) 
+      return false
 
     let columnIndex = currColumn
 
@@ -117,15 +145,24 @@ export class BoardComponent {
 
         for (let i = 0; i < CELL_COUNT_PER_ROW; i++)
           this.board[currRow][i].isHighlighted = true
+
+        this.updateGameStats(buttonValue)
+        return true
       }
+      return false
     }
 
     checkLeftCells()
     checkRightCells()
-    checkResult()
+
+    if (checkResult()){ 
+      return true
+    }
+
+    return false
   }   
 
-  didColumnWin(buttonValue: string){
+  didColumnWin(buttonValue: 'X'|'O'){
     const CELL_COUNT_PER_ROW = 3
 
     const currRow = this.getPlayerPosition(this.currPlayer.CurrId).rowIndex
@@ -136,53 +173,68 @@ export class BoardComponent {
 
     //check if there is any point in checking for x
     if (this.board[currRow][currColumn].display !== buttonValue)
-      return
+      return false
 
-    //check curr position then check (currRow) times up
-    let rowIndex = currRow
-    for (let i  = 0; i <= currRow; i++){
-      if (this.board[rowIndex][currColumn].display === buttonValue){
-        result[k] = true
-        k++
-      }
-      //make sure next check is a row up
-      --rowIndex     
-    }
-
-    //reset row index
-    rowIndex = currRow
-    //go (CELL_COUNT_PER_ROW - 1 - currRow times down (index + 3))
-    for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
-      rowIndex++
-      if(this.board[rowIndex][currColumn].display === buttonValue){
-        result[k] = true
-        k++
+    const checkCellsUp = () => {
+      let rowIndex = currRow
+      for (let i  = 0; i <= currRow; i++){
+        if (this.board[rowIndex][currColumn].display === buttonValue){
+          result[k] = true
+          k++
+        }
+        --rowIndex     
       }
     }
 
-    if (result.every((el) =>{ return (el === true) })){
-      this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
-      this.isBoardDisabled = true  
-
-      //highlight the column
-      for (let i = 0; i < CELL_COUNT_PER_ROW; i++){
-          this.board[i][currColumn].isHighlighted = true
+    const checkCellsDown = () =>{
+      let rowIndex = currRow
+      //go (CELL_COUNT_PER_ROW - 1 - currRow times down (index + 3))
+      for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
+        rowIndex++
+        if(this.board[rowIndex][currColumn].display === buttonValue){
+          result[k] = true
+          k++
+        }
       }
-    }   
+    }
+
+    const checkResult = () => {
+      if (result.every((el) =>{ return (el === true) })){
+        this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
+        this.isBoardDisabled = true  
+
+        //highlight the column
+        for (let i = 0; i < CELL_COUNT_PER_ROW; i++){
+            this.board[i][currColumn].isHighlighted = true
+        }
+
+        this.updateGameStats(buttonValue)
+        return true
+      }  
+      return false 
+    }
+
+    checkCellsUp()
+    checkCellsDown()
+    if (checkResult())
+      return true
+
+    return false
   }
 
   didDiagWin = (currentIdx: number, value: 'X' | 'O', direction: 'bottomLeft->rightUp'|'leftUp->bottomRight') => {
-    //generate matrix from my ids
-    const idMatrix: number[][] = this.board.map((row) => row.map((cell) => cell.id))
-
-    //console.log(arr)
     const currRow = this.getPlayerPosition(currentIdx).rowIndex
     const currColumn = this.getPlayerPosition(currentIdx).columnIndex
+
+    if (this.board[currRow][currColumn].display !== value)
+      return false
+
+    const idMatrix: number[][] = this.board.map((row) => row.map((cell) => cell.id))
 
     const STEP_COUNT = 3
     const CELL_COUNT = 3
 
-    let idsToCheck = []
+    const idsToCheck: number[] = []
 
     idsToCheck.push(currentIdx)
 
@@ -201,6 +253,8 @@ export class BoardComponent {
         }
         else{
           row = row - 1
+    //generate matrix from my ids
+    //generate matrix from my ids
           column = column - 1
 
           if ((row >= 0) && (column >= 0))
@@ -294,27 +348,39 @@ export class BoardComponent {
 
       this.isBoardDisabled = true
       this.sendMessageToStatusBar(`${value} is the winner!`)
+      this.updateGameStats(value)
+      return true
     }
+    return false
   }
 
-  
-
-
   checkWinner(){
-    this.didRowWin('X')
-    this.didRowWin('O')
-    
-    this.didColumnWin('X')
-    this.didColumnWin('O')
 
-    this.didDiagWin(this.currPlayer.CurrId, 'X', 'bottomLeft->rightUp')
-    this.didDiagWin(this.currPlayer.CurrId, 'O', 'bottomLeft->rightUp')
+    if (!this.didRowWin('X') && !this.didRowWin('O') &&
+      !this.didColumnWin('X') && !this.didColumnWin('O') &&
+      !this.didDiagWin(this.currPlayer.CurrId, 'X', 'bottomLeft->rightUp') &&
+      !this.didDiagWin(this.currPlayer.CurrId, 'O', 'bottomLeft->rightUp') &&
+      !this.didDiagWin(this.currPlayer.CurrId, 'X', 'leftUp->bottomRight')&&
+      !this.didDiagWin(this.currPlayer.CurrId, 'O', 'leftUp->bottomRight')){
 
-    this.didDiagWin(this.currPlayer.CurrId, 'X', 'leftUp->bottomRight')
-    this.didDiagWin(this.currPlayer.CurrId, 'O', 'leftUp->bottomRight')
-  
+      if (this.turnCount === (9)){
+        this.sendMessageToStatusBar(`It's a tie!`)
+        this.updateGameStats('tie')
+        this.isBoardDisabled = true
 
-    
+        return true
+      }
+      else{
+        if (this.currPlayer.isX)
+          this.sendMessageToStatusBar(`It's O's turn`)
+        else
+          this.sendMessageToStatusBar(`It's X's turn`)
+
+        return false
+      }
+    }
+
+    return true
   }
 
   //get info from child
@@ -322,16 +388,26 @@ export class BoardComponent {
   //so we can also use is to know if round is even
   getButtonInfo (info: button) {
     this.currPlayer.CurrId = info.id
+    this.turnCount++
 
     this.updateCurrPlayerInfo()
     this.updateButtonDisplay()
-    this.checkWinner()
 
-    this.turnCount++
+    //update stats bar on every game over
+    if (this.checkWinner()){
+      console.log('GAME OVER')
+      this.sendMessageToGameStatsBar(this.gameStats)
+    }
+    
   }
 
   //send Message on every click
   sendMessageToStatusBar(message: string){
     this.BoardEmitter.emit(message)
+  }
+
+  //send after every game over
+  sendMessageToGameStatsBar(gameStats: stats){
+    this.StatsEmitter.emit(gameStats)
   }
 }

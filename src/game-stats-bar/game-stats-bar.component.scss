@@ -1,20 +1,30 @@
-.statusBar{
+.gameStatsBar{
     background-color: #b3dee2;
-    width: 600px;
-    height: 100px;
+    width: 100%;
     border-radius: 15px;
-    margin: 10px;
 
     display: flex;
+    flex-direction: row;
+    column-gap: 60px;
     text-align: center;
     align-items: center;
     justify-content: center;
     color: #202020;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: 550;
     font-family: math;
 
     border-style: solid;
     border-color:  #218380;
     border-width: 4px;
+
+    margin-left: 0px;
+    margin-top: 10px;
+
+    padding: 15px;
+}
+
+.cell{
+    display: flex;
+    flex-direction: column;
 }
