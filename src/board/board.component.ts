@@ -26,11 +26,9 @@ export class BoardComponent {
  isBoardDisabled = false
  
   board = [
-    [{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
-    [{ id: -1, display: '', isHighlighted: false  },{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
-    [{ id: -1, display: '', isHighlighted: false  },{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
-    [{ id: -1, display: '', isHighlighted: false  },{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false }],
-    [{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false  },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false },{ id: -1, display: '', isHighlighted: false}]
+    [{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false }],
+    [{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false }],
+    [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
   ]
 
   currPlayer = {
@@ -86,6 +84,7 @@ export class BoardComponent {
     const currColumn = player.columnIndex
 
     const result: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
+    const WinningIds: number[] = new Array(CELL_COUNT_PER_ROW)
     let k = 0
 
     if (this.board[currRow][currColumn].display !== buttonValue) return
@@ -95,7 +94,7 @@ export class BoardComponent {
     const checkLeftCells = () => {
       for (let i = 0; i <= currColumn; i++){
         if (this.board[currRow][columnIndex--].display === buttonValue){
-          result[k] = true
+          result[k] = true 
           k++
         }
       } 
@@ -115,6 +114,9 @@ export class BoardComponent {
       if (result.every((el) =>{ return (el === true) })){
         this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
         this.isBoardDisabled = true  
+
+        for (let i = 0; i < CELL_COUNT_PER_ROW; i++)
+          this.board[currRow][i].isHighlighted = true
       }
     }
 
@@ -169,47 +171,111 @@ export class BoardComponent {
     }   
   }
 
-  didDiagonalWin(buttonValue: 'X'|'O', direction: '00->22'|'02->20'){
-    const CELL_COUNT_PER_ROW = 3
+  didDiagWin_1 = (currentIdx: number, value: 'X' | 'O') => {
 
-    const currRow = this.getPlayerPosition(this.currPlayer.CurrId).rowIndex
-    const currColumn = this.getPlayerPosition(this.currPlayer.CurrId).columnIndex
+    //generate matrix from my ids
+    const idMatrix: number[][] = this.board.map((row) => row.map((cell) => cell.id))
 
-    const result: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
-    let k = 0 //index for boolean array
+    //console.log(arr)
+    const currRow = this.getPlayerPosition(currentIdx).rowIndex
+    const currColumn = this.getPlayerPosition(currentIdx).columnIndex
 
-    if (this.board[currRow][currColumn].display !== buttonValue)
-      return
+    const STEP_COUNT = 3
+    const CELL_COUNT = 3
 
-    let rowIndex = currRow
-    let columnIndex = currColumn
+    let idsToCheck = []
 
-    for (let i = 0; i<=currRow; i++){
-      if(((direction === '00->22') && (this.board[rowIndex--][columnIndex--].display === buttonValue))||
-      ((direction === '02->20') && (this.board[rowIndex--][columnIndex++].display === buttonValue))){
-        result[k] = true
-        k++
+    idsToCheck.push(currentIdx)
+
+    const checkCellsUp = () => {
+      let row = currRow
+      let column  = currColumn
+      for (let i = 0; i < (STEP_COUNT - 1); i++){
+        row = row - 1
+        column = column + 1
+
+        if ((row >= 0) && (column <= (CELL_COUNT - 1)))
+          idsToCheck.push(idMatrix[row][column])
+      }
+    }
+    
+    const checkCellsDown = () => {
+     let row = currRow
+     let column = currColumn
+      for (let i = 0; i < (STEP_COUNT - 1); i++){
+        row = row + 1
+        column = column - 1
+
+        if ((row <= (CELL_COUNT - 1)) && (column >= 0))
+          idsToCheck.push(idMatrix[row][column])
       }
     }
 
-    //go down
-    //reset indexes
-    rowIndex = currRow
-    columnIndex = currColumn
+    checkCellsUp()
+    checkCellsDown()
 
-    for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
-      
-      if (((direction === '00->22')&&(this.board[++rowIndex][++columnIndex].display === buttonValue))||
-      ((direction === '02->20')&&(this.board[++rowIndex][--columnIndex].display === buttonValue)))
-      result[k] = true
-      k++
+    //check that ids to check lengh is at least STEP count
+    if (idsToCheck.length < STEP_COUNT)
+      return
+
+    idsToCheck.sort((a, b) => a - b);
+  
+    const result: boolean[] = new Array(idsToCheck.length).fill(false)
+    let k = 0
+
+    //will be used in case of a win
+    const winningIds: number[] = new Array(STEP_COUNT)
+
+    const checkIdArray = () => {
+      for (let i = 0; i < (idsToCheck.length); i++){
+        let id = idsToCheck[i]  
+        let row = this.getPlayerPosition(id).rowIndex
+        let column = this.getPlayerPosition(id).columnIndex
+
+        if (this.board[row][column].display === value){
+          result[k] = true
+          k++
+
+          winningIds.push(id)
+        }
+      }
     }
 
-    if (result.every((el) =>{ return (el === true) })){
-      this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
-      this.isBoardDisabled = true  
-    }   
+    //check if array has 3 true values in a row
+    const isWinner = () => {
+      let count = 0
+
+      for (let i = 0; i < result.length; i++){
+        if (result[i] === true){
+          count++
+
+          if (count === (STEP_COUNT))
+              return true
+        }
+        else{
+          count = 0
+        }
+      }
+      return false
+    }
+
+    checkIdArray()
+
+    if (isWinner() === true)
+    {
+      //highlight winning ids
+      winningIds.forEach((id) => {
+        let row = this.getPlayerPosition(id).rowIndex
+        let column = this.getPlayerPosition(id).columnIndex
+
+        this.board[row][column].isHighlighted = true
+      })
+
+      this.isBoardDisabled = true
+      this.sendMessageToStatusBar(`${value} is the winner!`)
+    }
   }
+
 
   checkWinner(){
     this.didRowWin('X')
@@ -217,12 +283,9 @@ export class BoardComponent {
     
     this.didColumnWin('X')
     this.didColumnWin('O')
-    
-    this.didDiagonalWin('X', '00->22')
-    this.didDiagonalWin('X', '02->20')
-    this.didDiagonalWin('O', '00->22')
-    this.didDiagonalWin('O', '02->20')
-    //this.didDiagonalWin_X_2()
+
+    this.didDiagWin_1(this.currPlayer.CurrId, 'X')
+    this.didDiagWin_1(this.currPlayer.CurrId, 'O')
   }
 
   //get info from child
