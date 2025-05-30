@@ -171,8 +171,7 @@ export class BoardComponent {
     }   
   }
 
-  didDiagWin_1 = (currentIdx: number, value: 'X' | 'O') => {
-
+  didDiagWin = (currentIdx: number, value: 'X' | 'O', direction: 'bottomLeft->rightUp'|'leftUp->bottomRight') => {
     //generate matrix from my ids
     const idMatrix: number[][] = this.board.map((row) => row.map((cell) => cell.id))
 
@@ -191,11 +190,22 @@ export class BoardComponent {
       let row = currRow
       let column  = currColumn
       for (let i = 0; i < (STEP_COUNT - 1); i++){
-        row = row - 1
-        column = column + 1
 
-        if ((row >= 0) && (column <= (CELL_COUNT - 1)))
-          idsToCheck.push(idMatrix[row][column])
+        if (direction === 'bottomLeft->rightUp')
+        { 
+          row = row - 1
+          column = column + 1
+
+          if ((row >= 0) && (column <= (CELL_COUNT - 1)))
+            idsToCheck.push(idMatrix[row][column])
+        }
+        else{
+          row = row - 1
+          column = column - 1
+
+          if ((row >= 0) && (column >= 0))
+            idsToCheck.push(idMatrix[row][column])
+        }
       }
     }
     
@@ -203,11 +213,22 @@ export class BoardComponent {
      let row = currRow
      let column = currColumn
       for (let i = 0; i < (STEP_COUNT - 1); i++){
-        row = row + 1
-        column = column - 1
 
-        if ((row <= (CELL_COUNT - 1)) && (column >= 0))
+        if (direction === 'bottomLeft->rightUp')
+        {
+          row = row + 1
+          column = column - 1
+
+          if ((row <= (CELL_COUNT - 1)) && (column >= 0))
+            idsToCheck.push(idMatrix[row][column])
+        }
+        else{
+          row = row + 1
+          column = column + 1
+
+          if ((row <= (CELL_COUNT - 1)) && (column<= (CELL_COUNT - 1)))
           idsToCheck.push(idMatrix[row][column])
+        }
       }
     }
 
@@ -276,6 +297,8 @@ export class BoardComponent {
     }
   }
 
+  
+
 
   checkWinner(){
     this.didRowWin('X')
@@ -284,8 +307,14 @@ export class BoardComponent {
     this.didColumnWin('X')
     this.didColumnWin('O')
 
-    this.didDiagWin_1(this.currPlayer.CurrId, 'X')
-    this.didDiagWin_1(this.currPlayer.CurrId, 'O')
+    this.didDiagWin(this.currPlayer.CurrId, 'X', 'bottomLeft->rightUp')
+    this.didDiagWin(this.currPlayer.CurrId, 'O', 'bottomLeft->rightUp')
+
+    this.didDiagWin(this.currPlayer.CurrId, 'X', 'leftUp->bottomRight')
+    this.didDiagWin(this.currPlayer.CurrId, 'O', 'leftUp->bottomRight')
+  
+
+    
   }
 
   //get info from child
