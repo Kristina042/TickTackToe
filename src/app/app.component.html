@@ -1,8 +1,19 @@
+<!-- <div class="body">
+    <app-status-bar [status]="gameStatus"/>
+    <app-board (BoardEmitter)="handleStatusChange($event)" (StatsEmitter)="handleGameStatsChange($event)"/>
+   
+    <div class="stats-bar-and-button">
+        <app-game-stats-bar [stats]="gameStats"/>
+        <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
+    </div>
+</div> -->
+
 <div class="body">
     <app-status-bar [status]="gameStatus"/>
     <app-board (BoardEmitter)="handleStatusChange($event)" (StatsEmitter)="handleGameStatsChange($event)"/>
+   
     <div class="stats-bar-and-button">
         <app-game-stats-bar [stats]="gameStats"/>
-        <button class="playAgain" (click)="handleNewGameClick()">new game</button>
+        <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
     </div>
 </div>

@@ -1,8 +1,8 @@
 <button 
   [class]="{
     'button': true,
-    'highlighted-button': !!isHighlighted(),
-    'disabled-button': !!isGameFinished()
+    'button_highlighted': !!isHighlighted(),
+    'button_disabled': !!isGameFinished()
   }"
   (click)="handleClick()"
 >

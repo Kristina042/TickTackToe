@@ -22,7 +22,7 @@ $highlight-border: #b33a9e;
     }
 }
 
-.highlighted-button{
+.button_highlighted{
    
     background-color:$highlight-color;
     border-color:  $highlight-border;
@@ -34,7 +34,7 @@ $highlight-border: #b33a9e;
     }
 }
 
-.disabled-button{
+.button_disabled{
     pointer-events: none; // Prevent clicks
     cursor: default;  // Show default cursor
   

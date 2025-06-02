@@ -38,6 +38,6 @@ export class AppComponent {
   }
 
   handleNewGameClick(){
-    
+    //send to child to clear board
   }
 }

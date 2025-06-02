@@ -1,12 +1,12 @@
-.board{
-    display: grid;
-    grid-template-columns: repeat(3, 200px);
-    grid-template-rows: repeat(3, 200px);
-    gap: 2px;
-}
-
-.container{
+.board-container{
     display: flex;
     justify-content: center;
     align-items: center;
+    
+    &__board{
+        display: grid;
+         grid-template-columns: repeat(3, 200px);
+        grid-template-rows: repeat(3, 200px);
+        gap: 2px;
+    }
 }

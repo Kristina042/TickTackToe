@@ -1,4 +1,4 @@
-.gameStatsBar{
+.game-stats-bar {
     background-color: #b3dee2;
     width: 100%;
     border-radius: 15px;
@@ -22,9 +22,9 @@
     margin-top: 10px;
 
     padding: 15px;
-}
 
-.cell{
-    display: flex;
-    flex-direction: column;
+    &__stat-item {
+        display: flex;
+        flex-direction: column;
+    }
 }

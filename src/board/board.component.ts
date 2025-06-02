@@ -46,6 +46,8 @@ export class BoardComponent {
     [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
   ]
 
+  flattenedBoard = this.board.flat();
+
   currPlayer = {
     isX: true,
     CurrId: 0
@@ -252,9 +254,7 @@ export class BoardComponent {
             idsToCheck.push(idMatrix[row][column])
         }
         else{
-          row = row - 1
-    //generate matrix from my ids
-    //generate matrix from my ids
+          row = row - 1 
           column = column - 1
 
           if ((row >= 0) && (column >= 0))
