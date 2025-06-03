@@ -2,6 +2,7 @@ import { Component, EventEmitter } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { input } from '@angular/core';
 
 type stats = {
   numXwins: number,
@@ -9,6 +10,11 @@ type stats = {
   numTies: number
 }
 
+export interface board_cell {
+  id:  number,
+  display: 'X'|'O'|'',
+  isHighlighted: boolean,
+}
 
 @Component({
   selector: 'app-board',
@@ -16,10 +22,16 @@ type stats = {
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
+
 export class BoardComponent {
 
-  @Output() BoardEmitter = new EventEmitter()
+  @Output() StatusEmitter = new EventEmitter()
   @Output() StatsEmitter = new EventEmitter<stats>() 
+
+  max_rows = input<number>()
+  max_columns = input<number>()
+
+  step_count = input<number>()
 
   //first turn is X - odd
   //X - goes on odd turns
@@ -35,13 +47,44 @@ export class BoardComponent {
 
  isBoardDisabled = false
  
-  board = [
-    [{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false }],
-    [{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false }],
-    [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
-  ]
+  // board = [
+  //   [{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false }],
+  //   [{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false }],
+  //   [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
+  // ]
+
+  board: any[][] = new Array()
+
+  create_board(board_width: any, board_heigth: any){
+    const board = new Array
+    let count = 0
+
+    for (let i = 0; i < board_heigth; i++){
+      const row = new Array
+
+      for (let j = 0; j < board_width; j++){
+
+        const cell: board_cell = {id: (j + count*board_width), display: '', isHighlighted: false}
+
+        row.push(cell)
+      }
+      count++
+
+      board.push(row)
+    }
+
+    console.log('from board')
+    console.log(board)
+    return board
+  }
 
   flattenedBoard = this.board.flat();
+
+  ngOnInit(){
+    this.board = this.create_board(this.max_rows(), this.max_columns())
+    this.flattenedBoard = this.board.flat()
+    console.log(`num of cells: ${this.flattenedBoard.length}`)
+  }
 
   currPlayer = {
     isX: true,
@@ -226,7 +269,7 @@ export class BoardComponent {
     if (this.board[currRow][currColumn].display !== value)
       return false
 
-    const idMatrix: number[][] = this.board.map((row) => row.map((cell) => cell.id))
+    const idMatrix: number[][] = this.board.map((row) => row.map((cell:board_cell) => cell.id))
 
     const STEP_COUNT = 3
     const CELL_COUNT = 3
@@ -393,12 +436,11 @@ export class BoardComponent {
       console.log('GAME OVER')
       this.sendMessageToGameStatsBar(this.gameStats)
     }
-    
   }
 
   //send Message on every click
   sendMessageToStatusBar(message: string){
-    this.BoardEmitter.emit(message)
+    this.StatusEmitter.emit(message)
   }
 
   //send after every game over

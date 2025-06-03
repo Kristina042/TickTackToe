@@ -1,49 +1,12 @@
 import { Component } from '@angular/core';
-import { BoardComponent } from '../board/board.component';
-import { StatusBarComponent } from "../status-bar/status-bar.component";
-import { GameStatsBarComponent } from "../game-stats-bar/game-stats-bar.component";
-import { Router } from '@angular/router';
-import { inject } from '@angular/core';
-
-export interface stats {
-  numXwins: number;
-  numOwins: number;
-  numTies: number;
-}
+import { NumByNumComponent } from '../num-by-num/num-by-num.component';
 
 @Component({
   selector: 'app-three-by-three',
-  imports: [BoardComponent, StatusBarComponent, GameStatsBarComponent],
-  templateUrl: './three-by-three.component.html',
-  styleUrl: './three-by-three.component.scss'
+  imports: [NumByNumComponent],
+  template: '<app-num-by-num [num_columns]="3" [num_rows]="3"/>',
 })
-export class ThreeByThreeComponent {
-  private router = inject(Router);
 
-  gameStatus:string = "It's X's turn"
+export class ThreeByThreeComponent{
   
-    gameStats:stats = {
-    numXwins: 0,
-    numOwins: 0,
-    numTies: 0
-   }
-  
-    handleStatusChange(newStatus: string){
-      this.gameStatus = newStatus
-    }
-  
-    handleGameStatsChange(newStats: stats){
-      this.gameStats = newStats
-  
-      console.log('from app:')
-      console.log(newStats)
-    }
-  
-    handleNewGameClick(){
-      //send to child to clear board
-    }
-
-    navigateToHome(){
-      this.router.navigate(["/"])
-    }
 }

@@ -1,3 +1,16 @@
+// .board-container{
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+    
+//     &__board{
+//         display: grid;
+//         grid-template-columns: repeat(3, 200px);
+//         grid-template-rows: repeat(3, 200px);
+//         gap: 2px;
+//     }
+// }
+
 .board-container{
     display: flex;
     justify-content: center;
@@ -5,8 +18,8 @@
     
     &__board{
         display: grid;
-         grid-template-columns: repeat(3, 200px);
-        grid-template-rows: repeat(3, 200px);
-        gap: 2px;
+
+        grid-template-columns: repeat(var(--column-count), calc(600px / var(--column-count)));
+        grid-template-rows: repeat(var(--row-count), calc(600px / var(--row-count)));
     }
 }
