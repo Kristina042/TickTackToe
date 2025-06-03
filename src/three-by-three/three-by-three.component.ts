@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { BoardComponent } from '../board/board.component';
 import { StatusBarComponent } from "../status-bar/status-bar.component";
 import { GameStatsBarComponent } from "../game-stats-bar/game-stats-bar.component";
+import { Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 export interface stats {
   numXwins: number;
@@ -16,6 +18,8 @@ export interface stats {
   styleUrl: './three-by-three.component.scss'
 })
 export class ThreeByThreeComponent {
+  private router = inject(Router);
+
   gameStatus:string = "It's X's turn"
   
     gameStats:stats = {
@@ -37,5 +41,9 @@ export class ThreeByThreeComponent {
   
     handleNewGameClick(){
       //send to child to clear board
+    }
+
+    navigateToHome(){
+      this.router.navigate(["/"])
     }
 }

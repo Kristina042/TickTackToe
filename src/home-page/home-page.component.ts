@@ -12,7 +12,11 @@ export class HomePageComponent {
 
   private router = inject(Router);
 
-  navigateTo3x3(){
-      this.router.navigate(['3x3']);
+  navigateTo_3x3(){
+    this.router.navigate(['3x3']);
+  }
+
+  navigateTo_10x10(){
+    this.router.navigate(['10x10']);
   }
 }

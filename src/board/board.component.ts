@@ -1,12 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { Output } from '@angular/core';
-import { CommonModule, UpperCasePipe } from '@angular/common';
-
-type button = {
-  id: number,
-  isClicked: boolean
-}
+import { CommonModule } from '@angular/common';
 
 type stats = {
   numXwins: number,
@@ -386,8 +381,8 @@ export class BoardComponent {
   //get info from child
   //called on every button click
   //so we can also use is to know if round is even
-  getButtonInfo (info: button) {
-    this.currPlayer.CurrId = info.id
+  getButtonInfo (info: number) {
+    this.currPlayer.CurrId = info
     this.turnCount++
 
     this.updateCurrPlayerInfo()

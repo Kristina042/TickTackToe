@@ -1,4 +1,4 @@
-<p>three-by-three works!</p>
+<button class="home-button" (click)="navigateToHome()">home</button>
 <div class="body">
     <app-status-bar [status]="gameStatus"/>
     <app-board (BoardEmitter)="handleStatusChange($event)" (StatsEmitter)="handleGameStatsChange($event)"/>

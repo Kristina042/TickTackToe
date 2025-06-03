@@ -1,10 +1,9 @@
 <div class="board-container">
     <div class="board-container__board">
-        <app-button *ngFor="let items of flattenedBoard; index as i"
-        [Id]="i"
-        [OnDisplay]="GetValueById(i)"
-        (ButtonEmitter)="getButtonInfo($event)"
+        <app-button *ngFor="let items of flattenedBoard; index as id"
+        [OnDisplay]="GetValueById(id)"
+        (ButtonEmitter)="getButtonInfo(id)"
         [isGameFinished]="isBoardDisabled"
-        [isHighlighted]="getButtonColor(i)"/>
+        [isHighlighted]="getButtonColor(id)"/>
     </div>
 </div>
