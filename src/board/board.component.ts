@@ -28,31 +28,26 @@ export class BoardComponent {
   @Output() StatusEmitter = new EventEmitter()
   @Output() StatsEmitter = new EventEmitter<stats>() 
 
-  max_rows = input<number>()
-  max_columns = input<number>()
+  max_rows = input<number>(0) 
+  max_columns = input<number>(0)
 
-  step_count = input<number>()
+  step_count = input<number>(0)
 
   //first turn is X - odd
   //X - goes on odd turns
   //O - goes on even turns 
- wasTurnEven = true
- turnCount = 0
+  wasTurnEven = true
+  turnCount = 0
+  isX = true
 
- gameStats:stats = {
-  numXwins: 0,
-  numOwins: 0,
-  numTies: 0
- }
+  gameStats:stats = {
+    numXwins: 0,
+    numOwins: 0,
+    numTies: 0
+  }
 
- isBoardDisabled = false
+  isBoardDisabled = false
  
-  // board = [
-  //   [{ id: 0, display: '', isHighlighted: false  },{ id: 1, display: '', isHighlighted: false },{ id: 2, display: '', isHighlighted: false }],
-  //   [{ id: 3, display: '', isHighlighted: false  },{ id: 4, display: '', isHighlighted: false },{ id: 5, display: '', isHighlighted: false }],
-  //   [{ id: 6, display: '', isHighlighted: false  },{ id: 7, display: '', isHighlighted: false },{ id: 8, display: '', isHighlighted: false }]
-  // ]
-
   board: any[][] = new Array()
 
   create_board(board_width: any, board_heigth: any){
@@ -72,9 +67,6 @@ export class BoardComponent {
 
       board.push(row)
     }
-
-    console.log('from board')
-    console.log(board)
     return board
   }
 
@@ -83,12 +75,6 @@ export class BoardComponent {
   ngOnInit(){
     this.board = this.create_board(this.max_rows(), this.max_columns())
     this.flattenedBoard = this.board.flat()
-    console.log(`num of cells: ${this.flattenedBoard.length}`)
-  }
-
-  currPlayer = {
-    isX: true,
-    CurrId: 0
   }
 
   updateGameStats(valToIncrement: 'X'|'O'|'tie'){
@@ -103,23 +89,21 @@ export class BoardComponent {
       console.log(this.gameStats)
   }
   
-  getPlayerPosition(id:number){
-    const CELL_COUNT_PER_ROW = 3
-
-    const rowIndex = Math.floor(id / CELL_COUNT_PER_ROW)
-    const columnIndex = Math.floor(id - rowIndex * CELL_COUNT_PER_ROW)
+  getPlayerPosition(id:number, cell_count_per_row: number){
+    const rowIndex = Math.floor(id / cell_count_per_row)
+    const columnIndex = Math.floor(id - rowIndex * cell_count_per_row)
 
     return{rowIndex, columnIndex}
   }
 
-  GetValueById(id: number){ 
-    const player = this.getPlayerPosition(id)
+  GetValueById(id: number,  cell_count_per_row: number){ 
+    const player = this.getPlayerPosition(id, cell_count_per_row)
     const boardElement = this.board[player.rowIndex][player.columnIndex]
     return boardElement.display
   }
 
-  getButtonColor(id: number){
-    const player = this.getPlayerPosition(id)
+  getButtonColor(id: number, cell_count_per_row: number){
+    const player = this.getPlayerPosition(id, cell_count_per_row)
     const boardElement = this.board[player.rowIndex][player.columnIndex]
     return boardElement.isHighlighted
   }
@@ -128,224 +112,46 @@ export class BoardComponent {
      this.wasTurnEven = !this.wasTurnEven
 
     if (this.wasTurnEven)
-        this.currPlayer.isX = false
+        this.isX = false
     else
-      this.currPlayer.isX = true
+      this.isX = true
   }
 
-  updateButtonDisplay(){
-    const player = this.getPlayerPosition(this.currPlayer.CurrId)
+  updateButtonDisplay(id:number, cell_count_per_row: number){
+    const player = this.getPlayerPosition(id, cell_count_per_row)
     const boardElement = this.board[player.rowIndex][player.columnIndex]
 
-    if(this.currPlayer.isX)
+    if(this.isX)
       boardElement.display = 'X'
     else
       boardElement.display = 'O'
   }
   
-  didRowWin(buttonValue: 'X'|'O'){
-    const CELL_COUNT_PER_ROW = 3
-    const player = this.getPlayerPosition(this.currPlayer.CurrId)
-
-    const currRow = player.rowIndex
-    const currColumn = player.columnIndex
-
-    const result: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
-    const WinningIds: number[] = new Array(CELL_COUNT_PER_ROW)
-    let k = 0
-
-    if (this.board[currRow][currColumn].display !== buttonValue) 
-      return false
-
-    let columnIndex = currColumn
-
-    const checkLeftCells = () => {
-      for (let i = 0; i <= currColumn; i++){
-        if (this.board[currRow][columnIndex--].display === buttonValue){
-          result[k] = true 
-          k++
-        }
-      } 
-    }
-
-    const checkRightCells = () => {
-      columnIndex = currColumn
-      for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currColumn); i++){
-        if (this.board[currRow][++columnIndex].display === buttonValue){
-          result[k] = true
-          k++
-        }
-      }
-    }
-
-    const checkResult = () => {
-      if (result.every((el) =>{ return (el === true) })){
-        this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
-        this.isBoardDisabled = true  
-
-        for (let i = 0; i < CELL_COUNT_PER_ROW; i++)
-          this.board[currRow][i].isHighlighted = true
-
-        this.updateGameStats(buttonValue)
-        return true
-      }
-      return false
-    }
-
-    checkLeftCells()
-    checkRightCells()
-
-    if (checkResult()){ 
-      return true
-    }
-
-    return false
-  }   
-
-  didColumnWin(buttonValue: 'X'|'O'){
-    const CELL_COUNT_PER_ROW = 3
-
-    const currRow = this.getPlayerPosition(this.currPlayer.CurrId).rowIndex
-    const currColumn = this.getPlayerPosition(this.currPlayer.CurrId).columnIndex
-
-    const result: boolean[] = new Array(CELL_COUNT_PER_ROW).fill(false);
-    let k = 0 //index for boolean array
-
-    //check if there is any point in checking for x
-    if (this.board[currRow][currColumn].display !== buttonValue)
-      return false
-
-    const checkCellsUp = () => {
-      let rowIndex = currRow
-      for (let i  = 0; i <= currRow; i++){
-        if (this.board[rowIndex][currColumn].display === buttonValue){
-          result[k] = true
-          k++
-        }
-        --rowIndex     
-      }
-    }
-
-    const checkCellsDown = () =>{
-      let rowIndex = currRow
-      //go (CELL_COUNT_PER_ROW - 1 - currRow times down (index + 3))
-      for (let i = 0; i < (CELL_COUNT_PER_ROW - 1 - currRow); i++){
-        rowIndex++
-        if(this.board[rowIndex][currColumn].display === buttonValue){
-          result[k] = true
-          k++
-        }
-      }
-    }
-
-    const checkResult = () => {
-      if (result.every((el) =>{ return (el === true) })){
-        this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
-        this.isBoardDisabled = true  
-
-        //highlight the column
-        for (let i = 0; i < CELL_COUNT_PER_ROW; i++){
-            this.board[i][currColumn].isHighlighted = true
-        }
-
-        this.updateGameStats(buttonValue)
-        return true
-      }  
-      return false 
-    }
-
-    checkCellsUp()
-    checkCellsDown()
-    if (checkResult())
-      return true
-
-    return false
-  }
-
-  didDiagWin = (currentIdx: number, value: 'X' | 'O', direction: 'bottomLeft->rightUp'|'leftUp->bottomRight') => {
-    const currRow = this.getPlayerPosition(currentIdx).rowIndex
-    const currColumn = this.getPlayerPosition(currentIdx).columnIndex
-
-    if (this.board[currRow][currColumn].display !== value)
-      return false
-
-    const idMatrix: number[][] = this.board.map((row) => row.map((cell:board_cell) => cell.id))
-
-    const STEP_COUNT = 3
-    const CELL_COUNT = 3
-
-    const idsToCheck: number[] = []
-
-    idsToCheck.push(currentIdx)
-
-    const checkCellsUp = () => {
-      let row = currRow
-      let column  = currColumn
-      for (let i = 0; i < (STEP_COUNT - 1); i++){
-
-        if (direction === 'bottomLeft->rightUp')
-        { 
-          row = row - 1
-          column = column + 1
-
-          if ((row >= 0) && (column <= (CELL_COUNT - 1)))
-            idsToCheck.push(idMatrix[row][column])
-        }
-        else{
-          row = row - 1 
-          column = column - 1
-
-          if ((row >= 0) && (column >= 0))
-            idsToCheck.push(idMatrix[row][column])
-        }
-      }
-    }
-    
-    const checkCellsDown = () => {
-     let row = currRow
-     let column = currColumn
-      for (let i = 0; i < (STEP_COUNT - 1); i++){
-
-        if (direction === 'bottomLeft->rightUp')
-        {
-          row = row + 1
-          column = column - 1
-
-          if ((row <= (CELL_COUNT - 1)) && (column >= 0))
-            idsToCheck.push(idMatrix[row][column])
-        }
-        else{
-          row = row + 1
-          column = column + 1
-
-          if ((row <= (CELL_COUNT - 1)) && (column<= (CELL_COUNT - 1)))
-          idsToCheck.push(idMatrix[row][column])
-        }
-      }
-    }
-
-    checkCellsUp()
-    checkCellsDown()
+  //true - win
+  //false - loss
+  checkIdsForWin(idArr: number[], buttonValue: 'X'|'O', cell_count_per_row: number, step_count:number){
+    console.log (`idArr`)
+    console.log(idArr)
 
     //check that ids to check lengh is at least STEP count
-    if (idsToCheck.length < STEP_COUNT)
-      return
+    if (idArr.length < step_count)
+      return false
 
-    idsToCheck.sort((a, b) => a - b);
-  
-    const result: boolean[] = new Array(idsToCheck.length).fill(false)
+    idArr.sort((a, b) => a - b)
+
+    const result: boolean[] = new Array(idArr.length).fill(false)
     let k = 0
 
     //will be used in case of a win
-    const winningIds: number[] = new Array(STEP_COUNT)
+    const winningIds: number[] = new Array()
 
     const checkIdArray = () => {
-      for (let i = 0; i < (idsToCheck.length); i++){
-        let id = idsToCheck[i]  
-        let row = this.getPlayerPosition(id).rowIndex
-        let column = this.getPlayerPosition(id).columnIndex
+      for (let i = 0; i < (idArr.length); i++){
+        let id = idArr[i]  
+        let row = this.getPlayerPosition(id, cell_count_per_row).rowIndex
+        let column = this.getPlayerPosition(id, cell_count_per_row).columnIndex
 
-        if (this.board[row][column].display === value){
+        if (this.board[row][column].display === buttonValue){
           result[k] = true
           k++
 
@@ -362,7 +168,7 @@ export class BoardComponent {
         if (result[i] === true){
           count++
 
-          if (count === (STEP_COUNT))
+          if (count === (step_count))
               return true
         }
         else{
@@ -376,32 +182,200 @@ export class BoardComponent {
 
     if (isWinner() === true)
     {
+      console.log('winning ids')
+      console.log(winningIds)
+
       //highlight winning ids
       winningIds.forEach((id) => {
-        let row = this.getPlayerPosition(id).rowIndex
-        let column = this.getPlayerPosition(id).columnIndex
+        let row = this.getPlayerPosition(id, cell_count_per_row).rowIndex
+        let column = this.getPlayerPosition(id, cell_count_per_row).columnIndex
 
         this.board[row][column].isHighlighted = true
       })
 
       this.isBoardDisabled = true
-      this.sendMessageToStatusBar(`${value} is the winner!`)
-      this.updateGameStats(value)
+      this.sendMessageToStatusBar(`${buttonValue} is the winner!`)
+      this.updateGameStats(buttonValue)
       return true
     }
     return false
   }
 
-  checkWinner(){
+  didRowWin(currentIdx:number, buttonValue: 'X'|'O', cell_count_per_row: number, step_count:number){
+    const player = this.getPlayerPosition(currentIdx, cell_count_per_row)
 
-    if (!this.didRowWin('X') && !this.didRowWin('O') &&
-      !this.didColumnWin('X') && !this.didColumnWin('O') &&
-      !this.didDiagWin(this.currPlayer.CurrId, 'X', 'bottomLeft->rightUp') &&
-      !this.didDiagWin(this.currPlayer.CurrId, 'O', 'bottomLeft->rightUp') &&
-      !this.didDiagWin(this.currPlayer.CurrId, 'X', 'leftUp->bottomRight')&&
-      !this.didDiagWin(this.currPlayer.CurrId, 'O', 'leftUp->bottomRight')){
+    const currRow = player.rowIndex
+    const currColumn = player.columnIndex
 
-      if (this.turnCount === (9)){
+    if (this.board[currRow][currColumn].display !==  buttonValue)
+      return false
+
+    const idsToCheck: number[] = []
+    idsToCheck.push(currentIdx)
+
+    const checkCellsRight = () => {
+      let column = currColumn
+      let id = currentIdx
+
+      for(let i = 0; i < (step_count - 1); i++){
+        column = column + 1
+        id = id + 1
+
+        if (column <= (cell_count_per_row - 1))
+          idsToCheck.push(id)
+      }
+    }
+
+    const checkCellsLeft = () => {
+      let column = currColumn
+      let id = currentIdx
+      
+      for (let i = 0; i < (step_count - 1); i++){
+        column = column - 1
+        id = id - 1
+
+        if (column >= 0)
+          idsToCheck.push(id)
+      }
+    }
+
+    checkCellsRight()
+    checkCellsLeft()
+    
+    if (this.checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count))
+      return true
+
+    return false
+  }   
+
+  didColumnWin(currentIdx: number, buttonValue: 'X'|'O', cell_count_per_row: number, step_count: number){
+    const player = this.getPlayerPosition(currentIdx, cell_count_per_row)
+
+    const currRow = player.rowIndex
+    const currColumn = player.columnIndex
+
+    if (this.board[currRow][currColumn].display !==  buttonValue)
+      return false
+
+    const idsToCheck: number[] = []
+    idsToCheck.push(currentIdx)
+
+    const checkCellsUp = () => {
+      let row = currRow
+      let id = currentIdx
+
+      for (let i = 0; i < (step_count - 1); i++){
+        row = row - 1
+        id = id - cell_count_per_row
+
+        if (row >= 0)
+          idsToCheck.push(id)
+      }
+    }
+
+    const checkCellsDown = () =>{
+      let row = currRow
+      let id = currentIdx
+
+      for (let i = 0; i < (step_count - 1); i++){
+        row = row + 1
+        id = id + cell_count_per_row
+
+        if (row <= (cell_count_per_row - 1))
+          idsToCheck.push(id)
+      }
+    }
+
+    checkCellsUp()
+    checkCellsDown()
+
+    if (this.checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count))
+    {
+      console.log('column won!')
+      return true
+    }
+
+    return false
+  }
+
+  didDiagWin = (currentIdx: number, value: 'X' | 'O', direction: 'bottomLeft->rightUp'|'leftUp->bottomRight',
+     cell_count_per_row: number, step_count: number) => {
+    const currRow = this.getPlayerPosition(currentIdx, cell_count_per_row).rowIndex
+    const currColumn = this.getPlayerPosition(currentIdx, cell_count_per_row).columnIndex
+
+    if (this.board[currRow][currColumn].display !== value)
+      return false
+
+    const idMatrix: number[][] = this.board.map((row) => row.map((cell:board_cell) => cell.id))
+
+    const idsToCheck: number[] = []
+
+    idsToCheck.push(currentIdx)
+
+    const checkCellsUp = () => {
+      let row = currRow
+      let column  = currColumn
+      for (let i = 0; i < (step_count - 1); i++){
+
+        if (direction === 'bottomLeft->rightUp')
+        { 
+          row = row - 1
+          column = column + 1
+
+          if ((row >= 0) && (column <= (cell_count_per_row - 1)))
+            idsToCheck.push(idMatrix[row][column])
+        }
+        else{
+          row = row - 1 
+          column = column - 1
+
+          if ((row >= 0) && (column >= 0))
+            idsToCheck.push(idMatrix[row][column])
+        }
+      }
+    }
+    
+    const checkCellsDown = () => {
+     let row = currRow
+     let column = currColumn
+      for (let i = 0; i < (step_count - 1); i++){
+
+        if (direction === 'bottomLeft->rightUp')
+        {
+          row = row + 1
+          column = column - 1
+
+          if ((row <= (cell_count_per_row - 1)) && (column >= 0))
+            idsToCheck.push(idMatrix[row][column])
+        }
+        else{
+          row = row + 1
+          column = column + 1
+
+          if ((row <= (cell_count_per_row - 1)) && (column<= (cell_count_per_row - 1)))
+          idsToCheck.push(idMatrix[row][column])
+        }
+      }
+    }
+
+    checkCellsUp()
+    checkCellsDown()
+
+   if (this.checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count))
+    return true
+
+   return false
+  }
+
+  checkWinner(id: number){
+    if (!this.didRowWin(id, 'X', this.max_rows(), this.step_count()) && !this.didRowWin(id, 'O', this.max_rows(), this.step_count()) &&
+      !this.didColumnWin(id, 'X', this.max_rows(), this.step_count()) && !this.didColumnWin(id, 'O', this.max_rows(), this.step_count()) &&
+      !this.didDiagWin(id, 'X', 'bottomLeft->rightUp', this.max_rows(), this.step_count()) &&
+      !this.didDiagWin(id, 'O', 'bottomLeft->rightUp', this.max_rows(), this.step_count()) &&
+      !this.didDiagWin(id, 'X', 'leftUp->bottomRight', this.max_rows(), this.step_count())&&
+      !this.didDiagWin(id, 'O', 'leftUp->bottomRight', this.max_rows(), this.step_count())){
+
+      if (this.turnCount === (this.max_columns()*this.max_rows())){
         this.sendMessageToStatusBar(`It's a tie!`)
         this.updateGameStats('tie')
         this.isBoardDisabled = true
@@ -409,7 +383,7 @@ export class BoardComponent {
         return true
       }
       else{
-        if (this.currPlayer.isX)
+        if (this.isX)
           this.sendMessageToStatusBar(`It's O's turn`)
         else
           this.sendMessageToStatusBar(`It's X's turn`)
@@ -424,15 +398,14 @@ export class BoardComponent {
   //get info from child
   //called on every button click
   //so we can also use is to know if round is even
-  getButtonInfo (info: number) {
-    this.currPlayer.CurrId = info
+  getButtonInfo (id: number) {
     this.turnCount++
 
     this.updateCurrPlayerInfo()
-    this.updateButtonDisplay()
+    this.updateButtonDisplay(id, this.max_rows())
 
     //update stats bar on every game over
-    if (this.checkWinner()){
+    if (this.checkWinner(id)){
       console.log('GAME OVER')
       this.sendMessageToGameStatsBar(this.gameStats)
     }

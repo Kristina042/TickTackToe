@@ -21,6 +21,7 @@ export class NumByNumComponent {
 
   num_rows = input<number>()
   num_columns = input<number>()
+  step_count = input<number>()
 
   private router = inject(Router);
 
