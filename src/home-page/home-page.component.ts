@@ -16,6 +16,10 @@ export class HomePageComponent {
     this.router.navigate(['3x3']);
   }
 
+  navigateTo_5x5(){
+    this.router.navigate(['5x5']);
+  }
+
   navigateTo_10x10(){
     this.router.navigate(['10x10']);
   }
