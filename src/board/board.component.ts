@@ -1,12 +1,8 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output, input} from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
-import { Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { input } from '@angular/core';
-
 import { stats} from '../utils/boardUtils/statusBars';
-import { getPlayerPosition, board_cell, create_board } from '../utils/boardUtils/board';
-import { checkWinner } from '../utils/boardUtils/board';
+import { getPlayerPosition, board_cell, create_board, checkWinner } from '../utils/boardUtils/board';
 
 @Component({
   selector: 'app-board',
@@ -16,19 +12,13 @@ import { checkWinner } from '../utils/boardUtils/board';
 })
 
 export class BoardComponent {
-  // TODO in this file I want to see only realted functions not definitions of them
-  // Move functions to other folder like idk, modules, utils, came out with 
-  // this file should have +/- 200 lines not 440 so reduce it by has max is 
-  @Output() StatusEmitter = new EventEmitter()
-  @Output() StatsEmitter = new EventEmitter<stats>() 
+  @Output() updateStatusBar = new EventEmitter()
+  @Output() updateGameScore = new EventEmitter<stats>() 
 
   max_rows = input(0) 
   max_columns = input<number>(0)
   step_count = input<number>(0)
 
-  //first turn is X - odd
-  //X - goes on odd turns
-  //O - goes on even turns 
   wasTurnEven = true
   turnCount = 0
   isX = true
@@ -42,37 +32,33 @@ export class BoardComponent {
   isBoardDisabled = false
   board: board_cell[][] = new Array()
 
-  flattenedBoard = this.board.flat();
+  // TODO idk i kinda dont like the name, its being used for rendering.
+  // came up with better name like boardIterator or something like this
+  // ask GPT he is good for this kind of thing
+  // ask him for list of names
+  BoardItems = this.board.flat();
 
   ngOnInit(){
     this.board = create_board(this.max_rows(), this.max_columns())
-    this.flattenedBoard = this.board.flat()
+    this.BoardItems = this.board.flat()
   }
 
-  // what about 3x ifs with return statement?
-  updateGameStats(valToIncrement: 'X'|'O'|'tie'){
+  updateGameStats(valToIncrement: 'X'|'O'|''){
     if (valToIncrement === 'X') return this.gameStats.numXwins++
 
     if(valToIncrement === 'O') return this.gameStats.numOwins ++
     
-    if (valToIncrement === 'tie') return this.gameStats.numTies++
+    if (valToIncrement === '') return this.gameStats.numTies++
 
     return
   }
 
-  GetValueById(id: number,  cell_count_per_row: number){ 
+  getElementById(id: number,  cell_count_per_row: number){
     const player = getPlayerPosition(id, cell_count_per_row)
-    const boardElement = this.board[player.rowIndex][player.columnIndex]
-    return boardElement.display
+    return this.board[player.rowIndex][player.columnIndex]
   }
 
-  getButtonColor(id: number, cell_count_per_row: number){
-    const player = getPlayerPosition(id, cell_count_per_row)
-    const boardElement = this.board[player.rowIndex][player.columnIndex]
-    return boardElement.isHighlighted
-  }
-
-  updateCurrPlayerInfo(){
+  updateCurrPlayerInfo() {
     this.wasTurnEven = !this.wasTurnEven
     this.isX = this.wasTurnEven ? true : false
   }
@@ -86,57 +72,38 @@ export class BoardComponent {
   
   highlightIdArray(ids:number[], cell_count_per_row: number){
     ids.forEach((id) => {
-      let row = getPlayerPosition(id, cell_count_per_row).rowIndex
-      let column = getPlayerPosition(id, cell_count_per_row).columnIndex
-      this.board[row][column].isHighlighted = true
+      const {rowIndex, columnIndex} = getPlayerPosition(id, cell_count_per_row)
+      this.board[rowIndex][columnIndex].isHighlighted = true
     })
   }
 
-   sendMessageToStatusBar(message: string){
-    this.StatusEmitter.emit(message)
-  }
-
-  sendMessageToGameStatsBar(gameStats: stats){
-    this.StatsEmitter.emit(gameStats)
-  }
-
-  handleButtonClick (id: number) {
+  handlePlayerTurn(id: number) {
     this.turnCount++
 
     this.updateCurrPlayerInfo()
     this.updateButtonDisplay(id, this.max_rows())
 
-    const Result = checkWinner(id, this.max_rows(), this.step_count(), this.board)
+    const result = checkWinner(id, this.max_rows(), this.step_count(), this.board)
 
-    if (Result.winner === 'X'){
-      this.highlightIdArray(Result.winningIds, this.max_rows())
-      this.updateGameStats('X')
-      this.sendMessageToGameStatsBar(this.gameStats)
-      this.sendMessageToStatusBar(`X is the winner!`)
+    const isGameOver = (winner:'X'|'O'|'') =>{
+      const GameIsNotOver = (winner === '') && (this.turnCount < this.max_columns()*this.max_rows())
+      if (GameIsNotOver) return false
+
+      const message = (winner === '') ? `It's a tie!` : `${winner} is the winner!`
+
+      this.updateGameStats(winner)
+      this.updateStatusBar.emit(message)
+      this.updateGameScore.emit(this.gameStats)
+      this.highlightIdArray(result.winningIds, this.max_rows())
       this.isBoardDisabled = true
-      return
+
+      return true
     }
 
-    if (Result.winner === 'O'){
-      this.highlightIdArray(Result.winningIds, this.max_rows())
-      this.updateGameStats('O')
-      this.sendMessageToGameStatsBar(this.gameStats)
-      this.sendMessageToStatusBar(`O is the winner!`)
-      this.isBoardDisabled = true
+    if (isGameOver(result.winner as '' | 'X' | 'O'))
       return
-    }
 
-    if ((Result.winner === '') && (this.turnCount === this.max_columns()*this.max_rows())){
-      this.sendMessageToStatusBar(`it's a tie!`)
-      this.updateGameStats('tie')
-      this.sendMessageToGameStatsBar(this.gameStats)
-      this.isBoardDisabled = true
-      return
-    }
-
-    if (this.isX)
-      this.sendMessageToStatusBar(`It's X's turn`)
-    else
-      this.sendMessageToStatusBar(`It's O's turn`)
+    const message = this.isX ? `It's X's turn` : `It's O's turn`
+    this.updateStatusBar.emit(message)
   }
 }

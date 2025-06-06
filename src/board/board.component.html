@@ -1,9 +1,9 @@
 <div class="board-container">
     <div  [style.--row-count]="max_rows()"  [style.--column-count]="max_columns()" class="board-container__board">
-        <app-button *ngFor="let items of flattenedBoard; index as id"
-        [OnDisplay]="GetValueById(id, max_rows())"
-        (ButtonEmitter)="handleButtonClick(id)"
+        <app-button *ngFor="let items of BoardItems; index as id"
+        [OnDisplay]="getElementById(id, max_rows()).display"
+        (ButtonEmitter)="handlePlayerTurn(id)"
         [isGameFinished]="isBoardDisabled"
-        [isHighlighted]="getButtonColor(id, max_rows())"/>
+        [isHighlighted]="getElementById(id, max_rows()).isHighlighted"/>
     </div>
 </div>

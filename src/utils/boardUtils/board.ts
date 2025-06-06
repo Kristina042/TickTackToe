@@ -4,63 +4,43 @@ export type board_cell = {
   display: 'X'|'O'|'',
   isHighlighted: boolean,
 }
+
 export const getPlayerPosition = (id:number, cell_count_per_row: number) => {
     const rowIndex = Math.floor(id / cell_count_per_row)
     const columnIndex = Math.floor(id - rowIndex * cell_count_per_row)
 
-    return{rowIndex, columnIndex}
-  }
+    return { rowIndex, columnIndex }
+}
 
-// TODO: make it more clean, try to use new Array(new Array)
-  export const create_board = (board_width: number, board_heigth: number) => {
-    const board = new Array
-    let count = 0
-
-    for (let i = 0; i < board_heigth; i++){
-      const row = new Array
-
-      for (let j = 0; j < board_width; j++){
-
-        const cell: board_cell = {id: (j + count*board_width), display: '', isHighlighted: false}
-
-        row.push(cell)
-      }
-      count++
-
-      board.push(row)
-    }
-    return board
-  }
+  export const create_board = (board_width: number, board_height: number): board_cell[][] =>
+  Array.from({ length: board_height }, (_, row) =>
+    Array.from({ length: board_width }, (_, col) => ({
+      id: row * board_width + col,
+      display: '',
+      isHighlighted: false
+    }))
+  );
 
 export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count_per_row: number, step_count:number, board:board_cell[][]) => {
-    //check that ids to check lengh is at least STEP count
-    if (idArr.length < step_count)
+    const isArrayTooLong = idArr.length < step_count
+    if (isArrayTooLong)
       return []
 
     idArr.sort((a, b) => a - b)
 
-    console.log(`sorted ids to check: ${idArr}`)
-
     const result: boolean[] = new Array(idArr.length).fill(false)
-    let result_index = 0
-
-    //will be used in case of a win
-    const winningIds: number[] = new Array()
+    const winningIds: number[] = []
 
     const checkIdArray = () => {
-      idArr.forEach((id) => {
-        let row = getPlayerPosition(id, cell_count_per_row).rowIndex
-        let column = getPlayerPosition(id, cell_count_per_row).columnIndex
+      idArr.forEach((id, index) => {
 
-        if (board[row][column].display !== buttonValue){
-          result[result_index] = false
-          result_index++
+        const {rowIndex, columnIndex} = getPlayerPosition(id, cell_count_per_row)
+
+        if (board[rowIndex][columnIndex].display !== buttonValue){
+          result[index] = false
           return
         }
-
-        result[result_index] = true
-        result_index++
-
+        result[index] = true
         winningIds.push(id)
       })
     }
@@ -73,7 +53,7 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
           count = 0
           continue
         }
-
+        
         count++
         if (count === (step_count))  return true
       }
@@ -83,20 +63,16 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
 
     checkIdArray()
 
-    console.log(`bool of sorted ids: ${result}`)
-    console.log('--------------------------------------------------------------------')
-
-    if (isWinner() !== true)
-      return []
+    if (isWinner() !== true) return []
     
     return winningIds
   }
 
   export const didRowWin = (currentIdx:number, buttonValue: 'X'|'O', cell_count_per_row: number, step_count:number, board:board_cell[][]) => {
-    const player = getPlayerPosition(currentIdx, cell_count_per_row)
+    const {rowIndex, columnIndex} = getPlayerPosition(currentIdx, cell_count_per_row)
 
-    const currRow = player.rowIndex
-    const currColumn = player.columnIndex
+    const currRow = rowIndex
+    const currColumn = columnIndex
 
     if (board[currRow][currColumn].display !==  buttonValue)
       return []
@@ -133,7 +109,7 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     
     const winningIds = checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count, board)
     
-    if (winningIds.length === 0)
+    if (!winningIds.length)
       return []
 
     return winningIds
@@ -141,10 +117,10 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
   
   
   export const didColumnWin = (currentIdx: number, buttonValue: 'X'|'O', cell_count_per_row: number, step_count: number, board:board_cell[][]) => {
-    const player = getPlayerPosition(currentIdx, cell_count_per_row)
+    const {rowIndex, columnIndex} = getPlayerPosition(currentIdx, cell_count_per_row)
 
-    const currRow = player.rowIndex
-    const currColumn = player.columnIndex
+    const currRow = rowIndex
+    const currColumn = columnIndex
 
     if (board[currRow][currColumn].display !==  buttonValue)
       return []
@@ -181,25 +157,28 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     checkCellsUp()
     checkCellsDown()
 
-    const WinningIds = checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count, board)
+    // wrong variable castin
+    const winningIds = checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count, board)
     
-    if (WinningIds.length === 0)
+    if (winningIds.length === 0)
       return []
 
-    return WinningIds
+    return winningIds
   }
 
-  export const didDiagWin = (
+  type diagInfo = {
     currentIdx: number,
     value: 'X' | 'O',
     direction: 'bottomLeft->rightUp'|'leftUp->bottomRight',
     cell_count_per_row: number,
     step_count: number,
     board:board_cell[][]
-  ) => {
+  }
 
-    const currRow = getPlayerPosition(currentIdx, cell_count_per_row).rowIndex
-    const currColumn = getPlayerPosition(currentIdx, cell_count_per_row).columnIndex
+  export const didDiagWin = ({currentIdx, value, direction, cell_count_per_row, step_count, board}: diagInfo) => {
+    const {rowIndex, columnIndex} = getPlayerPosition(currentIdx, cell_count_per_row)
+    const currRow = rowIndex
+    const currColumn = columnIndex
 
     if (board[currRow][currColumn].display !== value)
       return []
@@ -251,7 +230,6 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
       }
     }
   
-
     checkCellsUp()
     checkCellsDown()
 
@@ -268,13 +246,33 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     winningIds: number[]
   }
 
-  //should return object :
-  //win or no win
-  //who won
-  //tie or no tie
   export const checkWinner = (id:number, cell_count_per_row: number, step_count: number, board:board_cell[][]) => {
 
-    let winningIds = new Array()
+    let winningIds:number[] = []
+
+
+    // const input = {id: 1, sign: 'X', cell_count_per_row, step_count, board}
+
+    // const row = [didRowWin, didRowWin]
+    // const col = [didColumnWin, didColumnWin]
+    // const diag = [didDiagWin, didDiagWin, didDiagWin, didDiagWin]
+
+    // const xd: ('X' | 'O')[] = ['X', 'O']
+
+
+    // xd.map((sign) => {
+    //   const row = didRowWin(id, sign, cell_count_per_row, step_count, board)
+    //   const column = didColumnWin(id, sign, cell_count_per_row, step_count, board)
+
+    //   if (row.length) return row
+    //   if (column.length) return column
+    // })
+
+
+    // const result = {
+    //   winner: 'X',
+    //   winningIds: [1,2,3]
+    // }
 
     winningIds = didRowWin(id,'X' ,cell_count_per_row, step_count, board)
 
@@ -296,22 +294,22 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     if (winningIds.length > 0)
       return {winner:'O', winningIds: winningIds} 
 
-    winningIds = didDiagWin(id, 'X', 'bottomLeft->rightUp', cell_count_per_row, step_count, board)
+    winningIds = didDiagWin({currentIdx: id, value: 'X', direction: 'bottomLeft->rightUp', cell_count_per_row, step_count, board})
 
     if (winningIds.length > 0)
       return {winner:'X', winningIds: winningIds} 
 
-    winningIds = didDiagWin(id, 'X', 'leftUp->bottomRight', cell_count_per_row, step_count, board)
+    winningIds = didDiagWin({currentIdx: id, value: 'X', direction: 'leftUp->bottomRight', cell_count_per_row, step_count, board})
 
     if (winningIds.length > 0)
       return {winner:'X', winningIds: winningIds} 
 
-    winningIds = didDiagWin(id, 'O', 'bottomLeft->rightUp', cell_count_per_row, step_count, board)
+    winningIds = didDiagWin({currentIdx:id, value:'O', direction: 'bottomLeft->rightUp', cell_count_per_row, step_count, board})
 
     if (winningIds.length > 0)
       return {winner:'O', winningIds: winningIds} 
 
-    winningIds = didDiagWin(id, 'O', 'leftUp->bottomRight', cell_count_per_row, step_count, board)
+    winningIds = didDiagWin({currentIdx: id, value: 'O', direction: 'leftUp->bottomRight', cell_count_per_row, step_count, board})
 
     if (winningIds.length > 0)
       return {winner:'O', winningIds: winningIds} 
