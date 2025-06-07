@@ -4,6 +4,11 @@ $dark-gray:     #202020;
 $light-blue:    #b3dee2;
 $dark-blue:     #218380;
 
+$yellow: #ffffa7;
+$light-yellow: #fcfcdc;
+$medium-yellow: #d9ad3c;
+$dark-yellow: #c48f2d;
+
 .home-body{
     display: flex;
     flex-direction: column;
@@ -15,7 +20,9 @@ $dark-blue:     #218380;
 }
 
 .title{
-    font-size: 40px;
+    font-weight: 550;
+    font-family: "Comic Neue";
+    font-size: 50px;
     color: white;
     padding: 50px;
 }
@@ -29,7 +36,7 @@ $dark-blue:     #218380;
 
     border-style: solid;
     border-color: $dark-blue;
-    border-width: 4px;
+    border-width: 7px;
 
     border-radius: 25px;
     padding: 10px;
@@ -37,8 +44,11 @@ $dark-blue:     #218380;
     width: 320px;
 
     &__item{
-        color: $dark-gray;
+        font-weight: 550;
+        font-family: "Comic Neue";
         font-size: 30px;
+
+        color: $dark-gray;
         margin: 10px;
         transition: 0.1s;
 
@@ -47,4 +57,19 @@ $dark-blue:     #218380;
            cursor: pointer;
         }
     }
+}
+
+.octo{
+    width: 350px;
+    height:  350px;
+    background-size: cover;
+    background-position: center;
+    margin: 20px;
+}
+
+.menu-and-octos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }

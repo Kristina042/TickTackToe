@@ -1,15 +1,20 @@
 <button class="home-button" (click)="navigateToHome()">home</button>
-<div class="body">
-    <app-status-bar [status]="gameStatus"/>
-    <app-board 
-        (StatusEmitter)="handleStatusChange($event)"
-        (StatsEmitter)="handleGameStatsChange($event)"
-        [max_rows]="num_rows() || 0"
-        [max_columns]="num_columns() || 0" 
-        [step_count]="step_count() || 0"
-    />
-    <div class="stats-bar-and-button">
-        <app-game-stats-bar [stats]="gameStats"/>
-        <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
+<div class="game-and-octos">
+    <img class="octo" src="/octo2.png">
+    <div class="body">
+        <app-status-bar [status]="gameStatus"/>
+        <app-board 
+            (updateStatusBar)="handleStatusChange($event)"
+            (updateGameScore)="handleGameStatsChange($event)"
+            [max_rows]="num_rows() || 0"
+            [max_columns]="num_columns() || 0" 
+            [step_count]="step_count() || 0"
+            [resetBoard]="resetBoardTrigger"
+        />
+        <div class="stats-bar-and-button">
+            <app-game-stats-bar [stats]="gameStats"/>
+            <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
+        </div>
     </div>
+    <img class="octo" src="/octo1.png">
 </div>

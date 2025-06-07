@@ -1,27 +1,35 @@
+$yellow: #ffffa7;
+$light-yellow: #fcfcdc;
+$medium-yellow: #d9ad3c;
+$dark-yellow: #c48f2d;
+
+$light-blue:  #b3dee2;
+$dark-blue: #218380;
+
 .game-stats-bar {
-    background-color: #b3dee2;
+    background-color: $yellow;
     width: 100%;
     border-radius: 15px;
 
     display: flex;
     flex-direction: row;
-    column-gap: 60px;
+    column-gap: 30px;
     text-align: center;
     align-items: center;
     justify-content: center;
     color: #202020;
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 550;
-    font-family: math;
+    font-family: "Comic Neue";
 
     border-style: solid;
-    border-color:  #218380;
-    border-width: 4px;
+    border-color: $dark-yellow;
+    border-width: 6px;
 
     margin-left: 0px;
     margin-top: 10px;
 
-    padding: 15px;
+    padding: 10px;
 
     &__stat-item {
         display: flex;

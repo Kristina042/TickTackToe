@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input} from '@angular/core';
+import { Component, EventEmitter, Output, input, OnChanges, SimpleChanges} from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { CommonModule } from '@angular/common';
 import { stats} from '../utils/boardUtils/statusBars';
@@ -18,6 +18,7 @@ export class BoardComponent {
   max_rows = input(0) 
   max_columns = input<number>(0)
   step_count = input<number>(0)
+  resetBoard = input<boolean>(false)
 
   wasTurnEven = true
   turnCount = 0
@@ -41,6 +42,19 @@ export class BoardComponent {
   ngOnInit(){
     this.board = create_board(this.max_rows(), this.max_columns())
     this.BoardItems = this.board.flat()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['resetBoard']?.currentValue === true) {
+      this.resetGameBoard();
+    }
+  }
+
+  resetGameBoard() {
+    this.isBoardDisabled = false
+    this.turnCount = 0
+    this.updateStatusBar.emit(`Its X's turn`)
+    this.board = create_board(this.max_rows(), this.max_columns())
   }
 
   updateGameStats(valToIncrement: 'X'|'O'|''){

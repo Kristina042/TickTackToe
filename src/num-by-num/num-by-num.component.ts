@@ -25,13 +25,15 @@ export class NumByNumComponent {
 
   private router = inject(Router);
 
+  resetBoardTrigger = false;
+
   gameStatus:string = "It's X's turn"
   
-    gameStats:stats = {
+  gameStats:stats = {
     numXwins: 0,
     numOwins: 0,
     numTies: 0
-   }
+  }
   
   handleStatusChange(newStatus: string){
     this.gameStatus = newStatus
@@ -45,7 +47,10 @@ export class NumByNumComponent {
   }
   
   handleNewGameClick(){
-    //send to child to clear board
+    this.resetBoardTrigger = true;
+    
+    // Reset back to false to allow future resets
+    setTimeout(() => this.resetBoardTrigger = false);
   }
 
   navigateToHome(){

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'app-home-page',
-  imports: [],
+  imports: [NgOptimizedImage],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })

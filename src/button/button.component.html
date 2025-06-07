@@ -1,10 +1,12 @@
-<button 
-  [class]="{
-    'button': true,
-    'button_highlighted': !!isHighlighted(),
-    'button_disabled': !!isGameFinished()
-  }"
-  (click)="handleClick()"
->
-  {{ OnDisplay() }}
-</button>
+<div class = "button-container">
+  <button 
+    [class]="{
+      'button': true,
+      'button_highlighted': !!isHighlighted(),
+      'button_disabled': !!isGameFinished()
+    }"
+    (click)="handleClick()"
+  >
+    {{ OnDisplay() }}
+  </button>
+</div>
