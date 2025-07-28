@@ -1,10 +1,4 @@
-$yellow: #ffffa7;
-$light-yellow: #fcfcdc;
-$medium-yellow: #d9ad3c;
-$dark-yellow: #c48f2d;
-
-$light-blue:  #b3dee2;
-$dark-blue: #218380;
+@import '../styles.scss';
 
 .game-stats-bar {
     background-color: $yellow;

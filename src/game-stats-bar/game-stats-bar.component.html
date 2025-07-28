@@ -4,23 +4,29 @@
             player X
         </div>
         <div>
-            {{stats()?.numXwins}}
+            {{stats()?.numXwins || 0}}
         </div>
     </div>
+
+
     <div class='game-stats-bar__stat-item'>
         <div>
           player O
         </div>
         <div>
-            {{stats()?.numOwins}}
+            {{stats()?.numOwins || 0}}
         </div>
     </div>
+
+
     <div class='game-stats-bar__stat-item'>
         <div>
             tie
         </div>
         <div>
-            {{stats()?.numTies}}
+            {{stats()?.numTies || 0}}
         </div>
     </div>
 </div>
+
+

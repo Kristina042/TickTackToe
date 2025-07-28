@@ -1,13 +1,4 @@
-$light-pink:    #ffacf1;
-$dark-pink:     #a3008d;
-$dark-gray:     #202020;
-$light-blue:    #b3dee2;
-$dark-blue:     #218380;
-
-$yellow: #ffffa7;
-$light-yellow: #fcfcdc;
-$medium-yellow: #d9ad3c;
-$dark-yellow: #c48f2d;
+@import '../styles.scss';
 
 .home-body{
     display: flex;

@@ -1,0 +1,81 @@
+@import '../styles.scss';
+
+.form {
+    background-color: $light-blue;
+
+    padding: 50px;
+    width: 450px;
+
+
+    border-radius: 20px;
+    font-weight: 550;
+    font-family: "Comic Neue";
+    font-size: 25px;
+    color: $dark-gray;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    &__control {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        &__input {
+            width: 316px;
+            height: 30px;
+            font-size: 20px;
+            border-radius: 5px;
+            border-style: dashed;
+            border-color: $dark-blue;
+            border-width: 1px;
+        }
+
+        &--error{
+            color: rgb(214, 2, 161);
+            font-size: 20px;
+            position: absolute;
+            top: 57px;
+        }
+    }
+
+    &__button {
+        margin-top: 30px;
+        width: 316px;
+        height: 50px;
+        padding: 10px;
+        background-color: $dark-blue;
+        color: white;
+        border-radius: 10px;
+        border: unset;
+        font-size: 25px;
+        font-weight: bold;
+        text-transform: uppercase;
+        align-items: center;
+        cursor: pointer;
+        margin-bottom: -28px;
+
+        &:hover {
+            background-color: $yellow;
+            color: $dark-blue;
+        }
+    }
+
+    &__nav{
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: rgb(0, 105, 131);
+
+        &--login {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

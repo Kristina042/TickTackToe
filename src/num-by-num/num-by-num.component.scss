@@ -1,16 +1,13 @@
-$yellow: #ffffa7;
-$light-yellow: #fcfcdc;
-$medium-yellow: #d9ad3c;
-$dark-yellow: #c48f2d;
+@import '../styles.scss';
 
-.body{
+.body {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.play-again-button{
+.play-again-button {
     border-radius: 15px;
     width: 160px;
     background-color: $yellow;
@@ -20,7 +17,7 @@ $dark-yellow: #c48f2d;
     font-weight: 550;
     font-family: "Comic Neue";
     font-size: 35px;
-    
+
     margin-top: 10px;
     margin-left: 10px;
     margin-right: 0px;
@@ -59,7 +56,7 @@ $dark-yellow: #c48f2d;
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
-    
+
     cursor: pointer;
 }
 
