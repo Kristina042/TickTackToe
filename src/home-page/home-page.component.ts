@@ -1,27 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'app-home-page',
-  imports: [NgOptimizedImage],
+  imports: [],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })
 export class HomePageComponent {
-
-  private router = inject(Router);
-
-  navigateTo_3x3(){
-    this.router.navigate(['3x3']);
-  }
-
-  navigateTo_5x5(){
-    this.router.navigate(['5x5']);
-  }
-
-  navigateTo_10x10(){
-    this.router.navigate(['10x10']);
-  }
+  router = inject(Router);
 }

@@ -1,17 +1,3 @@
-
-// .board-container{
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-    
-//     &__board{
-//         display: grid;
-
-//         grid-template-columns: repeat(var(--column-count), calc(600px / var(--column-count)));
-//         grid-template-rows: repeat(var(--row-count), calc(600px / var(--row-count)));
-//     }
-// }
-
 .board-container{
     display: flex;
     justify-content: center;

@@ -1,9 +1,11 @@
-<div class = "button-container">
+<div class="c-button-container">
+  <!--CR USE BEM it will be c-button--higlighted, c-button--disabled -->
+  <!-- button true? can't you add this staticly somehow? -->
   <button 
     [class]="{
-      'button': true,
-      'button_highlighted': !!isHighlighted(),
-      'button_disabled': !!isGameFinished()
+      'c-button': true,
+      'c-button--higlighted': !!isHighlighted(),
+      'c-button--disabled': !!isGameFinished()
     }"
     (click)="handleClick()"
   >

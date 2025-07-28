@@ -5,6 +5,15 @@ export type board_cell = {
   isHighlighted: boolean,
 }
 
+type checkWinnerInfo = {
+  currentIdx: number,
+  value: 'X' | 'O',
+  cell_count_per_row: number,
+  step_count: number,
+  board:board_cell[][]
+}
+
+
 export const getPlayerPosition = (id:number, cell_count_per_row: number) => {
     const rowIndex = Math.floor(id / cell_count_per_row)
     const columnIndex = Math.floor(id - rowIndex * cell_count_per_row)
@@ -12,7 +21,7 @@ export const getPlayerPosition = (id:number, cell_count_per_row: number) => {
     return { rowIndex, columnIndex }
 }
 
-  export const create_board = (board_width: number, board_height: number): board_cell[][] =>
+export const create_board = (board_width: number, board_height: number): board_cell[][] =>
   Array.from({ length: board_height }, (_, row) =>
     Array.from({ length: board_width }, (_, col) => ({
       id: row * board_width + col,
@@ -68,13 +77,13 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     return winningIds
   }
 
-  export const didRowWin = (currentIdx:number, buttonValue: 'X'|'O', cell_count_per_row: number, step_count:number, board:board_cell[][]) => {
+  export const didRowWin = ({currentIdx, value, cell_count_per_row, step_count, board}: checkWinnerInfo) => {
     const {rowIndex, columnIndex} = getPlayerPosition(currentIdx, cell_count_per_row)
 
     const currRow = rowIndex
     const currColumn = columnIndex
 
-    if (board[currRow][currColumn].display !==  buttonValue)
+    if (board[currRow][currColumn].display !==  value)
       return []
 
     const idsToCheck: number[] = []
@@ -107,7 +116,7 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     checkCellsRight()
     checkCellsLeft()
     
-    const winningIds = checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count, board)
+    const winningIds = checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count, board)
     
     if (!winningIds.length)
       return []
@@ -116,13 +125,13 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
   }
   
   
-  export const didColumnWin = (currentIdx: number, buttonValue: 'X'|'O', cell_count_per_row: number, step_count: number, board:board_cell[][]) => {
+  export const didColumnWin = ({currentIdx, value, cell_count_per_row, step_count, board}: checkWinnerInfo) => {
     const {rowIndex, columnIndex} = getPlayerPosition(currentIdx, cell_count_per_row)
 
     const currRow = rowIndex
     const currColumn = columnIndex
 
-    if (board[currRow][currColumn].display !==  buttonValue)
+    if (board[currRow][currColumn].display !==  value)
       return []
 
     const idsToCheck: number[] = []
@@ -157,8 +166,10 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     checkCellsUp()
     checkCellsDown()
 
-    // wrong variable castin
-    const winningIds = checkIdsForWin(idsToCheck, buttonValue, cell_count_per_row, step_count, board)
+    // CR whats wrong here?
+    // answear here ->probably the name checkIdsForWin doesnt correspond very well to the functions return value which is an array of winning ids
+    //maybe it should be like const winningIs = getWinningIds(bla bla)
+    const winningIds = checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count, board)
     
     if (winningIds.length === 0)
       return []
@@ -166,26 +177,18 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     return winningIds
   }
 
-  type diagInfo = {
-    currentIdx: number,
-    value: 'X' | 'O',
-    direction: 'bottomLeft->rightUp'|'leftUp->bottomRight',
-    cell_count_per_row: number,
-    step_count: number,
-    board:board_cell[][]
-  }
-
-  export const didDiagWin = ({currentIdx, value, direction, cell_count_per_row, step_count, board}: diagInfo) => {
+  export const didDiagWin = ({currentIdx, value, cell_count_per_row, step_count, board}: checkWinnerInfo) => {
     const {rowIndex, columnIndex} = getPlayerPosition(currentIdx, cell_count_per_row)
     const currRow = rowIndex
     const currColumn = columnIndex
+    let direction = 'bottomLeft->rightUp'
 
     if (board[currRow][currColumn].display !== value)
       return []
 
     const idMatrix: number[][] = board.map((row) => row.map((cell:board_cell) => cell.id))
 
-    const idsToCheck: number[] = []
+    let idsToCheck: number[] = []
 
     idsToCheck.push(currentIdx)
 
@@ -214,7 +217,6 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
      let column = currColumn
       for (let i = 0; i < (step_count - 1); i++){
 
-        // TODO here also too much nesting
         if (direction === 'bottomLeft->rightUp'){
           row++; column--
 
@@ -233,10 +235,23 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     checkCellsUp()
     checkCellsDown()
 
-   const WinningIds = checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count, board)
+   let WinningIds = checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count, board)
   
+   //check for a win in the 2d direction if the 1st won is non-winning
    if (WinningIds.length === 0)
-    return []
+   {
+      direction = "leftUp->bottomRight"
+      idsToCheck = []
+      idsToCheck.push(currentIdx)
+
+      checkCellsUp()
+      checkCellsDown()
+
+      WinningIds = checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count, board)
+
+      if (WinningIds.length === 0)
+      return []
+   }
 
    return WinningIds
   }
@@ -249,70 +264,25 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
   export const checkWinner = (id:number, cell_count_per_row: number, step_count: number, board:board_cell[][]) => {
 
     let winningIds:number[] = []
+    const players: any[] = ['X', 'O']
+    const winChecks = [didRowWin, didColumnWin, didDiagWin]
 
-
-    // const input = {id: 1, sign: 'X', cell_count_per_row, step_count, board}
-
-    // const row = [didRowWin, didRowWin]
-    // const col = [didColumnWin, didColumnWin]
-    // const diag = [didDiagWin, didDiagWin, didDiagWin, didDiagWin]
-
-    // const xd: ('X' | 'O')[] = ['X', 'O']
-
-
-    // xd.map((sign) => {
-    //   const row = didRowWin(id, sign, cell_count_per_row, step_count, board)
-    //   const column = didColumnWin(id, sign, cell_count_per_row, step_count, board)
-
-    //   if (row.length) return row
-    //   if (column.length) return column
-    // })
-
-
-    // const result = {
-    //   winner: 'X',
-    //   winningIds: [1,2,3]
-    // }
-
-    winningIds = didRowWin(id,'X' ,cell_count_per_row, step_count, board)
-
-    if (winningIds.length > 0)
-      return {winner:'X', winningIds: winningIds}
-
-    winningIds = didRowWin(id,'O' ,cell_count_per_row, step_count, board)
-
-    if (winningIds.length > 0)
-      return {winner:'O', winningIds: winningIds}
-
-    winningIds = didColumnWin(id,'X' ,cell_count_per_row, step_count, board)
-
-    if (winningIds.length > 0)
-      return {winner:'X', winningIds: winningIds} 
-    
-    winningIds = didColumnWin(id,'O' ,cell_count_per_row, step_count, board)
-
-    if (winningIds.length > 0)
-      return {winner:'O', winningIds: winningIds} 
-
-    winningIds = didDiagWin({currentIdx: id, value: 'X', direction: 'bottomLeft->rightUp', cell_count_per_row, step_count, board})
-
-    if (winningIds.length > 0)
-      return {winner:'X', winningIds: winningIds} 
-
-    winningIds = didDiagWin({currentIdx: id, value: 'X', direction: 'leftUp->bottomRight', cell_count_per_row, step_count, board})
-
-    if (winningIds.length > 0)
-      return {winner:'X', winningIds: winningIds} 
-
-    winningIds = didDiagWin({currentIdx:id, value:'O', direction: 'bottomLeft->rightUp', cell_count_per_row, step_count, board})
-
-    if (winningIds.length > 0)
-      return {winner:'O', winningIds: winningIds} 
-
-    winningIds = didDiagWin({currentIdx: id, value: 'O', direction: 'leftUp->bottomRight', cell_count_per_row, step_count, board})
-
-    if (winningIds.length > 0)
-      return {winner:'O', winningIds: winningIds} 
+    // CR make it in loop, reach Damian if u dont know how
+    //i wanted to use foreach but when you return from inside forEach i think it returns from inner function and i want to return form outer function checkwinner 
+    for (let i = 0; i < players.length; i++){
+      let info:checkWinnerInfo = {
+        currentIdx: id,
+        value: players[i],
+        cell_count_per_row: cell_count_per_row,
+        step_count: step_count,
+        board:board
+      }
+      
+      for (let j = 0; j < winChecks.length; j++){
+        winningIds = winChecks[j](info)
+        if (winningIds.length > 0)  return {winner: players[i], winningIds: winningIds}
+      }
+    }
 
     return{winner:'', winningIds: []}
   }

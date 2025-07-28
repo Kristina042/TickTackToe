@@ -15,12 +15,12 @@ export class ButtonComponent {
   IsDisabled = computed<boolean>(() => 
     this.isGameFinished() || !!this.OnDisplay().length);
 
-  @Output() ButtonEmitter = new EventEmitter();
+  @Output() onClick = new EventEmitter();
 
   handleClick(){
     if (this.IsDisabled()) return
     
-    this.ButtonEmitter.emit()
+    this.onClick.emit()
   }
 
 }

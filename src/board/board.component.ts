@@ -1,8 +1,13 @@
-import { Component, EventEmitter, Output, input, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, EventEmitter, Output, input, SimpleChanges} from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { CommonModule } from '@angular/common';
-import { stats} from '../utils/boardUtils/statusBars';
 import { getPlayerPosition, board_cell, create_board, checkWinner } from '../utils/boardUtils/board';
+
+export type stats = {
+   numXwins: number,
+   numOwins: number,
+   numTies: number
+}
 
 @Component({
   selector: 'app-board',
@@ -33,10 +38,6 @@ export class BoardComponent {
   isBoardDisabled = false
   board: board_cell[][] = new Array()
 
-  // TODO idk i kinda dont like the name, its being used for rendering.
-  // came up with better name like boardIterator or something like this
-  // ask GPT he is good for this kind of thing
-  // ask him for list of names
   BoardItems = this.board.flat();
 
   ngOnInit(){

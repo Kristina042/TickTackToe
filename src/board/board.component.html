@@ -1,8 +1,10 @@
+<!-- CR add this c prefix to class -->
+ <!-- over here good class names IMO -->
 <div class="board-container">
     <div  [style.--row-count]="max_rows()"  [style.--column-count]="max_columns()" class="board-container__board">
         <app-button *ngFor="let items of BoardItems; index as id"
         [OnDisplay]="getElementById(id, max_rows()).display"
-        (ButtonEmitter)="handlePlayerTurn(id)"
+        (onClick)="handlePlayerTurn(id)"
         [isGameFinished]="isBoardDisabled"
         [isHighlighted]="getElementById(id, max_rows()).isHighlighted"/>
     </div>
