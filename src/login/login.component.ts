@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
   router = inject(Router);
+  authService = inject(AuthService)
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -29,6 +31,20 @@ export class LoginComponent {
   submitForm() {
     if (this.loginForm.invalid) return
 
-    console.log('submitted')
+    const rawForm = this.loginForm.getRawValue()
+
+    if (!rawForm.email || !rawForm.password)  return
+
+    const formData = {
+      email: rawForm.email!,
+      password: rawForm.password!,
+    }
+
+    this.authService.login(formData).subscribe(result => {
+      if (!result.error)
+        this.router.navigate(['/'])
+    })
   }
+
+
 }

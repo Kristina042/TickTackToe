@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { RegisterRequest } from '../types';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +15,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
 
   router = inject(Router)
+  authService = inject(AuthService)
 
   registrationForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -37,6 +40,20 @@ export class RegisterComponent {
   submitForm() {
     if (this.registrationForm.invalid) return
 
-    console.log('submitted')
+    const rawForm = this.registrationForm.getRawValue()
+
+    if (!rawForm.name || !rawForm.email || !rawForm.password)  return
+
+    const formData: RegisterRequest = {
+      name: rawForm.name!,
+      email: rawForm.email!,
+      password: rawForm.password!,
+    }
+
+    this.authService.register(formData).subscribe(result => {
+      if (!result.error) {
+        this.router.navigate(['/'])
+      }
+    })
   }
 }
