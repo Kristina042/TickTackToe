@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { User } from '../types';
+import { SupaBaseService } from '../services/supabase.service';
+
 export interface stats {
   numXwins: number;
   numOwins: number;
@@ -21,12 +22,14 @@ export class AppComponent {
 
   authService = inject(AuthService)
 
+  supaBaseService = inject(SupaBaseService)
+
   ngOnInit() {
-    this.authService.supabase.auth.onAuthStateChange((event, session) => {
+    this.supaBaseService.client.auth.onAuthStateChange((event, session) => {
       if (event ==='SIGNED_IN'){
         this.authService.currentUser.set({
           email: session?.user.email!,
-          userName: session?.user.identities?.at(0)?.identity_data?.['username']
+          userName: session?.user.user_metadata?.['name'] ?? null
         })
       } else if (event ==='SIGNED_OUT') {
         this.authService.currentUser.set(null)

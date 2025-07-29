@@ -62,7 +62,7 @@ export class BoardComponent {
     if (valToIncrement === 'X') return this.gameStats.numXwins++
 
     if(valToIncrement === 'O') return this.gameStats.numOwins ++
-    
+
     if (valToIncrement === '') return this.gameStats.numTies++
 
     return

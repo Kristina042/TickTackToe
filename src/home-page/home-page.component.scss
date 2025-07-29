@@ -7,7 +7,7 @@
     align-items: center;
     height: 100vh;
 
-    background-color: $dark-gray;   
+    background-color: $dark-gray;
 }
 
 .title{
@@ -32,7 +32,8 @@
     border-radius: 25px;
     padding: 10px;
 
-    width: 320px;
+    width: 330px;
+    height: 370px;
 
     &__item{
         font-weight: 550;
@@ -44,7 +45,7 @@
         transition: 0.1s;
 
         &:hover{
-           transform: scale(1.2);
+           transform: scale(1.1);
            cursor: pointer;
         }
     }

@@ -4,17 +4,18 @@ import { environment } from '../environments/environment';
 import { LoginRequest, RegisterRequest } from '../types';
 import { from, Observable } from 'rxjs';
 import { User } from '../types';
+import { SupaBaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  supabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_ANON_KEY)
+  constructor(private supabaseService: SupaBaseService) {}
 
   currentUser: WritableSignal<User | null> = signal<User | null>(null);
 
   register(user: RegisterRequest): Observable<AuthResponse> {
-    const promise = this.supabase.auth.signUp({
+    const promise = this.supabaseService.client.auth.signUp({
       email: user.email,
       password: user.password,
       options: {
@@ -28,7 +29,7 @@ export class AuthService {
   }
 
   login(user: LoginRequest): Observable<AuthResponse> {
-    const promise = this.supabase.auth.signInWithPassword({
+    const promise =  this.supabaseService.client.auth.signInWithPassword({
       email: user.email,
       password: user.password
     })
@@ -36,7 +37,9 @@ export class AuthService {
     return from(promise)
   }
 
-
+  logout() {
+     this.supabaseService.client.auth.signOut()
+  }
 
 
 }

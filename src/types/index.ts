@@ -12,4 +12,9 @@ export type LoginRequest = {
 export type User = {
   email: string;
   userName: string | null;
-};
+}
+
+export type CreateNewGameRequest = {
+  boardType: string,
+  userId: string
+}

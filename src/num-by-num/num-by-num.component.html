@@ -3,11 +3,11 @@
     <img class="octo" src="/octo2.png">
     <div class="body">
         <app-status-bar [status]="gameStatus"/>
-        <app-board 
+        <app-board
             (updateStatusBar)="handleStatusChange($event)"
             (updateGameScore)="handleGameStatsChange($event)"
             [max_rows]="num_rows() || 0"
-            [max_columns]="num_columns() || 0" 
+            [max_columns]="num_columns() || 0"
             [step_count]="step_count() || 0"
             [resetBoard]="resetBoardTrigger"
         />
