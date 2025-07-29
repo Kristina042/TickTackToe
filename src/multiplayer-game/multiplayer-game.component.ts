@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NumByNumComponent } from '../num-by-num/num-by-num.component';
 import { ActivatedRoute } from '@angular/router';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-multiplayer-game',
@@ -10,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class MultiplayerGameComponent {
   route = inject(ActivatedRoute)
+  gameService = inject(GameService)
 
   gameType = '3x3'; gameId = ''
   boardSize = 3; stepCount = 3
@@ -27,5 +29,11 @@ export class MultiplayerGameComponent {
     } else if (this.gameType === '10x10') {
       this.boardSize = 10; this.stepCount = 4
     }
+  }
+
+  handlePlayerTurn(id: string) {
+    console.log(`button ${id} clicked`)
+
+    //updateGame
   }
 }

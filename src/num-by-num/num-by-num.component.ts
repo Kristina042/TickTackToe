@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, EventEmitter, input, Output, output } from '@angular/core';
 import { BoardComponent } from '../board/board.component';
 import { StatusBarComponent } from '../status-bar/status-bar.component';
 import { GameStatsBarComponent } from '../game-stats-bar/game-stats-bar.component';
@@ -19,6 +19,8 @@ export interface stats {
 })
 export class NumByNumComponent {
 
+  @Output() getButtonClick = new EventEmitter()
+
   num_rows = input<number>()
   num_columns = input<number>()
   step_count = input<number>()
@@ -28,32 +30,37 @@ export class NumByNumComponent {
   resetBoardTrigger = false;
 
   gameStatus:string = "It's X's turn"
-  
+
   gameStats:stats = {
     numXwins: 0,
     numOwins: 0,
     numTies: 0
   }
-  
+
   handleStatusChange(newStatus: string){
     this.gameStatus = newStatus
   }
-  
+
   handleGameStatsChange(newStats: stats){
     this.gameStats = newStats
-  
+
     console.log('from app:')
     console.log(newStats)
   }
-  
+
   handleNewGameClick(){
     this.resetBoardTrigger = true;
-    
+
     // Reset back to false to allow future resets
     setTimeout(() => this.resetBoardTrigger = false);
   }
 
   navigateToHome(){
      this.router.navigate(["/"])
+  }
+
+  //prop drilling
+  sendClickUp(id: string) {
+    this.getButtonClick.emit(id)
   }
 }

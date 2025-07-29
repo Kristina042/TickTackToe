@@ -18,9 +18,10 @@ export type stats = {
 
 export class BoardComponent {
   @Output() updateStatusBar = new EventEmitter()
-  @Output() updateGameScore = new EventEmitter<stats>() 
+  @Output() updateGameScore = new EventEmitter<stats>()
+  @Output() sendClickUp = new EventEmitter()
 
-  max_rows = input(0) 
+  max_rows = input(0)
   max_columns = input<number>(0)
   step_count = input<number>(0)
   resetBoard = input<boolean>(false)
@@ -84,7 +85,7 @@ export class BoardComponent {
 
     boardElement.display = this.isX ? 'O' : 'X'
   }
-  
+
   highlightIdArray(ids:number[], cell_count_per_row: number){
     ids.forEach((id) => {
       const {rowIndex, columnIndex} = getPlayerPosition(id, cell_count_per_row)
@@ -93,6 +94,8 @@ export class BoardComponent {
   }
 
   handlePlayerTurn(id: number) {
+    this.sendClickUp.emit(id)
+
     this.turnCount++
 
     this.updateCurrPlayerInfo()

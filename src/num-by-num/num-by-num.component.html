@@ -10,6 +10,7 @@
             [max_columns]="num_columns() || 0"
             [step_count]="step_count() || 0"
             [resetBoard]="resetBoardTrigger"
+            (sendClickUp)="sendClickUp($event)"
         />
         <div class="stats-bar-and-button">
             <app-game-stats-bar [stats]="gameStats"/>
