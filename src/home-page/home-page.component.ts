@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-home-page',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class HomePageComponent {
   router = inject(Router);
   authService = inject(AuthService)
+  gameService = inject(GameService)
 
   logout() {
     this.authService.logout()
@@ -27,5 +29,30 @@ export class HomePageComponent {
     //in request include user id and board size
 
     //redirect to game page with game id that i will recieve in responce
+    this.gameService.createNewGame('3x3').subscribe(res => {
+      if (res){
+        const gameId = res.game_id
+        this.router.navigate(['/multiplayer', gameId, '3x3'])
+      }
+    })
+
+  }
+
+  createNew5x5(){
+    this.gameService.createNewGame('5x5').subscribe(res => {
+      if (res){
+        const gameId = res.game_id
+        this.router.navigate(['/multiplayer', gameId, '5x5'])
+      }
+    })
+  }
+
+  createNew10x10(){
+    this.gameService.createNewGame('10x10').subscribe(res => {
+      if (res){
+        const gameId = res.game_id
+        this.router.navigate(['/multiplayer', gameId, '10x10'])
+      }
+    })
   }
 }

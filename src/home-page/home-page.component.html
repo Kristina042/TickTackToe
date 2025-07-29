@@ -18,6 +18,8 @@
             <div (click)="this.router.navigate(['5x5'])" class="menu__item">play 5x5 game</div>
             <div (click)="this.router.navigate(['10x10'])" class="menu__item">play 10x10 game</div>
             <div *ngIf="authService.currentUser()" class="menu__item" (click)="createNew3x3()">start multiplayer 3x3</div>
+            <div *ngIf="authService.currentUser()" class="menu__item" (click)="createNew5x5()">start multiplayer 5x5</div>
+            <div *ngIf="authService.currentUser()" class="menu__item" (click)="createNew10x10()">start multiplayer 10x10</div>
             <div *ngIf="!authService.currentUser()" (click)="this.router.navigate(['login'])" class="menu__item">login/sign up</div>
             <div *ngIf="authService.currentUser()" (click)="logout()" class="menu__item">logout</div>
         </div>

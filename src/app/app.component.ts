@@ -29,11 +29,13 @@ export class AppComponent {
       if (event ==='SIGNED_IN'){
         this.authService.currentUser.set({
           email: session?.user.email!,
-          userName: session?.user.user_metadata?.['name'] ?? null
+          userName: session?.user.user_metadata?.['name'] ?? null,
+          Id: session?.user.id
         })
       } else if (event ==='SIGNED_OUT') {
         this.authService.currentUser.set(null)
       }
     })
+
   }
 }

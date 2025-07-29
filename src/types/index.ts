@@ -12,6 +12,7 @@ export type LoginRequest = {
 export type User = {
   email: string;
   userName: string | null;
+  Id: string | undefined
 }
 
 export type CreateNewGameRequest = {
