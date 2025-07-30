@@ -93,9 +93,6 @@ export class MultiplayerBoardComponent {
   }
 
   handlePlayerTurn(id: number) {
-
-    this.updateGameState.emit(this.board)
-
     this.turnCount++
 
     this.updateCurrPlayerInfo()
@@ -123,5 +120,7 @@ export class MultiplayerBoardComponent {
 
     const message = this.isX ? `It's X's turn` : `It's O's turn`
     this.updateStatusBar.emit(message)
+
+    this.updateGameState.emit(this.board)
   }
 }

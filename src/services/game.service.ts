@@ -37,6 +37,8 @@ export class GameService {
       .from('Games')
       .update(dataToUpdate)
       .match({game_id: gameId})
+      .select('board_state')
+      .single()
 
     return from(promise)
   }

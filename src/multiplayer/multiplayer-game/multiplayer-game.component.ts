@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { StatusBarComponent } from '../../status-bar/status-bar.component';
 import { MultiplayerBoardComponent } from '../multiplayer-board/multiplayer-board.component';
+import { skip } from 'rxjs';
 
 @Component({
   selector: 'app-multiplayer-game',
@@ -31,7 +32,7 @@ export class MultiplayerGameComponent {
   retrieveBoardState(){
     this.gameService.getBoardStateByGameId(this.gameId).subscribe(res => {
       const board = JSON.parse(res)
-      console.log(board)
+      //console.log(board)
       this.boardState = board
 
     })
@@ -49,15 +50,19 @@ export class MultiplayerGameComponent {
   }
 
   updateGame(board: []) {
+    console.log('board on clientside before update')
     console.log(board)
-    const boardState = JSON.stringify(board)
 
     const dataToUpdate = {
-      board_state: boardState,
+      board_state: board,
       history: {}
     }
 
-    this.gameService.updateGame(this.gameId, dataToUpdate).subscribe()
+    this.gameService.updateGame(this.gameId, dataToUpdate).subscribe(res => {
+        console.log('board in supabase after update')
+        console.log(res.data.board_state)
+      }
+    )
   }
 
   handleNewGameClick(){
