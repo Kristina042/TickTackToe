@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { SupaBaseService } from './supabase.service';
 import { from, map, Observable } from 'rxjs';
-import { Database } from '../types/supabase';
 import { AuthService } from './auth.service';
+import { StatusBarComponent } from '../status-bar/status-bar.component';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,9 @@ export class GameService {
 
   createNewGame(gameType: string): Observable<any> {
     const playerXId = this.authService.currentUser()?.Id
-    const boardState = {"board":[["","X",""],["","0",""],["","",""]]}
 
     const gameToCreate = {
-      board_state: boardState,
+      board_state: null,
       board_type: gameType,
       history: null,
       player_o_id: null,
@@ -33,16 +32,24 @@ export class GameService {
     return from(promise).pipe(map(result => result.data))
   }
 
-  updateGame(gameId: number, dataToUpdate: {state: {}, history: {}}): Observable<any> {
+  updateGame(gameId: number, dataToUpdate: {board_state: {}, history: {}}): Observable<any> {
     const promise = this.supabaseService.client
       .from('Games')
       .update(dataToUpdate)
-      .match({id: gameId})
-      .select('*')
+      .match({game_id: gameId})
+
+    return from(promise)
+  }
+
+  getBoardStateByGameId(gameId: number): Observable<any> {
+    const promise = this.supabaseService.client
+      .from('Games')
+      .select('board_state')
+      .eq('game_id', gameId)
       .single()
 
-    return from(promise).pipe(map(result => result.data))
-  }
+  return from(promise).pipe(map(result => result.data?.board_state));
+}
 
 
 

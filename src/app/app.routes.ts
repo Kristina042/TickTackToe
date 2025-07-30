@@ -5,7 +5,7 @@ import { TenByTenComponent } from '../ten-by-ten/ten-by-ten.component';
 import { FiveByFiveComponent } from '../five-by-five/five-by-five.component';
 import { RegisterComponent } from '../register/register.component';
 import { LoginComponent } from '../login/login.component';
-import { MultiplayerGameComponent } from '../multiplayer-game/multiplayer-game.component';
+import { MultiplayerGameComponent } from '../multiplayer/multiplayer-game/multiplayer-game.component';
 
 export const routes: Routes = [
     {path: '', component: HomePageComponent, title:'home page'},

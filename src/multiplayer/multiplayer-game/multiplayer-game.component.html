@@ -1,0 +1,19 @@
+<button class="home-button" (click)="navigateToHome()" >home</button>
+<div class="game-and-octos">
+    <img class="octo" src="/octo2.png">
+    <div class="body">
+        <app-status-bar [status]="gameStatus"/>
+        <app-multiplayer-board
+            (updateStatusBar)="handleStatusChange($event)"
+            [max_rows]="boardSize"
+            [max_columns]="boardSize"
+            [step_count]="stepCount"
+            [resetBoard]="resetBoardTrigger"
+            (updateGameState)="updateGame($event)"
+        />
+        <div class="stats-bar-and-button">
+            <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
+        </div>
+    </div>
+    <img class="octo" src="/octo1.png">
+</div>

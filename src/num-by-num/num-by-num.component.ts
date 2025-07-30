@@ -56,7 +56,7 @@ export class NumByNumComponent {
   }
 
   navigateToHome(){
-     this.router.navigate(["/"])
+    this.router.navigate(["/"])
   }
 
   //prop drilling

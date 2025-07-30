@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, input, SimpleChanges} from '@angular/core';
-import { ButtonComponent } from '../button/button.component';
+import { ButtonComponent } from '../../button/button.component';
 import { CommonModule } from '@angular/common';
-import { getPlayerPosition, board_cell, create_board, checkWinner } from '../utils/boardUtils/board';
+import { getPlayerPosition, board_cell, create_board, checkWinner } from '../../utils/boardUtils/board';
 
 export type stats = {
   numXwins: number,
@@ -10,16 +10,15 @@ export type stats = {
 }
 
 @Component({
-  selector: 'app-board',
-  imports: [ ButtonComponent, CommonModule ],
-  templateUrl: './board.component.html',
-  styleUrl: './board.component.scss'
+  selector: 'app-multiplayer-board',
+  imports: [ButtonComponent, CommonModule],
+  templateUrl: './multiplayer-board.component.html',
+  styleUrl: './multiplayer-board.component.scss'
 })
-
-export class BoardComponent {
+export class MultiplayerBoardComponent {
   @Output() updateStatusBar = new EventEmitter()
   @Output() updateGameScore = new EventEmitter<stats>()
-  @Output() sendClickUp = new EventEmitter()
+  @Output() updateGameState = new EventEmitter()
 
   max_rows = input(0)
   max_columns = input<number>(0)
@@ -37,7 +36,7 @@ export class BoardComponent {
   }
 
   isBoardDisabled = false
-  board: board_cell[][] = new Array()
+  board: board_cell[][] = []
 
   BoardItems = this.board.flat();
 
@@ -94,7 +93,8 @@ export class BoardComponent {
   }
 
   handlePlayerTurn(id: number) {
-    this.sendClickUp.emit(id)
+
+    this.updateGameState.emit(this.board)
 
     this.turnCount++
 
