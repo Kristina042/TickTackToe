@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { StatusBarComponent } from '../../status-bar/status-bar.component';
 import { MultiplayerBoardComponent } from '../multiplayer-board/multiplayer-board.component';
+import { AuthService } from '../../services/auth.service';
+import { RealtimeService } from '../../services/realtime-.service';
 import { skip } from 'rxjs';
+import { board_cell } from '../../utils/boardUtils/board';
 
 @Component({
   selector: 'app-multiplayer-game',
@@ -14,7 +17,9 @@ import { skip } from 'rxjs';
 export class MultiplayerGameComponent {
   route = inject(ActivatedRoute)
   gameService = inject(GameService)
+  authService = inject(AuthService)
   router = inject(Router)
+  realtimeService = inject(RealtimeService)
 
   gameType = '3x3'; gameId = 0
   boardSize = 3; stepCount = 3
@@ -22,19 +27,27 @@ export class MultiplayerGameComponent {
   resetBoardTrigger = false;
   gameStatus:string = "It's X's turn"
 
-  boardState = []
+  boardState: board_cell[][] = []  // holds the current board from backend
 
   ngOnInit(){
     this.RenderBoard()
     this.retrieveBoardState()
+    this.updatePlayersInDatabase()
+    this.subscribeToWebSocket()
   }
 
   retrieveBoardState(){
     this.gameService.getBoardStateByGameId(this.gameId).subscribe(res => {
       const board = JSON.parse(res)
-      //console.log(board)
       this.boardState = board
+    })
+  }
 
+  subscribeToWebSocket() {
+    this.realtimeService.subscribeToMessages(this.gameId)
+    this.realtimeService.messages$.pipe(skip(1)).subscribe(messages => {
+      console.log('from web socket:')
+      console.log(messages.board_state)
     })
   }
 
@@ -49,20 +62,41 @@ export class MultiplayerGameComponent {
     }
   }
 
-  updateGame(board: []) {
-    console.log('board on clientside before update')
-    console.log(board)
+  updatePlayersInDatabase() {
+    const currPlayerId = this.authService.currentUser?.Id
 
+    //get current players from database
+    this.gameService.getCurrGameData(this.gameId).subscribe(res => {
+
+      if ((currPlayerId === res.player_x_id) || (currPlayerId === res.player_o_id))
+        return
+
+      if(res.player_x_id === null) {
+        //then we will be player x
+        this.gameService.updateGame(this.gameId, { player_x_id: currPlayerId }).subscribe()
+        return
+
+      } else if (res.player_o_id === null) {
+        this.gameService.updateGame(this.gameId, { player_o_id: currPlayerId }).subscribe()
+        return
+        //then we will be player o
+      }
+      else if ((res.player_x_id !== currPlayerId) && (res.player_o_id !== currPlayerId)) {
+        //then this isnt our game and we will be kicked out
+        this.router.navigate(['/'])
+         return
+      }
+    })
+
+  }
+
+  updateGame(board: []) {
     const dataToUpdate = {
       board_state: board,
       history: {}
     }
 
-    this.gameService.updateGame(this.gameId, dataToUpdate).subscribe(res => {
-        console.log('board in supabase after update')
-        console.log(res.data.board_state)
-      }
-    )
+    this.gameService.updateGame(this.gameId, dataToUpdate).subscribe()
   }
 
   handleNewGameClick(){
@@ -78,5 +112,9 @@ export class MultiplayerGameComponent {
 
   navigateToHome(){
     this.router.navigate(["/"])
+  }
+
+  ngOnDestroy(): void {
+    this.realtimeService.unsubscribe();
   }
 }

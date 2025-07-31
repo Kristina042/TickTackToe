@@ -25,17 +25,7 @@ export class AppComponent {
   supaBaseService = inject(SupaBaseService)
 
   ngOnInit() {
-    this.supaBaseService.client.auth.onAuthStateChange((event, session) => {
-      if (event ==='SIGNED_IN'){
-        this.authService.currentUser.set({
-          email: session?.user.email!,
-          userName: session?.user.user_metadata?.['name'] ?? null,
-          Id: session?.user.id
-        })
-      } else if (event ==='SIGNED_OUT') {
-        this.authService.currentUser.set(null)
-      }
-    })
+    this.authService.authInit()
 
   }
 }

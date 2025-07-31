@@ -92,15 +92,16 @@ export class MultiplayerBoardComponent {
     })
   }
 
-  handlePlayerTurn(id: number) {
+  handlePlayerTurn(ButtonId: number) {
     this.turnCount++
 
     this.updateCurrPlayerInfo()
-    this.updateButtonDisplay(id, this.max_rows())
+    this.updateButtonDisplay(ButtonId, this.max_rows())
 
-    const result = checkWinner(id, this.max_rows(), this.step_count(), this.board)
+    const result = checkWinner(ButtonId, this.max_rows(), this.step_count(), this.board)
 
-    const isGameOver = (winner:'X'|'O'|'') =>{
+
+    const isGameOver = (winner:'X'|'O'|'') => {
       const GameIsNotOver = (winner === '') && (this.turnCount < this.max_columns()*this.max_rows())
       if (GameIsNotOver) return false
 
@@ -112,6 +113,7 @@ export class MultiplayerBoardComponent {
       this.highlightIdArray(result.winningIds, this.max_rows())
       this.isBoardDisabled = true
 
+      this.updateGameState.emit(this.board)
       return true
     }
 
@@ -120,7 +122,6 @@ export class MultiplayerBoardComponent {
 
     const message = this.isX ? `It's X's turn` : `It's O's turn`
     this.updateStatusBar.emit(message)
-
     this.updateGameState.emit(this.board)
   }
 }

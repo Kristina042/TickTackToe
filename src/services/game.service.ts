@@ -12,14 +12,12 @@ export class GameService {
   authService = inject(AuthService)
 
   createNewGame(gameType: string): Observable<any> {
-    const playerXId = this.authService.currentUser()?.Id
-
     const gameToCreate = {
       board_state: null,
       board_type: gameType,
       history: null,
       player_o_id: null,
-      player_x_id: playerXId,
+      player_x_id: null,
       winner: null,
     }
 
@@ -32,7 +30,7 @@ export class GameService {
     return from(promise).pipe(map(result => result.data))
   }
 
-  updateGame(gameId: number, dataToUpdate: {board_state: {}, history: {}}): Observable<any> {
+  updateGame(gameId: number, dataToUpdate: {board_state?: {}, history?: {}, player_x_id?: string | null, player_o_id?: string | null}): Observable<any> {
     const promise = this.supabaseService.client
       .from('Games')
       .update(dataToUpdate)
@@ -50,9 +48,17 @@ export class GameService {
       .eq('game_id', gameId)
       .single()
 
-  return from(promise).pipe(map(result => result.data?.board_state));
-}
+    return from(promise).pipe(map(result => result.data?.board_state))
+  }
 
+  getCurrGameData(gameId: number) {
+    const promise = this.supabaseService.client
+      .from('Games')
+      .select('*')
+      .eq('game_id', gameId)
+      .single()
 
+    return from(promise).pipe(map(result => result.data))
+  }
 
 }
