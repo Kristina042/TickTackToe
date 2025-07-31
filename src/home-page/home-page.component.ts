@@ -29,7 +29,14 @@ export class HomePageComponent {
     //in request include user id and board size
 
     //redirect to game page with game id that i will recieve in responce
-    this.gameService.createNewGame('3x3').subscribe(res => {
+
+    const emptyBoard = [
+      [{"id":0,"display":"","isHighlighted":false},{"id":1,"display":"","isHighlighted":false},{"id":2,"display":"","isHighlighted":false}],
+      [{"id":3,"display":"","isHighlighted":false},{"id":4,"display":"","isHighlighted":false},{"id":5,"display":"","isHighlighted":false}],
+      [{"id":6,"display":"","isHighlighted":false},{"id":7,"display":"","isHighlighted":false},{"id":8,"display":"","isHighlighted":false}]
+    ]
+
+    this.gameService.createNewGame('3x3', emptyBoard).subscribe(res => {
       if (res){
         const gameId = res.game_id
         this.router.navigate(['/multiplayer', gameId, '3x3'])

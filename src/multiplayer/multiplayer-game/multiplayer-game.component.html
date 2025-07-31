@@ -10,6 +10,7 @@
             [step_count]="stepCount"
             [resetBoard]="resetBoardTrigger"
             (updateGameState)="updateGame($event)"
+            [board]="boardState"
         />
         <div class="stats-bar-and-button">
             <button class="play-again-button" (click)="handleNewGameClick()">new game</button>

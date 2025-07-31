@@ -17,60 +17,36 @@ export type stats = {
 })
 export class MultiplayerBoardComponent {
   @Output() updateStatusBar = new EventEmitter()
-  @Output() updateGameScore = new EventEmitter<stats>()
   @Output() updateGameState = new EventEmitter()
 
   max_rows = input(0)
   max_columns = input<number>(0)
   step_count = input<number>(0)
   resetBoard = input<boolean>(false)
+  board = input<board_cell[][]>([])
 
   wasTurnEven = true
   turnCount = 0
   isX = true
 
-  gameStats:stats = {
-    numXwins: 0,
-    numOwins: 0,
-    numTies: 0
-  }
-
   isBoardDisabled = false
-  board: board_cell[][] = []
 
-  BoardItems = this.board.flat();
+  BoardItems = this.board().flat();
+
 
   ngOnInit(){
-    this.board = create_board(this.max_rows(), this.max_columns())
-    this.BoardItems = this.board.flat()
+    //this.BoardItems = this.board().flat()
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['resetBoard']?.currentValue === true) {
-      this.resetGameBoard();
+    if (changes['board']) {
+      this.BoardItems = this.board().flat()
     }
-  }
-
-  resetGameBoard() {
-    this.isBoardDisabled = false
-    this.turnCount = 0
-    this.updateStatusBar.emit(`Its X's turn`)
-    this.board = create_board(this.max_rows(), this.max_columns())
-  }
-
-  updateGameStats(valToIncrement: 'X'|'O'|''){
-    if (valToIncrement === 'X') return this.gameStats.numXwins++
-
-    if(valToIncrement === 'O') return this.gameStats.numOwins ++
-
-    if (valToIncrement === '') return this.gameStats.numTies++
-
-    return
   }
 
   getElementById(id: number,  cell_count_per_row: number){
     const player = getPlayerPosition(id, cell_count_per_row)
-    return this.board[player.rowIndex][player.columnIndex]
+    return this.board()[player.rowIndex][player.columnIndex]
   }
 
   updateCurrPlayerInfo() {
@@ -80,16 +56,13 @@ export class MultiplayerBoardComponent {
 
   updateButtonDisplay(id:number, cell_count_per_row: number){
     const player = getPlayerPosition(id, cell_count_per_row)
-    const boardElement = this.board[player.rowIndex][player.columnIndex]
+    const boardElement = this.board()[player.rowIndex][player.columnIndex]
 
     boardElement.display = this.isX ? 'O' : 'X'
-  }
 
-  highlightIdArray(ids:number[], cell_count_per_row: number){
-    ids.forEach((id) => {
-      const {rowIndex, columnIndex} = getPlayerPosition(id, cell_count_per_row)
-      this.board[rowIndex][columnIndex].isHighlighted = true
-    })
+    console.log('onUpDateButton:')
+    console.log(this.board())
+    this.updateGameState.emit(this.board())
   }
 
   handlePlayerTurn(ButtonId: number) {
@@ -98,30 +71,8 @@ export class MultiplayerBoardComponent {
     this.updateCurrPlayerInfo()
     this.updateButtonDisplay(ButtonId, this.max_rows())
 
-    const result = checkWinner(ButtonId, this.max_rows(), this.step_count(), this.board)
-
-
-    const isGameOver = (winner:'X'|'O'|'') => {
-      const GameIsNotOver = (winner === '') && (this.turnCount < this.max_columns()*this.max_rows())
-      if (GameIsNotOver) return false
-
-      const message = (winner === '') ? `It's a tie!` : `${winner} is the winner!`
-
-      this.updateGameStats(winner)
-      this.updateStatusBar.emit(message)
-      this.updateGameScore.emit(this.gameStats)
-      this.highlightIdArray(result.winningIds, this.max_rows())
-      this.isBoardDisabled = true
-
-      this.updateGameState.emit(this.board)
-      return true
-    }
-
-    if (isGameOver(result.winner as '' | 'X' | 'O'))
-      return
 
     const message = this.isX ? `It's X's turn` : `It's O's turn`
     this.updateStatusBar.emit(message)
-    this.updateGameState.emit(this.board)
   }
 }

@@ -12,14 +12,14 @@ export class ButtonComponent {
   isHighlighted = input<boolean>(false)
   isGameFinished = input<boolean>()
 
-  IsDisabled = computed<boolean>(() => 
+  IsDisabled = computed<boolean>(() =>
     this.isGameFinished() || !!this.OnDisplay().length);
 
   @Output() onClick = new EventEmitter();
 
   handleClick(){
     if (this.IsDisabled()) return
-    
+
     this.onClick.emit()
   }
 

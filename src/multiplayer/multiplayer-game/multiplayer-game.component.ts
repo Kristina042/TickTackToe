@@ -25,9 +25,10 @@ export class MultiplayerGameComponent {
   boardSize = 3; stepCount = 3
 
   resetBoardTrigger = false;
-  gameStatus:string = "It's X's turn"
+  gameStatus: string = "It's X's turn"
 
   boardState: board_cell[][] = []  // holds the current board from backend
+  isUserX: boolean = true
 
   ngOnInit(){
     this.RenderBoard()
@@ -38,8 +39,9 @@ export class MultiplayerGameComponent {
 
   retrieveBoardState(){
     this.gameService.getBoardStateByGameId(this.gameId).subscribe(res => {
-      const board = JSON.parse(res)
-      this.boardState = board
+      const board:board_cell[][] = res
+      this.boardState = [...board]
+      console.log('retieved board:', res)
     })
   }
 
@@ -48,7 +50,19 @@ export class MultiplayerGameComponent {
     this.realtimeService.messages$.pipe(skip(1)).subscribe(messages => {
       console.log('from web socket:')
       console.log(messages.board_state)
+      const oldBoard = this.boardState
+      const newBoard = messages.board_state
+
+      if(!this.deepEqual(oldBoard, newBoard)) {
+        this.boardState = [...newBoard]
+        //signal somehow that its our users turn to move
+        console.log('BOARD STATE CHANGED')
+      }
     })
+  }
+
+  deepEqual(obj1: board_cell[][], obj2: board_cell[][]) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
 
   RenderBoard() {
@@ -73,10 +87,12 @@ export class MultiplayerGameComponent {
 
       if(res.player_x_id === null) {
         //then we will be player x
+        this.isUserX = true
         this.gameService.updateGame(this.gameId, { player_x_id: currPlayerId }).subscribe()
         return
 
       } else if (res.player_o_id === null) {
+        this.isUserX = false
         this.gameService.updateGame(this.gameId, { player_o_id: currPlayerId }).subscribe()
         return
         //then we will be player o
