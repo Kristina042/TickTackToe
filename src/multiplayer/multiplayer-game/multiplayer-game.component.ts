@@ -5,7 +5,6 @@ import { StatusBarComponent } from '../../status-bar/status-bar.component';
 import { MultiplayerBoardComponent } from '../multiplayer-board/multiplayer-board.component';
 import { AuthService } from '../../services/auth.service';
 import { RealtimeService } from '../../services/realtime-.service';
-import { skip } from 'rxjs';
 import { board_cell } from '../../utils/boardUtils/board';
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -51,7 +50,6 @@ export class MultiplayerGameComponent {
     })
   }
 
-  //decide if board is disabled or not
   toggleBoardAccess() {
     this.gameService.getCurrGameData(this.gameId)
     .subscribe(res => {
@@ -136,7 +134,7 @@ export class MultiplayerGameComponent {
 
       this.count = messages.count
 
-      if (this.count >= 9)
+      if (this.count >= this.boardSize*this.boardSize)
         this.isBoardDisabled = true
 
       this.winner = messages.winner

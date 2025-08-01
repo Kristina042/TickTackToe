@@ -4,6 +4,7 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { GameService } from '../services/game.service';
+import { create_board } from '../utils/boardUtils/board';
 
 @Component({
   selector: 'app-home-page',
@@ -21,22 +22,9 @@ export class HomePageComponent {
   }
 
   createNew3x3() {
-    //1 ask database if currUser has an ongoing game
+    const emptyBoard = create_board(3, 3)
 
-    //if yes redirect to ongoing game with game id in url
-
-    //if not send request to server to create new game
-    //in request include user id and board size
-
-    //redirect to game page with game id that i will recieve in responce
-
-    const emptyBoard = [
-      [{"id":0,"display":"","isHighlighted":false},{"id":1,"display":"","isHighlighted":false},{"id":2,"display":"","isHighlighted":false}],
-      [{"id":3,"display":"","isHighlighted":false},{"id":4,"display":"","isHighlighted":false},{"id":5,"display":"","isHighlighted":false}],
-      [{"id":6,"display":"","isHighlighted":false},{"id":7,"display":"","isHighlighted":false},{"id":8,"display":"","isHighlighted":false}]
-    ]
-
-    const history = {player:"unset",cellId: 0}
+    const history = { player:"unset",cellId: 0 }
 
     this.gameService.createNewGame('3x3', emptyBoard, history, 0).subscribe(res => {
       if (res){
@@ -48,7 +36,10 @@ export class HomePageComponent {
   }
 
   createNew5x5(){
-    this.gameService.createNewGame('5x5').subscribe(res => {
+    const emptyBoard = create_board(5, 5)
+    const history = { player:"unset",cellId: 0 }
+
+    this.gameService.createNewGame('5x5', emptyBoard, history, 0).subscribe(res => {
       if (res){
         const gameId = res.game_id
         this.router.navigate(['/multiplayer', gameId, '5x5'])
@@ -57,7 +48,10 @@ export class HomePageComponent {
   }
 
   createNew10x10(){
-    this.gameService.createNewGame('10x10').subscribe(res => {
+    const emptyBoard = create_board(10, 10)
+    const history = { player:"unset",cellId: 0 }
+
+    this.gameService.createNewGame('10x10', emptyBoard, history, 0).subscribe(res => {
       if (res){
         const gameId = res.game_id
         this.router.navigate(['/multiplayer', gameId, '10x10'])

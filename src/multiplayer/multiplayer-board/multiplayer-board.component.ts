@@ -38,10 +38,6 @@ export class MultiplayerBoardComponent {
     })
   }
 
-  ngOnInit(){
-    console.log('is User X: ', this.isUserX())
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['board']) {
       this.BoardItems = this.board().flat()
@@ -67,7 +63,7 @@ export class MultiplayerBoardComponent {
     const winner = this.checkForWinner(ButtonId)
 
     const newCount = this.count() + 1
-    const isTie = (newCount >= 9) && (winner === '')
+    const isTie = (newCount >= this.max_columns()*this.max_rows()) && (winner === '')
 
     const currentMove = { player: this.isUserX() ? 'X' : 'O', cellId: ButtonId}
     this.updateGameState.emit({board: this.board(), history: currentMove, winner: isTie ? 'tie' : winner, count: newCount})
@@ -90,15 +86,6 @@ export class MultiplayerBoardComponent {
   renderStatusBar() {
     let message = ''
 
-    if(this.winner() === 'X')
-      message = `X won!`
-
-    if(this.winner() === 'O')
-      message = `O won!`
-
-    if(this.winner() === 'tie')
-      message = `It's a tie`
-
     if (this.isUserX() && this.isBoardDisabled())
       message = `It's O's turn`
 
@@ -110,6 +97,15 @@ export class MultiplayerBoardComponent {
 
     if (!this.isUserX() && !this.isBoardDisabled())
       message = `It's O's turn`
+
+    if(this.winner() === 'X')
+      message = `X won!`
+
+    if(this.winner() === 'O')
+      message = `O won!`
+
+    if(this.winner() === 'tie')
+      message = `It's a tie`
 
     this.updateStatusBar.emit(message)
   }
