@@ -19,23 +19,19 @@
 }
 
 .menu{
+    max-width: 600px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: $light-blue;
-
-    border-style: solid;
-    border-color: $dark-blue;
-    border-width: 7px;
+    gap: 15px;
+    flex-wrap: wrap;
 
     border-radius: 25px;
     padding: 10px;
 
-    width: 370px;
-    height: 480px;
 
     &__item{
+        text-wrap: nowrap;
         font-weight: 550;
         font-family: "Comic Neue";
         font-size: 30px;
@@ -43,6 +39,14 @@
         color: $dark-gray;
         margin: 10px;
         transition: 0.1s;
+
+        background-color: $light-blue;
+        border-radius: 10px;
+        padding: 10px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border-right: 5px solid  $darker-blue;
+        border-bottom: 5px solid $dark-blue;
 
         &:hover{
            transform: scale(1.1);
@@ -56,7 +60,6 @@
     height:  350px;
     background-size: cover;
     background-position: center;
-    margin: 20px;
 }
 
 .menu-and-octos{
@@ -64,4 +67,21 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
+}
+
+.auth {
+    font-weight: 550;
+    font-family: "Comic Neue";
+    font-size: 40px;
+    color: white;
+
+    position: absolute;
+    right: 30px;
+    top: 20px;
+
+    &:hover{
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
 }

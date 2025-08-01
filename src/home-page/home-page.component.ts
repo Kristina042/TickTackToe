@@ -22,6 +22,11 @@ export class HomePageComponent {
   }
 
   createNew3x3() {
+    if (!this.authService.currentUser) {
+      this.router.navigate(['login'])
+      return
+    }
+
     const emptyBoard = create_board(3, 3)
 
     const history = { player:"unset",cellId: 0 }
@@ -36,6 +41,11 @@ export class HomePageComponent {
   }
 
   createNew5x5(){
+    if (!this.authService.currentUser) {
+      this.router.navigate(['login'])
+      return
+    }
+
     const emptyBoard = create_board(5, 5)
     const history = { player:"unset",cellId: 0 }
 
@@ -48,6 +58,11 @@ export class HomePageComponent {
   }
 
   createNew10x10(){
+    if (!this.authService.currentUser) {
+      this.router.navigate(['login'])
+      return
+    }
+
     const emptyBoard = create_board(10, 10)
     const history = { player:"unset",cellId: 0 }
 
