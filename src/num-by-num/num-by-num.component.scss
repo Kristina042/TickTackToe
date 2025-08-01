@@ -8,15 +8,18 @@
 }
 
 .play-again-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
     border-radius: 15px;
-    width: 160px;
     background-color: $yellow;
     border-color:  $dark-yellow;
     border-width: 6px;
     color: #202020;
     font-weight: 550;
     font-family: "Comic Neue";
-    font-size: 35px;
+    font-size: 28px;
 
     margin-top: 10px;
     margin-left: 10px;
@@ -35,7 +38,7 @@
 }
 
 .stats-bar-and-button{
-    width: 600px;
+    width: 480px;
     display: flex;
     justify-content: space-between;
 }
@@ -46,7 +49,7 @@
     left: 20px;
     font-weight: 550;
     font-family: "Comic Neue";
-    font-size: 38px;
+    font-size: 30px;
 
     background-color: $yellow;
     border-radius: 15px;
@@ -61,8 +64,8 @@
 }
 
 .octo{
-    width: 500px;
-    height:  500px;
+    width: 400px;
+    height:  400px;
     background-size: cover;
     background-position: center;
     margin: 0px;

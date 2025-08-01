@@ -2,17 +2,18 @@
 
 .game-stats-bar {
     background-color: $yellow;
-    width: 100%;
+    width: 350px;
     border-radius: 15px;
+    max-height: 80px;
 
     display: flex;
     flex-direction: row;
-    column-gap: 30px;
+    column-gap: 40px;
     text-align: center;
     align-items: center;
     justify-content: center;
     color: #202020;
-    font-size: 40px;
+    font-size: 28px;
     font-weight: 550;
     font-family: "Comic Neue";
 

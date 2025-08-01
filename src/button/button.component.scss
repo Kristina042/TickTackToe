@@ -17,7 +17,7 @@
 
     font-weight: 550;
     font-family: "Comic Neue";
-    font-size: 44px;
+    font-size: 33px;
 
     padding: 0px;
 
@@ -51,16 +51,16 @@
     height: 100%;
 }
 
-@container (min-width: 100px) {
+@container (min-width: 155px) {
   .c-button{
-    font-size: 90px;
-    border-width: 6px;
+    font-size: 100px;
+    border-width: 8px;
   }
 }
 
-@container (min-width: 190px) {
-  .button{
-    font-size: 130px;
-    border-width: 8px;
+@container (min-width: 95px) and (max-width: 150px) {
+  .c-button{
+    font-size: 70px;
+    border-width: 6px;
   }
 }
