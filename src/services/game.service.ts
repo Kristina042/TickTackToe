@@ -11,7 +11,7 @@ export class GameService {
   supabaseService = inject(SupaBaseService)
   authService = inject(AuthService)
 
-  createNewGame(gameType: string, boardState?: any, history?: {}): Observable<any> {
+  createNewGame(gameType: string, boardState?: any, history?: {}, count?: number): Observable<any> {
     const gameToCreate = {
       board_state: boardState,
       board_type: gameType,
@@ -19,6 +19,7 @@ export class GameService {
       player_o_id: null,
       player_x_id: null,
       winner: null,
+      count: count
     }
 
     const promise = this.supabaseService.client
@@ -30,7 +31,7 @@ export class GameService {
     return from(promise).pipe(map(result => result.data))
   }
 
-  updateGame(gameId: number, dataToUpdate: {board_state?: {}, history?: {}, player_x_id?: string | null, player_o_id?: string | null}): Observable<any> {
+  updateGame(gameId: number, dataToUpdate: { board_state?: {}, history?: {}, player_x_id?: string | null, player_o_id?: string | null, count?: number }): Observable<any> {
     const promise = this.supabaseService.client
       .from('Games')
       .update(dataToUpdate)

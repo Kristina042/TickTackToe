@@ -28,12 +28,12 @@ export class MultiplayerBoardComponent {
   isUserX = input<boolean>()
   isBoardDisabled = input<boolean>()
   winner = input<'X' | 'O' | 'tie' | null>(null)
+  count = input<number>(0)
 
   BoardItems = this.board().flat();
 
   constructor() {
     effect(() => {
-     // const value = this.isUserX()
       this.renderStatusBar()
     })
   }
@@ -64,36 +64,20 @@ export class MultiplayerBoardComponent {
   handlePlayerTurn(ButtonId: number) {
     this.updateButtonDisplay(ButtonId, this.max_rows())
 
-    //should return 'x' | 'o' | 'tie' |null
     const winner = this.checkForWinner(ButtonId)
 
-
+    const newCount = this.count() + 1
+    const isTie = (newCount >= 9) && (winner === '')
 
     const currentMove = { player: this.isUserX() ? 'X' : 'O', cellId: ButtonId}
-    this.updateGameState.emit({board: this.board(), history: currentMove, winner: winner})
+    this.updateGameState.emit({board: this.board(), history: currentMove, winner: isTie ? 'tie' : winner, count: newCount})
   }
 
   checkForWinner(ButtonId: number) {
     const result = checkWinner(ButtonId, this.max_rows(), this.step_count(), this.board())
-    console.log(result)
 
     this.highlightIdArray(result.winningIds, this.max_rows())
     return result.winner
-
-    //const isGameOver = (winner:'X'|'O'|'') => {
-      // const GameIsNotOver = (winner === '') && (this.turnCount < this.max_columns()*this.max_rows())
-      // if (GameIsNotOver) return false
-
-      //const message = (winner === '') ? `It's a tie!` : `${winner} is the winner!`
-
-      //this.updateStatusBar.emit(message)
-      //this.highlightIdArray(result.winningIds, this.max_rows())
-
-      //return true
-    //}
-
-    //if (isGameOver(result.winner as '' | 'X' | 'O'))
-      //return
   }
 
   highlightIdArray(ids:number[], cell_count_per_row: number){
@@ -106,6 +90,15 @@ export class MultiplayerBoardComponent {
   renderStatusBar() {
     let message = ''
 
+    if(this.winner() === 'X')
+      message = `X won!`
+
+    if(this.winner() === 'O')
+      message = `O won!`
+
+    if(this.winner() === 'tie')
+      message = `It's a tie`
+
     if (this.isUserX() && this.isBoardDisabled())
       message = `It's O's turn`
 
@@ -117,12 +110,6 @@ export class MultiplayerBoardComponent {
 
     if (!this.isUserX() && !this.isBoardDisabled())
       message = `It's O's turn`
-
-    if(this.winner() === 'X')
-      message = `X won!`
-
-    if(this.winner() === 'O')
-      message = `O won!`
 
     this.updateStatusBar.emit(message)
   }

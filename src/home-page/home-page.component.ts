@@ -38,7 +38,7 @@ export class HomePageComponent {
 
     const history = {player:"unset",cellId: 0}
 
-    this.gameService.createNewGame('3x3', emptyBoard, history).subscribe(res => {
+    this.gameService.createNewGame('3x3', emptyBoard, history, 0).subscribe(res => {
       if (res){
         const gameId = res.game_id
         this.router.navigate(['/multiplayer', gameId, '3x3'])

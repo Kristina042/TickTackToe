@@ -30,10 +30,11 @@ export class MultiplayerGameComponent {
   resetBoardTrigger = false;
   gameStatus: string = "It's X's turn"
 
-  boardState: board_cell[][] = []  // holds the current board from backend
+  boardState: board_cell[][] = []
   isUserX: boolean = true
   isBoardDisabled = false
   winner: 'X' | 'O' | 'tie' | null = null
+  count: number = 0
 
   ngOnInit(){
     this.RenderBoard()
@@ -54,7 +55,6 @@ export class MultiplayerGameComponent {
   toggleBoardAccess() {
     this.gameService.getCurrGameData(this.gameId)
     .subscribe(res => {
-
       const currPlayerId = this.authService.currentUser?.Id
 
       if(res.player_x_id === currPlayerId) {
@@ -84,6 +84,11 @@ export class MultiplayerGameComponent {
       if ((res.winner === 'O') || (res.winner === 'X'))
         this.isBoardDisabled = true
 
+      this.count = res.count
+
+      if (this.count >= 9)
+        this.isBoardDisabled = true
+
       this.winner = res.winner
 
       this.changeDetector.detectChanges()
@@ -92,7 +97,8 @@ export class MultiplayerGameComponent {
 
   subscribeToWebSocket() {
     this.realtimeService.subscribeToMessages(this.gameId)
-    this.realtimeService.messages$.pipe().subscribe(messages => {
+    this.realtimeService.messages$.subscribe(messages => {
+
       const oldBoard = this.boardState
       const newBoard = messages.board_state
 
@@ -128,6 +134,11 @@ export class MultiplayerGameComponent {
       if ((messages.winner === 'O') || (messages.winner === 'X'))
         this.isBoardDisabled = true
 
+      this.count = messages.count
+
+      if (this.count >= 9)
+        this.isBoardDisabled = true
+
       this.winner = messages.winner
 
       this.changeDetector.detectChanges()
@@ -153,30 +164,24 @@ export class MultiplayerGameComponent {
   updatePlayersInDatabase() {
     const currPlayerId = this.authService.currentUser?.Id
 
-    //get current players from database
     this.gameService.getCurrGameData(this.gameId).subscribe(res => {
 
       if ((currPlayerId === res.player_x_id) || (currPlayerId === res.player_o_id))
         return
 
       if(res.player_x_id === null) {
-        //then we will be player x
         this.isUserX = true
-       // console.log('isUserX from parent = ', this.isUserX)
         this.gameService.updateGame(this.gameId, { player_x_id: currPlayerId }).subscribe()
         this.changeDetector.detectChanges()
         return
 
       } else if (res.player_o_id === null) {
         this.isUserX = false
-        //console.log('isUserX from parent = ', this.isUserX)
         this.gameService.updateGame(this.gameId, { player_o_id: currPlayerId }).subscribe()
         this.changeDetector.detectChanges()
         return
-        //then we will be player o
       }
       else if ((res.player_x_id !== currPlayerId) && (res.player_o_id !== currPlayerId)) {
-        //then this isnt our game and we will be kicked out
         this.router.navigate(['/'])
          return
       }
@@ -185,17 +190,15 @@ export class MultiplayerGameComponent {
 
   updateGame(data: any) {
 
-    // this.gameService.getCurrGameData(this.gameId).subscribe(res => {
-    //   const newHistory = [...res.history, ...data.history]
-    // })
-
     const dataToUpdate = {
       board_state: data.board,
       history: data.history,
-      winner: data.winner
+      winner: data.winner,
+      count: data.count
     }
 
     this.gameService.updateGame(this.gameId, dataToUpdate).subscribe()
+
   }
 
   handleNewGameClick(){
