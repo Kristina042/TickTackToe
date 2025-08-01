@@ -277,7 +277,7 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
         step_count: step_count,
         board:board
       }
-      
+
       for (let j = 0; j < winChecks.length; j++){
         winningIds = winChecks[j](info)
         if (winningIds.length > 0)  return {winner: players[i], winningIds: winningIds}

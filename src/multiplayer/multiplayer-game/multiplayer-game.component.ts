@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { RealtimeService } from '../../services/realtime-.service';
 import { skip } from 'rxjs';
 import { board_cell } from '../../utils/boardUtils/board';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-multiplayer-game',
@@ -14,12 +15,14 @@ import { board_cell } from '../../utils/boardUtils/board';
   templateUrl: './multiplayer-game.component.html',
   styleUrl: './multiplayer-game.component.scss'
 })
+
 export class MultiplayerGameComponent {
   route = inject(ActivatedRoute)
   gameService = inject(GameService)
   authService = inject(AuthService)
   router = inject(Router)
   realtimeService = inject(RealtimeService)
+  changeDetector = inject(ChangeDetectorRef)
 
   gameType = '3x3'; gameId = 0
   boardSize = 3; stepCount = 3
@@ -29,11 +32,14 @@ export class MultiplayerGameComponent {
 
   boardState: board_cell[][] = []  // holds the current board from backend
   isUserX: boolean = true
+  isBoardDisabled = false
+  winner: 'X' | 'O' | 'tie' | null = null
 
   ngOnInit(){
     this.RenderBoard()
     this.retrieveBoardState()
     this.updatePlayersInDatabase()
+    this.toggleBoardAccess()
     this.subscribeToWebSocket()
   }
 
@@ -41,23 +47,91 @@ export class MultiplayerGameComponent {
     this.gameService.getBoardStateByGameId(this.gameId).subscribe(res => {
       const board:board_cell[][] = res
       this.boardState = [...board]
-      console.log('retieved board:', res)
+    })
+  }
+
+  //decide if board is disabled or not
+  toggleBoardAccess() {
+    this.gameService.getCurrGameData(this.gameId)
+    .subscribe(res => {
+
+      const currPlayerId = this.authService.currentUser?.Id
+
+      if(res.player_x_id === currPlayerId) {
+        this.isUserX = true
+      }
+
+      if (res.player_o_id === currPlayerId) {
+        this.isUserX = false
+      }
+
+      if (res.history.player === 'unset') {
+        if (this.isUserX)
+          this.isBoardDisabled = false
+        else
+          this.isBoardDisabled = true
+
+        return
+      }
+
+      if (((res.history.player === 'X') && (this.isUserX)) || ((res.history.player === 'O') && (!this.isUserX))){
+
+        this.isBoardDisabled = true
+      } else {
+        this.isBoardDisabled = false
+      }
+
+      if ((res.winner === 'O') || (res.winner === 'X'))
+        this.isBoardDisabled = true
+
+      this.winner = res.winner
+
+      this.changeDetector.detectChanges()
     })
   }
 
   subscribeToWebSocket() {
     this.realtimeService.subscribeToMessages(this.gameId)
-    this.realtimeService.messages$.pipe(skip(1)).subscribe(messages => {
-      console.log('from web socket:')
-      console.log(messages.board_state)
+    this.realtimeService.messages$.pipe().subscribe(messages => {
       const oldBoard = this.boardState
       const newBoard = messages.board_state
 
       if(!this.deepEqual(oldBoard, newBoard)) {
         this.boardState = [...newBoard]
-        //signal somehow that its our users turn to move
-        console.log('BOARD STATE CHANGED')
       }
+
+      //detect is user x or not
+      const currPlayerId = this.authService.currentUser?.Id
+
+      if(messages.player_x_id === currPlayerId) {
+        this.isUserX = true
+      }
+
+      if (messages.player_o_id === currPlayerId) {
+        this.isUserX = false
+      }
+
+      if ((messages.history.player === 'X') && (!this.isUserX)) {
+        this.isBoardDisabled = false
+      }
+
+      if ((messages.history.player === 'O') && (!this.isUserX)) {
+        this.isBoardDisabled = true
+      }
+
+      if ((messages.history.player === 'X') && (this.isUserX))
+        this.isBoardDisabled = true
+
+      if ((messages.history.player === 'O') && (this.isUserX))
+        this.isBoardDisabled = false
+
+      if ((messages.winner === 'O') || (messages.winner === 'X'))
+        this.isBoardDisabled = true
+
+      this.winner = messages.winner
+
+      this.changeDetector.detectChanges()
+
     })
   }
 
@@ -88,12 +162,16 @@ export class MultiplayerGameComponent {
       if(res.player_x_id === null) {
         //then we will be player x
         this.isUserX = true
+       // console.log('isUserX from parent = ', this.isUserX)
         this.gameService.updateGame(this.gameId, { player_x_id: currPlayerId }).subscribe()
+        this.changeDetector.detectChanges()
         return
 
       } else if (res.player_o_id === null) {
         this.isUserX = false
+        //console.log('isUserX from parent = ', this.isUserX)
         this.gameService.updateGame(this.gameId, { player_o_id: currPlayerId }).subscribe()
+        this.changeDetector.detectChanges()
         return
         //then we will be player o
       }
@@ -103,13 +181,18 @@ export class MultiplayerGameComponent {
          return
       }
     })
-
   }
 
-  updateGame(board: []) {
+  updateGame(data: any) {
+
+    // this.gameService.getCurrGameData(this.gameId).subscribe(res => {
+    //   const newHistory = [...res.history, ...data.history]
+    // })
+
     const dataToUpdate = {
-      board_state: board,
-      history: {}
+      board_state: data.board,
+      history: data.history,
+      winner: data.winner
     }
 
     this.gameService.updateGame(this.gameId, dataToUpdate).subscribe()

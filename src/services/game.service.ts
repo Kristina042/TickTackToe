@@ -11,11 +11,11 @@ export class GameService {
   supabaseService = inject(SupaBaseService)
   authService = inject(AuthService)
 
-  createNewGame(gameType: string, boardState?: any): Observable<any> {
+  createNewGame(gameType: string, boardState?: any, history?: {}): Observable<any> {
     const gameToCreate = {
       board_state: boardState,
       board_type: gameType,
-      history: null,
+      history: history,
       player_o_id: null,
       player_x_id: null,
       winner: null,

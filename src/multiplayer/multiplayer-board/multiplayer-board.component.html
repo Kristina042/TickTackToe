@@ -3,7 +3,7 @@
         <app-button *ngFor="let items of BoardItems; index as id"
         [OnDisplay]="getElementById(id, max_rows()).display"
         (onClick)="handlePlayerTurn(id)"
-        [isGameFinished]="isBoardDisabled"
+        [isGameFinished]="isBoardDisabled()"
         [isHighlighted]="getElementById(id, max_rows()).isHighlighted"/>
     </div>
 </div>

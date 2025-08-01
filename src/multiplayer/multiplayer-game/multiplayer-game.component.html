@@ -11,6 +11,9 @@
             [resetBoard]="resetBoardTrigger"
             (updateGameState)="updateGame($event)"
             [board]="boardState"
+            [isUserX]="isUserX"
+            [isBoardDisabled]="isBoardDisabled"
+            [winner]="winner"
         />
         <div class="stats-bar-and-button">
             <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
