@@ -13,8 +13,43 @@
     }
 
     <div class="menu-and-octos">
+
         <img class="octo" src="/octo2.png">
-        <div class="menu">
+
+        <div class="menu__wrapper">
+            <div class="menu__a">
+                <div class="menu__item-a menu__item-a--1">
+                    <div (click)="this.router.navigate(['3x3'])" class="menu__item">play 3x3</div>
+                </div>
+                <div class="menu__item-a menu__item-a--2">
+                    <div (click)="this.router.navigate(['5x5'])" class="menu__item">play 5x5 game</div>
+                </div>
+                <div class="menu__item-a menu__item-a--3">
+                    <div (click)="this.router.navigate(['10x10'])" class="menu__item">play 10x10 game</div>
+                </div>
+                <div class="menu__item-a menu__item-a--4">
+                    <div (click)="createNew3x3()" class="menu__item">play online 3x3</div>
+                </div>
+            </div>
+            <div class="menu__b">
+                <div class="menu__item-b menu__item-b--1">
+                    <div (click)="createNew3x3()" class="menu__item">play online 3x3</div>
+                </div>
+                <div class="menu__item-b menu__item-b--2">
+                    <div (click)="createNew5x5()" class="menu__item">play online 5x5</div>
+                </div>
+                <div class="menu__item-b menu__item-b--3">
+                    <div (click)="createNew10x10()" class="menu__item">play online 10x10</div>
+                </div>
+                <div class="menu__item-b menu__item-b--4">
+                    <div (click)="createNew3x3()" class="menu__item">play online 3x3</div>
+                </div>
+            </div>
+        </div>
+        <!-- <img class="octo" src="/octo2.png"> -->
+
+
+        <!-- <div class="menu">
             <div class="menu__item">my stats</div>
             <div (click)="this.router.navigate(['3x3'])" class="menu__item">play 3x3 game</div>
             <div (click)="this.router.navigate(['5x5'])" class="menu__item">play 5x5 game</div>
@@ -22,7 +57,7 @@
             <div (click)="createNew3x3()" class="menu__item">play online 3x3</div>
             <div (click)="createNew5x5()" class="menu__item">play online 5x5</div>
             <div (click)="createNew10x10()" class="menu__item">play online 10x10</div>
-        </div>
-        <img class="octo" src="/octo1.png">
+        </div> -->
+        <!-- <img class="octo" src="/octo1.png"> -->
     </div>
 </div>
