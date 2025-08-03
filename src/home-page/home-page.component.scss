@@ -1,6 +1,6 @@
 @import '../styles.scss';
 
-.home-body{
+.home-body {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -10,16 +10,16 @@
     background-color: $dark-gray;
 }
 
-.title{
+.title {
     font-weight: 550;
     font-family: "Comic Neue";
     font-size: 50px;
     color: white;
     padding: 50px;
-
+    text-align: center;
 }
 
-.menu{
+.menu {
     max-width: 600px;
     display: flex;
     justify-content: center;
@@ -30,143 +30,16 @@
     border-radius: 25px;
     padding: 10px;
 
-
-    &__wrapper {
-        position: relative;
-
-        top: 0;
-        left: 0;
-
-        animation-duration: 50s;
-        animation-name: wrapper;
-        animation-iteration-count: infinite;
-
-        width: 400px;
-        height: 400px;
-
-    }
-
-    @keyframes wrapper {
-        from {
-            transform: rotate(0deg);
-        }
-
-         to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes item {
-        from {
-            transform: rotate(360deg);
-        }
-
-        to {
-            transform: rotate(0);
-        }
-    }
-
-    @keyframes item-b {
-        from {
-            transform: rotate(315deg);
-        }
-
-        to {
-            transform: rotate(-45deg);
-        }
-    }
-
-
-    &__a,
-    &__b {
-        min-width: 500px;
-        min-height: 500px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: -1;
-
-        // background-color: cyan;
-    }
-
-    &__b {
-        transform: rotate(45deg);
-        animation-iteration-count: infinite;
-
-        // background-color: red;
-    }
-
-    &__item-a,
-    &__item-b {
-        position: absolute;
-        z-index: 100000000000;
-    }
-
-    &__item-a {
-        animation-duration: 50s;
-        animation-name: item;
-        animation-iteration-count: infinite;
-
-        &--1 {
-            left: 0;
-            top: 0;
-        }
-
-        &--2 {
-            right: 0;
-            top: 0;
-        }
-
-        &--3 {
-            left: 0;
-            bottom: 0;
-        }
-
-        &--4 {
-            right: 0;
-            bottom: 0;
-        }
-    }
-
-    &__item-b {
-        animation-duration: 50s;
-        animation-name: item-b;
-        animation-iteration-count: infinite;
-        transform: rotate(-45deg);
-
-        &--1 {
-            left: 0;
-            top: 0;
-        }
-
-        &--2 {
-            right: 0;
-            top: 0;
-        }
-
-        &--3 {
-            left: 0;
-            bottom: 0;
-        }
-
-        &--4 {
-            right: 0;
-            bottom: 0;
-        }
-    }
-
-
-    &__item{
+    &__item {
         font-weight: 550;
         font-family: "Comic Neue";
         font-size: 24px;
         text-align: center;
 
-        height: 130px;
-        width: 130px;
         padding: 15px;
+        text-wrap: nowrap;
 
-        border-radius: 100%;
+        border-radius: 20px;
         border-right: 6px solid $darker-blue;
         border-bottom: 6px solid $dark-blue;
 
@@ -176,7 +49,6 @@
 
         color: $dark-gray;
         margin: 10px;
-        transition: 0.1s;
 
         background-color: $light-blue;
 
@@ -187,11 +59,8 @@
     }
 }
 
-.octo{
-    position: absolute;
+.octo {
     max-width: 481px;
-    // z-index: -1;
-    user-select: none;
 }
 
 .menu-and-octos{
@@ -199,8 +68,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
-
-    position: relative;
 }
 
 .auth {
@@ -216,6 +83,37 @@
     &:hover{
         transform: scale(1.1);
         cursor: pointer;
+    }
+
+}
+
+@media (min-width: 1201px) {
+    .mobile_auth {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .octo {
+        display: none
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 0px;
+    }
+
+    .auth {
+        display: none;
+    }
+
+    .title {
+        font-size: 25px;
+        margin-top: 200px;
+        padding: 10px;
+        text-align: center;
     }
 
 }

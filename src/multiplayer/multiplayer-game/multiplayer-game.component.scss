@@ -47,7 +47,7 @@
     left: 20px;
     font-weight: 550;
     font-family: "Comic Neue";
-    font-size: 38px;
+    font-size: 30px;
 
     background-color: $yellow;
     border-radius: 15px;
@@ -74,4 +74,33 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
+}
+
+
+@media (max-width: 1200px) {
+  .octo {
+    display: none;
+  }
+
+  .stats-bar-and-button {
+    width: 345px;
+  }
+
+  .play-again-button {
+    font-size: 26px;
+    width: 80px;
+    border-width: 4px;
+  }
+
+  .home-button {
+    position: fixed;
+    top: 4px;
+    left: 4px;
+    font-size: 20px;
+    margin: 0px;
+    border: none;
+    background-color: inherit;
+    padding: 0px;
+    color: white;
+  }
 }

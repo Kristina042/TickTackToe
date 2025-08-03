@@ -58,9 +58,31 @@
   }
 }
 
-@container (min-width: 95px) and (max-width: 150px) {
+@container (min-width: 114px) and (max-width: 154px) {
+  .c-button{
+    font-size: 80px;
+    border-width: 6px;
+  }
+}
+
+
+@container (min-width: 95px) and (max-width: 114px) {
   .c-button{
     font-size: 70px;
     border-width: 6px;
+  }
+}
+
+@container (min-width: 68px) and (max-width: 94px) {
+  .c-button{
+    font-size: 52px;
+    border-width: 3px;
+  }
+}
+
+@container (min-width: 34px) and (max-width: 65px) {
+  .c-button{
+    font-size: 25px;
+    border-width: 2px;
   }
 }

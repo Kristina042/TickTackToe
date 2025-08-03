@@ -26,3 +26,11 @@ $dark-blue: #218380;
     border-color: $dark-yellow;
     border-width: 5px;
 }
+
+@media (max-width: 1200px) {
+    .status-bar {
+        width: 345px;
+        height: 70px;
+        border-width: 4px;
+  }
+}

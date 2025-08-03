@@ -86,3 +86,21 @@
         }
     }
 }
+
+@media (max-width: 1200px) {
+    .form {
+        width: 345px;
+
+        &__control__input {
+            width: 280px;
+        }
+
+        &__button {
+            width: 280px;
+        }
+
+        &__nav {
+            font-size: 17px;
+        }
+    }
+}

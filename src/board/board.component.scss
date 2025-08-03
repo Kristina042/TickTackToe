@@ -16,3 +16,10 @@
         grid-template-rows: repeat(var(--row-count), 1fr);
     }
 }
+
+@media (max-width: 1200px) {
+    .board-container {
+        width: 345px;
+        height: 345px;
+  }
+}
