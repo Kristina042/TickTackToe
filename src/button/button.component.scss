@@ -1,4 +1,11 @@
-.button{
+@import '../styles.scss';
+
+.c-button{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 100%;
     height: 100%;
     border-radius: 10px;
@@ -6,10 +13,76 @@
     border-color:  #218380;
     border-width: 4px;
 
+    color: #202020;
+
+    font-weight: 550;
+    font-family: "Comic Neue";
+    font-size: 33px;
+
+    padding: 0px;
+
     transition: all .25s ease-in-out;
+
+    &--higlighted{
+      background-color:$highlight-color ;
+      border-color:  $highlight-border ;
+
+      &:hover{
+        background-color: $highlight-color !important;
+        border-color: $highlight-border !important;
+        opacity: 1 !important;
+      }
+    }
+
+    &--disabled{
+      pointer-events: none;
+      cursor: none;
+    }
+
+    &:hover{
+        opacity: 1;
+        background-color: #218380;
+    }
 }
 
-.button:hover{
-    opacity: 1;
-    background-color: #218380;
+.c-button-container{
+    container-type: inline-size;
+    width: 100%;
+    height: 100%;
+}
+
+@container (min-width: 155px) {
+  .c-button{
+    font-size: 100px;
+    border-width: 8px;
+  }
+}
+
+@container (min-width: 114px) and (max-width: 154px) {
+  .c-button{
+    font-size: 80px;
+    border-width: 6px;
+  }
+}
+
+
+@container (min-width: 95px) and (max-width: 114px) {
+  .c-button{
+    font-size: 70px;
+    border-width: 6px;
+  }
+}
+
+@container (min-width: 68px) and (max-width: 94px) {
+  .c-button{
+    font-size: 52px;
+    border-width: 3px;
+  }
+}
+
+@container (min-width: 34px) and (max-width: 65px) {
+  .c-button{
+    font-size: 25px;
+    border-width: 2px;
+  }
 }

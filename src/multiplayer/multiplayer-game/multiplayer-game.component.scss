@@ -1,0 +1,135 @@
+@import '../../styles.scss';
+
+.body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-again-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  border-radius: 15px;
+  background-color: $yellow;
+  border-color:  $dark-yellow;
+  border-width: 6px;
+  color: #202020;
+  font-weight: 550;
+  font-family: "Comic Neue";
+  font-size: 28px;
+
+  margin-top: 10px;
+  margin-right: 0px;
+
+  padding: 10px;
+
+  cursor: pointer;
+
+  transition: all .25s ease-in-out;
+
+  &:hover{
+      opacity: 1;
+      background-color: $medium-yellow;
+  }
+}
+.stats-bar-and-button{
+  width: 480px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.home-button{
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-weight: 550;
+  font-family: "Comic Neue";
+  font-size: 30px;
+
+  background-color: $yellow;
+  border-radius: 15px;
+  border-color:  $dark-yellow;
+  border-width: 4px;
+  color: #202020;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+
+  cursor: pointer;
+}
+
+.octo{
+  width: 400px;
+  height:  400px;
+  background-size: cover;
+  background-position: center;
+  margin: 0px;
+}
+
+.game-and-octos{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+
+.opponent{
+  background-color: $yellow;
+  width: 480px;
+  height: 70px;
+  border-radius: 15px;
+  margin: 10px;
+
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: #202020;
+  font-weight: 550;
+  font-family: "Comic Neue";
+  font-size: 35px;
+
+  border-style: solid;
+  border-color: $dark-yellow;
+  border-width: 5px;
+}
+
+@media (max-width: 1200px) {
+  .octo {
+    display: none;
+  }
+
+  .stats-bar-and-button {
+    width: 345px;
+  }
+
+  .play-again-button {
+    font-size: 26px;
+    width: 80px;
+    border-width: 4px;
+  }
+
+  .home-button {
+    position: fixed;
+    top: 4px;
+    left: 4px;
+    font-size: 20px;
+    margin: 0px;
+    border: none;
+    background-color: inherit;
+    padding: 0px;
+    color: white;
+  }
+
+  .opponent {
+    width: 345px;
+    height: 60px;
+    border-width: 4px;
+    font-size: 28px;
+  }
+}

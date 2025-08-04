@@ -1,0 +1,30 @@
+<div class="home-body">
+    <div *ngIf="authService.currentUser" (click)="logout()" class="auth">logout</div>
+    <div *ngIf="!authService.currentUser" (click)="this.router.navigate(['login'])" class="auth">login/sign up</div>
+
+    @if (authService.currentUser){
+        <div class="title">
+            Hi, {{authService.currentUser.userName}}! <br> Lets play something <3
+        </div>
+    } @else {
+        <div class="title">
+            Welcome to my Tic Tack Toe app!
+        </div>
+    }
+
+    <div class="menu-and-octos">
+
+        <img class="octo" src="/octo2.png">
+        <div class="menu">
+            <div class="menu__item" (click)="viewStats()">my stats</div>
+            <div (click)="this.router.navigate(['3x3'])" class="menu__item">play 3x3 game</div>
+            <div (click)="this.router.navigate(['5x5'])" class="menu__item">play 5x5 game</div>
+            <div (click)="this.router.navigate(['10x10'])" class="menu__item">play 10x10 game</div>
+            <div (click)="createNew3x3()" class="menu__item">play online 3x3</div>
+            <div (click)="createNew5x5()" class="menu__item">play online 5x5</div>
+            <div (click)="createNew10x10()" class="menu__item">play online 10x10</div>
+            <div *ngIf="authService.currentUser" (click)="logout()" class="menu__item mobile_auth">logout</div>
+        </div>
+        <img class="octo" src="/octo1.png">
+    </div>
+</div>

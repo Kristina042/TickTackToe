@@ -1,0 +1,31 @@
+<div class="stats-grid">
+  <!-- Header Row -->
+  <div class="grid-header">Date</div>
+  <div class="grid-header">Game</div>
+  <div class="grid-header">Players</div>
+  <div class="grid-header">Winner</div>
+
+  <!-- Data Rows -->
+  <ng-container *ngFor="let stat of stats$ | async">
+    <div class="grid-cell">{{ stat.created_at | date: 'yyyy-MM-dd' }}</div>
+    <div class="grid-cell">{{ stat.board_type }}</div>
+    <div class="grid-cell">{{ stat.player_x_name }} vs {{ stat.player_o_name }}</div>
+    <div class="grid-cell">
+      @if (stat.winner === 'X') {
+        @if (authService.currentUser?.Id === stat.player_x_id) {
+          me
+        } @else {
+          {{ stat.player_x_name }}
+        }
+      } @else if (stat.winner === 'O') {
+        @if (authService.currentUser?.Id === stat.player_o_id) {
+          me
+        } @else {
+          {{ stat.player_o_name }}
+        }
+      } @else if (stat.winner === 'tie') {
+        tie
+      }
+    </div>
+  </ng-container>
+</div>

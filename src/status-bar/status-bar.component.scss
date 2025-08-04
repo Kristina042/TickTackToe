@@ -1,7 +1,15 @@
-.statusBar{
-    background-color: #b3dee2;
-    width: 600px;
-    height: 100px;
+$yellow: #ffffa7;
+$light-yellow: #fcfcdc;
+$medium-yellow: #d9ad3c;
+$dark-yellow: #c48f2d;
+
+$light-blue:  #b3dee2;
+$dark-blue: #218380;
+
+.status-bar{
+    background-color: $yellow;
+    width: 480px;
+    height: 70px;
     border-radius: 15px;
     margin: 10px;
 
@@ -9,12 +17,21 @@
     text-align: center;
     align-items: center;
     justify-content: center;
-    color: #185f5d;
-    font-size: 30px;
+    color: #202020;
     font-weight: 550;
-    font-family: math;
+    font-family: "Comic Neue";
+    font-size: 35px;
 
     border-style: solid;
-    border-color:  #218380;
-    border-width: 4px;
+    border-color: $dark-yellow;
+    border-width: 5px;
+}
+
+@media (max-width: 1200px) {
+    .status-bar {
+        width: 345px;
+        height: 60px;
+        border-width: 4px;
+        font-size: 28px;
+  }
 }

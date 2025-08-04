@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { input } from '@angular/core';
+import { Component, Output, EventEmitter, computed, input } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -9,5 +8,19 @@ import { input } from '@angular/core';
 })
 
 export class ButtonComponent {
-  ID = input<number>()
+  OnDisplay = input<string>('');
+  isHighlighted = input<boolean>(false)
+  isGameFinished = input<boolean>()
+
+  IsDisabled = computed<boolean>(() =>
+    this.isGameFinished() || !!this.OnDisplay().length);
+
+  @Output() onClick = new EventEmitter();
+
+  handleClick(){
+    if (this.IsDisabled()) return
+
+    this.onClick.emit()
+  }
+
 }

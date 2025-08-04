@@ -1,9 +1,3 @@
-<div class="statusBar">
-    @if(isEndOfGame){
-        {{CurrPlayer}} is the winner!
-    }
-    @else{
-         Now it's {{CurrPlayer}}'s turn
-    }
-  
+<div class="status-bar" >
+   {{status()}}
 </div>

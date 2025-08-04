@@ -1,0 +1,114 @@
+@import '../styles.scss';
+
+.form {
+    background-color: $light-blue;
+
+    padding: 40px;
+    width: 450px;
+    min-height: 470px;
+
+    border-right: 6px solid  $darker-blue;
+    border-bottom: 6px solid $darker-blue;
+
+
+    border-radius: 20px;
+    font-weight: 550;
+    font-family: "Comic Neue";
+    font-size: 25px;
+    color: $dark-gray;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    &__wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    &__control {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        &__input {
+            width: 316px;
+            height: 30px;
+            font-size: 20px;
+            border-radius: 5px;
+            border-style: dashed;
+            border-color: $dark-blue;
+            border-width: 1px;
+            padding-left: 4px;
+        }
+
+        &--error{
+            color: $darker-blue;
+            font-size: 20px;
+            position: absolute;
+            top: 57px;
+        }
+    }
+
+    &__button {
+        margin-top: 30px;
+        width: 316px;
+        height: 50px;
+        padding: 10px;
+        background-color: $dark-blue;
+        color: white;
+        border-radius: 10px;
+        border: unset;
+        font-size: 25px;
+        font-weight: bold;
+        text-transform: uppercase;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $darker-blue;
+        }
+    }
+
+    &__nav{
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: rgb(0, 105, 131);
+
+        &--register {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    .form {
+        width: 345px;
+
+        &__control__input {
+            width: 280px;
+        }
+
+        &__button {
+            width: 280px;
+        }
+
+        &__nav {
+            font-size: 17px;
+        }
+    }
+}

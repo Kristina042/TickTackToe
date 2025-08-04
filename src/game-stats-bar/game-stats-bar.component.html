@@ -1,0 +1,32 @@
+<div class="game-stats-bar">
+    <div class='game-stats-bar__stat-item'>
+        <div>
+            player X
+        </div>
+        <div>
+            {{stats()?.numXwins || 0}}
+        </div>
+    </div>
+
+
+    <div class='game-stats-bar__stat-item'>
+        <div>
+          player O
+        </div>
+        <div>
+            {{stats()?.numOwins || 0}}
+        </div>
+    </div>
+
+
+    <div class='game-stats-bar__stat-item'>
+        <div>
+            tie
+        </div>
+        <div>
+            {{stats()?.numTies || 0}}
+        </div>
+    </div>
+</div>
+
+
