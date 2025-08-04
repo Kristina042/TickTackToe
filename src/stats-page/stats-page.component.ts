@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { StatsService } from '../services/stats.service';
 import { CommonModule } from '@angular/common';
-import { filter, forkJoin, map, mergeMap, of, switchMap } from 'rxjs';
+import { forkJoin, map, of, switchMap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-stats-page',

@@ -1,17 +1,59 @@
-.stats {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+@import '../styles.scss';
 
-    font-size: 20px;
-    font-family: "Comic Neue";
-    color: white
+$cols: 4;
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Comic Neue';
+  font-size: 30px;
+  font-weight: 600;
 }
 
-span{
-    background-color: rgb(185, 78, 78);
+.grid-header {
+  background-color: $light-blue;
+  padding: 15px;
 }
 
-label {
-    background-color: rgb(58, 51, 153);
+.grid-cell {
+  background-color: $light-pink;
+  padding: 15px;
+  border: 1px solid $dark-gray;
+
+  &:nth-child(#{$cols}n) {
+    border-right: none;
+  }
+}
+
+// Alternate background every other row
+@for $i from 0 through 100 {
+  .grid-cell:nth-child(#{2 * $cols * $i + $cols + 1}),
+  .grid-cell:nth-child(#{2 * $cols * $i + $cols + 2}),
+  .grid-cell:nth-child(#{2 * $cols * $i + $cols + 3}),
+  .grid-cell:nth-child(#{2 * $cols * $i + $cols + 4}) {
+    background-color: lighten($light-pink, 8%);
+  }
+}
+
+
+@media (max-width: 1200px) {
+    .stats-grid {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 10px;
+    }
+
+    .grid-cell {
+        padding: 2px;
+        border: 0px;
+    }
+
+    .grid-header {
+        padding: 5px;
+    }
+
 }
