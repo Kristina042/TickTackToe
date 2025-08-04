@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { SupaBaseService } from './supabase.service';
 import { from, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { StatusBarComponent } from '../status-bar/status-bar.component';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,7 @@ export class GameService {
   supabaseService = inject(SupaBaseService)
   authService = inject(AuthService)
 
-  createNewGame(gameType: string, boardState?: any, history?: {}, count?: number): Observable<any> {
+  createNewGame(gameType: string, boardState?: any, history?: {}, count?: number, player_o_id?: string | null, player_x_id?: string | null): Observable<any> {
     const gameToCreate = {
       board_state: boardState,
       board_type: gameType,

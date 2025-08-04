@@ -31,6 +31,7 @@ export class MultiplayerBoardComponent {
   count = input<number>(0)
 
   BoardItems = this.board().flat();
+  opponentName = input('')
 
   constructor() {
     effect(() => {
@@ -44,7 +45,7 @@ export class MultiplayerBoardComponent {
     }
   }
 
-  getElementById(id: number,  cell_count_per_row: number){
+  getElementById(id: number,  cell_count_per_row: number) {
     const player = getPlayerPosition(id, cell_count_per_row)
     return this.board()[player.rowIndex][player.columnIndex]
   }
@@ -84,29 +85,32 @@ export class MultiplayerBoardComponent {
   }
 
   renderStatusBar() {
-    let message = ''
 
-    if (this.isUserX() && this.isBoardDisabled())
-      message = `It's O's turn`
+    if((this.winner() === 'X') && (this.isUserX()))
+      return this.updateStatusBar.emit(`you won!`)
 
-    if (this.isUserX() && !this.isBoardDisabled())
-      message = `It's X's turn`
+    if((this.winner() === 'O') && (this.isUserX()))
+      return this.updateStatusBar.emit(`${this.opponentName()} won!`)
 
-    if (!this.isUserX() && this.isBoardDisabled())
-      message = `It's X's turn`
+    if((this.winner() === 'X') && (!this.isUserX()))
+      return this.updateStatusBar.emit(`${this.opponentName()} won!`)
 
-    if (!this.isUserX() && !this.isBoardDisabled())
-      message = `It's O's turn`
-
-    if(this.winner() === 'X')
-      message = `X won!`
-
-    if(this.winner() === 'O')
-      message = `O won!`
+    if((this.winner() === 'O') && (!this.isUserX()))
+      return this.updateStatusBar.emit(`you won!`)
 
     if(this.winner() === 'tie')
-      message = `It's a tie`
+      return this.updateStatusBar.emit(`It's a tie`)
 
-    this.updateStatusBar.emit(message)
+    if (this.isUserX() && this.isBoardDisabled())
+      return this.updateStatusBar.emit(`It's O's turn`)
+
+    if (this.isUserX() && !this.isBoardDisabled())
+      return this.updateStatusBar.emit(`It's X's turn (yours)`)
+
+    if (!this.isUserX() && this.isBoardDisabled())
+      return this.updateStatusBar.emit(`It's X's turn`)
+
+    if (!this.isUserX() && !this.isBoardDisabled())
+      return this.updateStatusBar.emit(`It's O's turn (yours)`)
   }
 }

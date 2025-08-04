@@ -5,8 +5,9 @@ import { StatusBarComponent } from '../../status-bar/status-bar.component';
 import { MultiplayerBoardComponent } from '../multiplayer-board/multiplayer-board.component';
 import { AuthService } from '../../services/auth.service';
 import { RealtimeService } from '../../services/realtime-.service';
-import { board_cell } from '../../utils/boardUtils/board';
+import { board_cell, create_board } from '../../utils/boardUtils/board';
 import { ChangeDetectorRef } from '@angular/core';
+import { map, take } from 'rxjs';
 
 @Component({
   selector: 'app-multiplayer-game',
@@ -34,6 +35,10 @@ export class MultiplayerGameComponent {
   isBoardDisabled = false
   winner: 'X' | 'O' | 'tie' | null = null
   count: number = 0
+
+  opponentId = null
+
+  opponentName = '...'
 
   ngOnInit(){
     this.RenderBoard()
@@ -89,6 +94,23 @@ export class MultiplayerGameComponent {
 
       this.winner = res.winner
 
+      //get opponents name
+      if (this.isUserX) {
+        this.opponentId = res.player_o_id
+      } else {
+        this.opponentId = res.player_x_id
+      }
+
+      if (this.opponentName !== null) {
+        this.authService.getNameById(this.opponentId).pipe(
+          take(1),
+          map(res => res.data?.name)
+        )
+        .subscribe(name  => {
+          this.opponentName = name
+        })
+      }
+
       this.changeDetector.detectChanges()
     })
   }
@@ -139,6 +161,23 @@ export class MultiplayerGameComponent {
 
       this.winner = messages.winner
 
+            //get opponents name
+      if (this.isUserX) {
+        this.opponentId = messages.player_o_id
+      } else {
+        this.opponentId = messages.player_x_id
+      }
+
+        if (this.opponentName !== null) {
+        this.authService.getNameById(this.opponentId).pipe(
+          take(1),
+          map(res => res.data?.name)
+        )
+        .subscribe(name  => {
+          this.opponentName = name
+        })
+      }
+
       this.changeDetector.detectChanges()
 
     })
@@ -154,8 +193,13 @@ export class MultiplayerGameComponent {
 
     if (this.gameType === '5x5') {
       this.boardSize = 5; this.stepCount = 3
+      return
     } else if (this.gameType === '10x10') {
       this.boardSize = 10; this.stepCount = 4
+      return
+    } else if (this.gameType === '3x3') {
+       this.boardSize = 3; this.stepCount = 3
+       return
     }
   }
 
@@ -197,13 +241,6 @@ export class MultiplayerGameComponent {
 
     this.gameService.updateGame(this.gameId, dataToUpdate).subscribe()
 
-  }
-
-  handleNewGameClick(){
-    this.resetBoardTrigger = true;
-
-    // Reset back to false to allow future resets
-    setTimeout(() => this.resetBoardTrigger = false);
   }
 
   handleStatusChange(newStatus: string){

@@ -2,7 +2,9 @@
 <div class="game-and-octos">
     <img class="octo" src="/octo2.png">
     <div class="body">
-        <app-status-bar [status]="gameStatus"/>
+        <div class = 'opponent'>
+            playing with {{opponentName}}
+        </div>
         <app-multiplayer-board
             (updateStatusBar)="handleStatusChange($event)"
             [max_rows]="boardSize"
@@ -15,10 +17,9 @@
             [isBoardDisabled]="isBoardDisabled"
             [winner]="winner"
             [count]="count"
+            [opponentName]="opponentName"
         />
-        <div class="stats-bar-and-button">
-            <button class="play-again-button" (click)="handleNewGameClick()">new game</button>
-        </div>
+        <app-status-bar [status]="gameStatus"/>
     </div>
     <img class="octo" src="/octo1.png">
 </div>
