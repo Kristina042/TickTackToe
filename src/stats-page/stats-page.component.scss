@@ -1,0 +1,17 @@
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    font-size: 20px;
+    font-family: "Comic Neue";
+    color: white
+}
+
+span{
+    background-color: rgb(185, 78, 78);
+}
+
+label {
+    background-color: rgb(58, 51, 153);
+}

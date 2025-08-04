@@ -73,4 +73,11 @@ export class HomePageComponent {
       }
     })
   }
+
+  viewStats() {
+    if (!this.authService.currentUser)
+      return this.router.navigate(['/login'])
+
+    return this.router.navigate(['/stats'])
+  }
 }

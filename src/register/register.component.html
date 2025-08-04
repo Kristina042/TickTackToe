@@ -1,49 +1,50 @@
-<form class="form" [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+<div class="form__wrapper">
+    <form class="form" [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+        <div class="form__controls">
+            <div class="form__control">
+                <label>name</label>
+                <input
+                    class="form__control__input"
+                    type="text"
+                    formControlName="name"
+                >
+                <div *ngIf="name?.invalid && name?.touched" class="form__control--error">
+                    name is too short
+                </div>
+            </div>
 
-    <div class="form__controls">
-        <div class="form__control">
-            <label>name</label>
-            <input
-                class="form__control__input"
-                type="text"
-                formControlName="name"
-            >
-            <div *ngIf="name?.invalid && name?.touched" class="form__control--error">
-                name is too short
+            <div class="form__control">
+                <label>email</label>
+                <input
+                    class="form__control__input"
+                    type="text"
+                    formControlName="email"
+                >
+                <div *ngIf="email?.invalid && email?.touched" class="form__control--error">
+                    email is invalid
+                </div>
+            </div>
+
+            <div class="form__control">
+                <label>password</label>
+                <input
+                    class="form__control__input"
+                    type="password"
+                    formControlName="password"
+                >
+                <div *ngIf="password?.invalid && password?.touched" class="form__control--error">
+                    password is too short
+                </div>
             </div>
         </div>
 
-        <div class="form__control">
-            <label>email</label>
-            <input
-                class="form__control__input"
-                type="text"
-                formControlName="email"
-            >
-            <div *ngIf="email?.invalid && email?.touched" class="form__control--error">
-                email is invalid
+        <div class="form_button-and-link">
+            <button class="form__button" type="submit">register</button>
+
+            <div class="form__nav">
+                <div>if you dont have an account you can</div>
+                <div class="form__nav--login" (click)="this.router.navigate(['/login'])">login</div>
             </div>
         </div>
-
-        <div class="form__control">
-            <label>password</label>
-            <input
-                class="form__control__input"
-                type="password"
-                formControlName="password"
-            >
-            <div *ngIf="password?.invalid && password?.touched" class="form__control--error">
-                password is too short
-            </div>
-        </div>
-    </div>
-
-    <div class="form_button-and-link">
-        <button class="form__button" type="submit">register</button>
-
-        <div class="form__nav">
-            <div>if you dont have an account you can</div>
-            <div class="form__nav--login" (click)="this.router.navigate(['/login'])">login</div>
-        </div>
-    </div>
-</form>
+    </form>
+</div>

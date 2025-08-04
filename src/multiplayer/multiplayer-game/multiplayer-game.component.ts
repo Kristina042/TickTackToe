@@ -102,12 +102,10 @@ export class MultiplayerGameComponent {
       }
 
       if (this.opponentName !== null) {
-        this.authService.getNameById(this.opponentId).pipe(
-          take(1),
-          map(res => res.data?.name)
-        )
+        this.authService.getNameById(this.opponentId).pipe()
         .subscribe(name  => {
           this.opponentName = name
+          console.log(name)
         })
       }
 
@@ -161,20 +159,18 @@ export class MultiplayerGameComponent {
 
       this.winner = messages.winner
 
-            //get opponents name
+      //get opponents name
       if (this.isUserX) {
         this.opponentId = messages.player_o_id
       } else {
         this.opponentId = messages.player_x_id
       }
 
-        if (this.opponentName !== null) {
-        this.authService.getNameById(this.opponentId).pipe(
-          take(1),
-          map(res => res.data?.name)
-        )
+      if (this.opponentName !== null) {
+        this.authService.getNameById(this.opponentId).pipe()
         .subscribe(name  => {
           this.opponentName = name
+          console.log(name)
         })
       }
 
@@ -218,6 +214,7 @@ export class MultiplayerGameComponent {
         return
 
       } else if (res.player_o_id === null) {
+        console.log('player o is null')
         this.isUserX = false
         this.gameService.updateGame(this.gameId, { player_o_id: currPlayerId }).subscribe()
         this.changeDetector.detectChanges()
@@ -225,7 +222,7 @@ export class MultiplayerGameComponent {
       }
       else if ((res.player_x_id !== currPlayerId) && (res.player_o_id !== currPlayerId)) {
         this.router.navigate(['/'])
-         return
+        return
       }
     })
   }

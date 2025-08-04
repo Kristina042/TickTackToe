@@ -1,0 +1,44 @@
+<div class="stats">
+    <div *ngFor="let stat of stats$ | async">
+        <span>
+            <label>date: </label>
+            {{stat.created_at | date: 'yyyy-MM-dd'}}
+        </span>
+        <span>
+            <label>game_id: </label>
+            {{stat.game_id}}
+        </span>
+        <span>
+            <label>game: </label>
+            {{stat.board_type}}
+       </span>
+
+        <span>
+            {{stat.player_x_name}} vs {{stat.player_o_name}}
+       </span>
+
+        <span>
+            <label>winner: </label>
+            @if (stat.winner === 'X') {
+                @if (this.authService.currentUser?.Id === stat.player_x_id) {
+                    me
+                } @else {
+                    {{stat.player_x_name}}
+                }
+            }
+
+            @else if (stat.winner === 'O') {
+                @if (this.authService.currentUser?.Id === stat.player_o_id) {
+                    me
+                } @else {
+                    {{stat.player_o_name}}
+                }
+            }
+
+            @else if(stat.winner === 'tie') {
+                tie
+            }
+
+       </span>
+    </div>
+</div>

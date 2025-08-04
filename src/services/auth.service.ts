@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthResponse } from '@supabase/supabase-js';
 import { LoginRequest, RegisterRequest } from '../types';
-import { BehaviorSubject, from, Observable, of, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { User } from '../types';
 import { SupaBaseService } from './supabase.service';
 
@@ -79,14 +79,14 @@ register(user: RegisterRequest): Observable<AuthResponse> {
     this.supabaseService.client.auth.signOut()
   }
 
-  getNameById(id: string | null) {
+  getNameById(id: string | null): Observable<string> {
     const promise = this.supabaseService.client
       .from('profiles')
       .select('name')
       .eq('id', id)
       .single()
 
-    return from(promise)
+    return from(promise).pipe(map(res => res.data?.name))
   }
 
   get currentUser(): User | null | undefined {
