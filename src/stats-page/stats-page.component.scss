@@ -30,7 +30,7 @@ $cols: 4;
 }
 
 // Alternate background every other row
-@for $i from 0 through 100 {
+@for $i from 0 through 10 {
   .grid-cell:nth-child(#{2 * $cols * $i + $cols + 1}),
   .grid-cell:nth-child(#{2 * $cols * $i + $cols + 2}),
   .grid-cell:nth-child(#{2 * $cols * $i + $cols + 3}),
