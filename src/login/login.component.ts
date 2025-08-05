@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent {
 
   router = inject(Router);
   authService = inject(AuthService)
+  snackBar = inject(MatSnackBar)
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -41,9 +43,22 @@ export class LoginComponent {
     }
 
     this.authService.login(formData).subscribe(result => {
-      if (!result.error)
-        this.router.navigate(['/'])
-    })
+      if (!result.error) {
+        return this.router.navigate(['/']);
+      }
+
+      this.snackBar.open(
+        result.error.message,
+        'Close',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar']
+        }
+      );
+
+      return
+    });
   }
 
 
