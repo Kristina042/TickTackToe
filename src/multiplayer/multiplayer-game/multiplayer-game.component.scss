@@ -99,6 +99,34 @@
   border-width: 5px;
 }
 
+.share-link {
+  background-color: $light-pink;
+  width: 200px;
+  height: 50px;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: #202020;
+  font-weight: 550;
+  font-family: "Comic Neue";
+  font-size: 20px;
+
+  border-style: solid;
+  border-color: $dark-pink;
+  border-width: 3px;
+
+  align-self: flex-end;
+
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 @media (max-width: 1200px) {
   .octo {
     display: none;

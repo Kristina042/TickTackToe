@@ -14,12 +14,10 @@ export class AuthorizedGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean | UrlTree> {
-    console.log('in authrized guard')
     this.authService.authInit()
       return this.authService.isUserSignedIn$.pipe(
        filter(val => val !== null),
         map((isAuth) => {
-          console.log('Guard check, user:', isAuth)
           return isAuth ? true : this.router.createUrlTree(['login'])
         })
       )

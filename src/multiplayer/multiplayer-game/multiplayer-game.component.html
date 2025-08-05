@@ -2,7 +2,8 @@
 <div class="game-and-octos">
     <img class="octo" src="/octo2.png">
     <div class="body">
-        <div class = 'opponent'>
+        <div *ngIf="opponentName ==='...' || !opponentName" class='share-link' (click)="shareLink()">invite second player</div>
+        <div class='opponent'>
             playing with {{opponentName}}
         </div>
         <app-multiplayer-board

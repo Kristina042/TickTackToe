@@ -18,7 +18,6 @@ export class NotAuthorizedGuard implements CanActivate {
     return this.authService.isUserSignedIn$.pipe(
      filter(val => val !== null),
       map((isAuth) => {
-        console.log('Guard check, user:', isAuth)
         return !!isAuth ? this.router.createUrlTree(['/']) : true
       })
     )

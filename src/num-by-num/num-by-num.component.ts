@@ -43,9 +43,6 @@ export class NumByNumComponent {
 
   handleGameStatsChange(newStats: stats){
     this.gameStats = newStats
-
-    console.log('from app:')
-    console.log(newStats)
   }
 
   handleNewGameClick(){

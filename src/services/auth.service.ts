@@ -64,7 +64,6 @@ register(user: RegisterRequest): Observable<AuthResponse> {
     this.supabaseService.client.auth.getSession().then(({ data }) => {
       const session = data.session;
       if (session) {
-        console.log('session found on init');
         this.isUserSignedIn$$.next(true);
         this._currentUser.next({
           email: session.user.email!,
@@ -72,7 +71,6 @@ register(user: RegisterRequest): Observable<AuthResponse> {
           Id: session.user.id
         });
       } else {
-        console.log('no session found on init');
         this.isUserSignedIn$$.next(false);
         this._currentUser.next(null);
       }
@@ -81,7 +79,6 @@ register(user: RegisterRequest): Observable<AuthResponse> {
     // 2. Listen for future auth events
     this.supabaseService.client.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
-        console.log('signed in via event');
         this.isUserSignedIn$$.next(true);
         this._currentUser.next({
           email: session?.user.email!,
@@ -89,7 +86,6 @@ register(user: RegisterRequest): Observable<AuthResponse> {
           Id: session?.user.id
         });
       } else if (event === 'SIGNED_OUT') {
-        console.log('signed out via event');
         this.isUserSignedIn$$.next(false);
         this._currentUser.next(null);
       }

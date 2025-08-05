@@ -31,7 +31,7 @@ export class MultiplayerBoardComponent {
   count = input<number>(0)
 
   BoardItems: board_cell[] = [];
-  opponentName = input('')
+  opponentName = input('...')
 
   constructor() {
     effect(() => {
@@ -42,7 +42,6 @@ export class MultiplayerBoardComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['board']) {
       this.BoardItems = this.board().flat()
-      console.log(this.BoardItems.length)
     }
   }
 

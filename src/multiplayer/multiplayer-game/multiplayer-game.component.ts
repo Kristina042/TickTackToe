@@ -8,10 +8,11 @@ import { RealtimeService } from '../../services/realtime-.service';
 import { board_cell, create_board } from '../../utils/boardUtils/board';
 import { ChangeDetectorRef } from '@angular/core';
 import { map, take } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-multiplayer-game',
-  imports: [StatusBarComponent, MultiplayerBoardComponent, StatusBarComponent],
+  imports: [StatusBarComponent, MultiplayerBoardComponent, StatusBarComponent, CommonModule],
   templateUrl: './multiplayer-game.component.html',
   styleUrl: './multiplayer-game.component.scss'
 })
@@ -102,10 +103,9 @@ export class MultiplayerGameComponent {
       }
 
       if (this.opponentName !== null) {
-        this.authService.getNameById(this.opponentId).pipe()
+        this.authService.getNameById(this.opponentId)
         .subscribe(name  => {
           this.opponentName = name
-          console.log(name)
         })
       }
 
@@ -170,7 +170,6 @@ export class MultiplayerGameComponent {
         this.authService.getNameById(this.opponentId).pipe()
         .subscribe(name  => {
           this.opponentName = name
-          console.log(name)
         })
       }
 
@@ -216,7 +215,6 @@ export class MultiplayerGameComponent {
         return
 
       } else if (res.player_o_id === null) {
-        console.log('player o is null')
         this.isUserX = false
         this.gameService.updateGame(this.gameId, { player_o_id: currPlayerId }).subscribe()
         this.changeDetector.detectChanges()
@@ -248,6 +246,27 @@ export class MultiplayerGameComponent {
 
   navigateToHome(){
     this.router.navigate(["/"])
+  }
+
+  shareLink() {
+    const currentUrl = window.location.href;
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'Join my game!',
+        text: 'Play TicTacToe with me',
+        url: currentUrl
+      }).then(() => {
+        console.log('Link shared successfully!');
+      }).catch((error) => {
+        console.error('Error sharing:', error);
+      });
+    } else {
+      // fallback: copy to clipboard or show a message
+      navigator.clipboard.writeText(currentUrl)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(() => alert('Failed to copy link.'));
+    }
   }
 
   ngOnDestroy(): void {
