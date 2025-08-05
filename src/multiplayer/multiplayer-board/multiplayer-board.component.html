@@ -1,9 +1,12 @@
-<div class="board-container">
-    <div  [style.--row-count]="max_rows()"  [style.--column-count]="max_columns()" class="board-container__board">
-        <app-button *ngFor="let items of BoardItems; index as id"
-        [OnDisplay]="getElementById(id, max_rows()).display"
-        (onClick)="handlePlayerTurn(id)"
-        [isGameFinished]="isBoardDisabled()"
-        [isHighlighted]="getElementById(id, max_rows()).isHighlighted"/>
+
+<ng-container *ngIf="BoardItems?.length === max_rows() * max_columns()">
+    <div class="board-container">
+        <div  [style.--row-count]="max_rows()"  [style.--column-count]="max_columns()" class="board-container__board">
+            <app-button *ngFor="let items of BoardItems; index as id"
+            [OnDisplay]="getElementById(id, max_rows()).display"
+            (onClick)="handlePlayerTurn(id)"
+            [isGameFinished]="isBoardDisabled()"
+            [isHighlighted]="getElementById(id, max_rows()).isHighlighted"/>
+        </div>
     </div>
-</div>
+</ng-container>

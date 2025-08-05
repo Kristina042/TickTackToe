@@ -197,6 +197,8 @@ export class MultiplayerGameComponent {
        this.boardSize = 3; this.stepCount = 3
        return
     }
+
+    this.changeDetector.detectChanges()
   }
 
   updatePlayersInDatabase() {

@@ -28,3 +28,11 @@
     display: flex;
     justify-content: space-between;
 }
+
+@media (max-width: 1200px) {
+    .play-again-button {
+        &:hover {
+            background-color: inherit;
+        }
+    }
+}

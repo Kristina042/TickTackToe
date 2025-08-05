@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, input, SimpleChanges, effect} from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
 import { CommonModule } from '@angular/common';
-import { getPlayerPosition, board_cell, checkWinner} from '../../utils/boardUtils/board';
+import { getPlayerPosition, board_cell, checkWinner, create_board} from '../../utils/boardUtils/board';
 
 export type stats = {
   numXwins: number,
@@ -30,7 +30,7 @@ export class MultiplayerBoardComponent {
   winner = input<'X' | 'O' | 'tie' | null>(null)
   count = input<number>(0)
 
-  BoardItems = this.board().flat();
+  BoardItems: board_cell[] = [];
   opponentName = input('')
 
   constructor() {
@@ -42,6 +42,7 @@ export class MultiplayerBoardComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['board']) {
       this.BoardItems = this.board().flat()
+      console.log(this.BoardItems.length)
     }
   }
 
@@ -85,7 +86,6 @@ export class MultiplayerBoardComponent {
   }
 
   renderStatusBar() {
-
     if((this.winner() === 'X') && (this.isUserX()))
       return this.updateStatusBar.emit(`you won!`)
 
