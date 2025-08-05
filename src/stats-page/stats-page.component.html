@@ -1,11 +1,10 @@
+<div class="home-button" (click)="this.router.navigate(['/'])">home</div>
 <div class="stats-grid">
-  <!-- Header Row -->
   <div class="grid-header">Date</div>
   <div class="grid-header">Game</div>
   <div class="grid-header">Players</div>
   <div class="grid-header">Winner</div>
 
-  <!-- Data Rows -->
   <ng-container *ngFor="let stat of stats$ | async">
     <div class="grid-cell">{{ stat.created_at | date: 'yyyy-MM-dd' }}</div>
     <div class="grid-cell">{{ stat.board_type }}</div>

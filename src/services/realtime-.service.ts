@@ -19,7 +19,6 @@ export class RealtimeService {
   subscribeToMessages(gameId: number): void {
     this.channel = this.supabaseService.client
       .channel('realtime:messages')
-      // CR instead of using PSQL event you could create own "Message type" -> https://supabase.com/docs/guides/realtime/broadcast
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'Games' }, (payload) => {
         const newMessage = payload.new
 

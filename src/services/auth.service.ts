@@ -13,6 +13,11 @@ export class AuthService {
   private _currentUser = new BehaviorSubject<User | null | undefined>(undefined);
   public currentUser$ = this._currentUser.asObservable()
 
+  private isUserSignedIn$$ = new BehaviorSubject<boolean | null>(null)
+  public isUserSignedIn$ = this.isUserSignedIn$$.asObservable()
+
+  initialized = false
+
 register(user: RegisterRequest): Observable<AuthResponse> {
   return from(
     this.supabaseService.client.auth.signUp({
@@ -20,7 +25,7 @@ register(user: RegisterRequest): Observable<AuthResponse> {
       password: user.password,
       options: {
         data: {
-          name: user.name, // stored in user_metadata (optional)
+          name: user.name,
         },
       },
     })
@@ -30,11 +35,10 @@ register(user: RegisterRequest): Observable<AuthResponse> {
         return throwError(() => error || new Error('User registration failed'));
       }
 
-      // Insert into profiles table
       const insertPromise = this.supabaseService.client
         .from('profiles')
         .insert({
-          id: data.user.id,     // match auth.users.id
+          id: data.user.id,
           name: user.name,
         });
 
@@ -44,7 +48,6 @@ register(user: RegisterRequest): Observable<AuthResponse> {
             return throwError(() => insertError);
           }
 
-          // Registration + profile insert succeeded
           return of({ data, error: null });
         })
       );
@@ -53,17 +56,44 @@ register(user: RegisterRequest): Observable<AuthResponse> {
 }
 
   authInit() {
+
+    if (this.initialized) return;
+    this.initialized = true;
+
+    // 1. Immediately check session
+    this.supabaseService.client.auth.getSession().then(({ data }) => {
+      const session = data.session;
+      if (session) {
+        console.log('session found on init');
+        this.isUserSignedIn$$.next(true);
+        this._currentUser.next({
+          email: session.user.email!,
+          userName: session.user.user_metadata?.['name'] ?? null,
+          Id: session.user.id
+        });
+      } else {
+        console.log('no session found on init');
+        this.isUserSignedIn$$.next(false);
+        this._currentUser.next(null);
+      }
+    });
+
+    // 2. Listen for future auth events
     this.supabaseService.client.auth.onAuthStateChange((event, session) => {
-      if (event ==='SIGNED_IN'){
+      if (event === 'SIGNED_IN') {
+        console.log('signed in via event');
+        this.isUserSignedIn$$.next(true);
         this._currentUser.next({
           email: session?.user.email!,
           userName: session?.user.user_metadata?.['name'] ?? null,
           Id: session?.user.id
-        })
-      } else if (event ==='SIGNED_OUT') {
-        this._currentUser.next(null)
+        });
+      } else if (event === 'SIGNED_OUT') {
+        console.log('signed out via event');
+        this.isUserSignedIn$$.next(false);
+        this._currentUser.next(null);
       }
-    })
+    });
   }
 
   login(user: LoginRequest): Observable<AuthResponse> {

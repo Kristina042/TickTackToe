@@ -14,6 +14,21 @@ $cols: 4;
   font-weight: 600;
 }
 
+.home-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background-color: $light-pink;
+  color: $dark-gray;
+  padding: 10px;
+  margin: 10px;
+  width: 100px;
+  font-family: 'Comic Neue';
+  font-size: 30px;
+  font-weight: 600;
+}
+
 .grid-header {
   background-color: $light-blue;
   padding: 15px;
@@ -41,19 +56,24 @@ $cols: 4;
 
 
 @media (max-width: 1200px) {
+    .home-button {
+      font-size: 20px;
+      width: 70px;
+    }
+
     .stats-grid {
-        font-size: 20px;
-        font-weight: 600;
-        margin: 10px;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 10px;
     }
 
     .grid-cell {
-        padding: 2px;
-        border: 0px;
+      padding: 2px;
+      border: 0px;
     }
 
     .grid-header {
-        padding: 5px;
+      padding: 5px;
     }
 
 }

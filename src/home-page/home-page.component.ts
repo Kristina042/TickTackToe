@@ -80,4 +80,9 @@ export class HomePageComponent {
 
     return this.router.navigate(['/stats'])
   }
+
+  login() {
+    console.log('trying to login')
+    this.router.navigate(['login'])
+  }
 }

@@ -1,6 +1,6 @@
 <div class="home-body">
     <div *ngIf="authService.currentUser" (click)="logout()" class="auth">logout</div>
-    <div *ngIf="!authService.currentUser" (click)="this.router.navigate(['login'])" class="auth">login/sign up</div>
+    <div *ngIf="!authService.currentUser" (click)="login()" class="auth">login/sign up</div>
 
     @if (authService.currentUser){
         <div class="title">

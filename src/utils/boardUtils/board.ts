@@ -166,9 +166,6 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     checkCellsUp()
     checkCellsDown()
 
-    // CR whats wrong here?
-    // answear here ->probably the name checkIdsForWin doesnt correspond very well to the functions return value which is an array of winning ids
-    //maybe it should be like const winningIs = getWinningIds(bla bla)
     const winningIds = checkIdsForWin(idsToCheck, value, cell_count_per_row, step_count, board)
     
     if (winningIds.length === 0)
@@ -267,8 +264,6 @@ export const checkIdsForWin = (idArr: number[], buttonValue: 'X'|'O', cell_count
     const players: any[] = ['X', 'O']
     const winChecks = [didRowWin, didColumnWin, didDiagWin]
 
-    // CR make it in loop, reach Damian if u dont know how
-    //i wanted to use foreach but when you return from inside forEach i think it returns from inner function and i want to return form outer function checkwinner 
     for (let i = 0; i < players.length; i++){
       let info:checkWinnerInfo = {
         currentIdx: id,

@@ -15,6 +15,7 @@ export class StatsPageComponent {
 
 statsService = inject(StatsService)
 authService = inject(AuthService)
+router = inject(Router)
 currentUserId = this.authService.currentUser?.Id;
 
 

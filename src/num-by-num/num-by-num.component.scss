@@ -100,9 +100,9 @@
     left: 4px;
     font-size: 20px;
     margin: 0px;
-    border: none;
-    background-color: inherit;
-    padding: 0px;
-    color: white;
+    border: solid 2px $dark-yellow;
+    background-color: $yellow;
+    padding: 3px;
+    color: $dark-gray;
   }
 }
