@@ -14,6 +14,11 @@
 
     <div class="menu-and-octos">
 
+        <div class="mobile-octos">
+            <img class="mobile-octo" src="/octo2.png">
+            <img class="mobile-octo" src="/octo1.png">
+        </div>
+
         <img class="octo" src="/octo2.png">
         <div class="menu">
             <div class="menu__item" (click)="viewStats()">my stats</div>
@@ -24,6 +29,7 @@
             <div (click)="createNew5x5()" class="menu__item">play online 5x5</div>
             <div (click)="createNew10x10()" class="menu__item">play online 10x10</div>
             <div *ngIf="authService.currentUser" (click)="logout()" class="menu__item mobile_auth">logout</div>
+            <div *ngIf="!authService.currentUser" (click)="this.router.navigate(['login'])" class="menu__item mobile_auth">login/signup</div>
         </div>
         <img class="octo" src="/octo1.png">
     </div>

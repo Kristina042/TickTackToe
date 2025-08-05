@@ -10,7 +10,13 @@
     height: 100%;
     border-radius: 10px;
     background-color: #b3dee2;
-    border-color:  #218380;
+
+    border: none;
+    outline: none;
+
+    border: solid  #218380;
+    border-right-color:  rgb(4, 57, 61);
+    border-bottom-color: rgb(4, 57, 61);
     border-width: 4px;
 
     color: #202020;
@@ -39,10 +45,16 @@
       cursor: none;
     }
 
-    &:hover{
-        opacity: 1;
-        background-color: #218380;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 1;
+      background-color: #218380;
     }
+  }
+
+  &:active {
+    background-color: #218380;
+  }
 }
 
 .c-button-container{
@@ -80,9 +92,16 @@
   }
 }
 
-@container (min-width: 34px) and (max-width: 65px) {
+@container (min-width: 47px) and (max-width: 67px) {
   .c-button{
-    font-size: 25px;
+    font-size: 37px;
+    border-width: 3px;
+  }
+}
+
+@container (min-width: 34px) and (max-width: 46px) {
+  .c-button{
+    font-size: 26px;
     border-width: 2px;
   }
 }

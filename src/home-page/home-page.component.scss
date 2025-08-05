@@ -31,6 +31,7 @@
     padding: 10px;
 
     &__item {
+        z-index: 1000;
         font-weight: 550;
         font-family: "Comic Neue";
         font-size: 24px;
@@ -91,9 +92,38 @@
     .mobile_auth {
         display: none;
     }
+
+    .mobile-octo {
+        display: none;
+    }
+
 }
 
+
 @media (max-width: 1200px) {
+
+    .menu-and-octos {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-octo {
+        max-width: 130px;
+    }
+
+    .mobile-octos {
+        display: flex;
+        flex-direction: row;
+        gap: 120px;
+
+        position: absolute;
+        top: 70px;
+    }
+
+    .home-body {
+        height: 100%;
+    }
+
     .octo {
         display: none
     }
@@ -111,7 +141,6 @@
 
     .title {
         font-size: 25px;
-        margin-top: 200px;
         padding: 10px;
         text-align: center;
     }

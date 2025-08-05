@@ -23,7 +23,6 @@
     align-items: center;
 
     &__wrapper {
-        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -92,6 +91,36 @@
                 cursor: pointer;
             }
         }
+    }
+}
+
+
+.form-and-back-button{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.back-button {
+    padding:15px;
+    background-color: $dark-blue;
+    color: white;
+    font-weight: 550;
+    border-radius: 15px;
+    font-size: 20px;
+    font-family: Arial;
+    text-transform: uppercase;
+    font-weight: 550;
+    align-self:flex-start;
+
+    border-right: solid 6px $light-blue;
+    border-bottom: solid 6px $light-blue;
+    &:hover {
+        background-color: $darker-blue;
+        cursor: pointer;
     }
 }
 

@@ -7,7 +7,7 @@ import { map, Observable, take } from 'rxjs';
   providedIn: 'root'
 })
 
-export class AuthorizedGuard implements CanActivate {
+export class NotAuthorizedGuard implements CanActivate {
   constructor(
     private router: Router,
     private authService: AuthService
@@ -17,7 +17,7 @@ export class AuthorizedGuard implements CanActivate {
   canActivate(): Observable<boolean | UrlTree> {
     return this.authService.currentUser$.pipe(
       take(1),
-      map((isAuth) => isAuth ? true : this.router.createUrlTree(['/login']))
+      map((isAuth) => isAuth ? true : this.router.createUrlTree(['/']))
     )
   }
 }
