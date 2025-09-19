@@ -78,7 +78,7 @@
 }
 
 
-.opponent{
+.opponent {
   background-color: $yellow;
   width: 480px;
   height: 70px;
@@ -127,9 +127,19 @@
   }
 }
 
+@media (max-width:1500px) {
+  .opponent {
+    width: 400px;
+    height: 60px;
+    border-width: 4px;
+    font-size: 28px;
+  }
+}
+
 @media (max-width: 1200px) {
   .octo {
-    display: none;
+    width: 300px;
+    height: 300px;
   }
 
   .stats-bar-and-button {
@@ -144,9 +154,9 @@
 
   .home-button {
     position: fixed;
-    top: 4px;
-    left: 4px;
-    font-size: 20px;
+    top: 20px;
+    left: 32px;
+    font-size: 26px;
     margin: 0px;
     border: solid 2px $dark-yellow;
     background-color: $yellow;
@@ -161,3 +171,31 @@
     font-size: 28px;
   }
 }
+
+@media(max-width: 1000px) {
+  .octo {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media(max-width: 860px) {
+  .octo {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media(max-width: 760px) {
+  .octo {
+    display:none;
+  }
+
+  .home-button {
+    top: 20px;
+    left: 20px;
+    font-size: 22px;
+  }
+}
+
+
