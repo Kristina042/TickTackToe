@@ -63,11 +63,12 @@
 }
 
 .octo{
-  width: 400px;
-  height:  400px;
   background-size: cover;
   background-position: center;
   margin: 0px;
+
+  min-width: 100px;
+  max-width: 600px;
 }
 
 .game-and-octos{
@@ -131,7 +132,8 @@
   .octo {
     display: none;
   }
-
+}
+@media (max-width: 600px) {
   .stats-bar-and-button {
     width: 345px;
   }
