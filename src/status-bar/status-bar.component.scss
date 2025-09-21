@@ -27,11 +27,11 @@ $dark-blue: #218380;
     border-width: 5px;
 }
 
-@media (max-width: 1200px) {
-    .status-bar {
-        width: 345px;
-        height: 60px;
-        border-width: 4px;
-        font-size: 28px;
+@media (max-width: 600px) {
+  .status-bar {
+    width: 345px;
+    height: 60px;
+    border-width: 4px;
+    font-size: 28px;
   }
 }

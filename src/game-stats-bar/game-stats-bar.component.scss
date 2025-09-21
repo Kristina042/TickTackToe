@@ -32,12 +32,12 @@
     }
 }
 
-@media (max-width: 1200px) {
-    .game-stats-bar {
-        width: 256px;
-        border-width: 4px;
-        font-size: 24px;
-        column-gap: 12px;
-        padding: 6px;
+@media (max-width: 600px) {
+  .game-stats-bar {
+    width: 256px;
+    border-width: 4px;
+    font-size: 24px;
+    column-gap: 12px;
+    padding: 6px;
   }
 }

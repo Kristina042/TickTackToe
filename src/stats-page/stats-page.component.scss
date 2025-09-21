@@ -1,17 +1,20 @@
 @import '../styles.scss';
 
 $cols: 4;
+.content {
+  padding-bottom: 30px;
+}
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
-  margin-top: 1rem;
-  border-radius: 12px;
+  grid-template-columns: 1fr 0.5fr 2fr 1.5fr;
+  gap: 6px;
+  border-radius: 15px;
   overflow: hidden;
   font-family: 'Comic Neue';
   font-size: 30px;
   font-weight: 600;
+  margin: 50px 400px;
 }
 
 .home-button {
@@ -22,11 +25,15 @@ $cols: 4;
   background-color: $light-pink;
   color: $dark-gray;
   padding: 10px;
-  margin: 10px;
+  margin: 20px;
   width: 100px;
   font-family: 'Comic Neue';
   font-size: 30px;
   font-weight: 600;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .grid-header {
@@ -54,26 +61,52 @@ $cols: 4;
   }
 }
 
+@media (max-width: 1800px) {
+  .stats-grid {
+    margin: 50px 250px;
+  }
+}
+
+@media (max-width: 1500px) {
+  .stats-grid {
+    margin: 50px 200px;
+    font-size: 24px;
+  }
+}
+
 
 @media (max-width: 1200px) {
-    .home-button {
-      font-size: 20px;
-      width: 70px;
-    }
+  .home-button {
+    font-size: 20px;
+    width: 70px;
+  }
 
-    .stats-grid {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 10px;
-    }
+  .stats-grid {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 100px;
+    padding: 0px;
+  }
 
-    .grid-cell {
-      padding: 2px;
-      border: 0px;
-    }
+  .grid-cell {
+    padding: 2px;
+    border: 0px;
+  }
 
-    .grid-header {
-      padding: 5px;
-    }
+  .grid-header {
+    padding: 5px;
+  }
+}
 
+@media (max-width: 800px) {
+  .stats-grid {
+    margin: 20px 50px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .stats-grid {
+    margin: 20px 10px;
+  }
 }
