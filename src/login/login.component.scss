@@ -1,11 +1,18 @@
 @import '../styles.scss';
 
+.content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .form {
     background-color: $light-blue;
 
     padding: 40px;
-    width: 450px;
     min-height: 470px;
+    width: 100%;
 
     border-right: 6px solid  $darker-blue;
     border-bottom: 6px solid $darker-blue;
@@ -95,13 +102,14 @@
 }
 
 
-.form-and-back-button{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
+.form-and-back-button {
+  width: 450px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 .back-button {
@@ -125,9 +133,11 @@
 }
 
 @media (max-width: 1200px) {
-    .form {
-        width: 345px;
+    .form-and-back-button {
+      width: 345px;
+    }
 
+    .form {
         &__control__input {
             width: 280px;
         }
