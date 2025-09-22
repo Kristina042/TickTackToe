@@ -32,6 +32,14 @@
     }
 }
 
+@media (max-width: 1500px) {
+  .game-stats-bar {
+    width: 280px;
+    font-size: 24px;
+    column-gap: 22px
+  }
+}
+
 @media (max-width: 600px) {
   .game-stats-bar {
     width: 256px;
