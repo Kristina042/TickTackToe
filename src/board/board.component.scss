@@ -17,6 +17,13 @@
   }
 }
 
+@media (max-width: 1500px) {
+  .board-container {
+    width: 400px;
+    height: 400px;
+}
+}
+
 @media (max-width: 600px) {
   .board-container {
     width: 345px;

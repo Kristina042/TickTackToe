@@ -64,7 +64,7 @@
   cursor: pointer;
 }
 
-.octo{
+.octo {
   background-size: cover;
   background-position: center;
   margin: 0px;
@@ -80,7 +80,17 @@
   flex-direction: row;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
+  .stats-bar-and-button {
+    width: 400px;
+  }
+
+  .play-again-button {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 1000px) {
   .octo {
     display: none;
   }
